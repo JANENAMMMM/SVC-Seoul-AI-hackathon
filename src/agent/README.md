@@ -1,3 +1,5 @@
+> ⚠️ 이 문서는 초기 6-노드 설계 기록입니다. 최신 9-노드 구조(HITL 포함)는 [루트 README](../../README.md#3-agent-pipeline-상세)를 참고하세요.
+
 # Travel Planner Agent — LangGraph 구조
 
 자연어 입력 하나로 목적지·날짜·숙소·장소를 자동 수집하고 여행 일정을 생성하는 6-노드 LangGraph 에이전트입니다.
