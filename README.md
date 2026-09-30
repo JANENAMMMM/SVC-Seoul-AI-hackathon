@@ -31,6 +31,18 @@
 | **노 희 윤** | 경희대학교 | 소프트웨어융합학과 |
 | **이 지 원** | 덕성여자대학교 | 디지털소프트웨어공학부 |
 
+### 🧭 담당 역할 — 남재은 (Agent Architecture)
+
+오케스트레이터 중심의 에이전트 구조 설계를 담당했습니다.
+
+- **그래프 설계**: `intent_router`부터 `synthesizer`까지 9개 노드의 역할 분리와 실행 순서 정의 (`src/agent/graph.py`)
+- **조건 분기**: 날짜 확정 여부(`date_fixed`)에 따라 `date_compute → date_select` 경로를 건너뛰는 라우팅 설계
+- **상태 설계**: 노드 간 공유되는 `AgentState` 스키마 정의 (`src/agent/state.py`)
+- **Human-in-the-Loop**: 날짜 선택·숙소 조건·숙소 선택 3단계 사용자 개입 지점 설계 (`interrupt()` + `Command(resume=...)`)
+- **관측성**: LangSmith 노드 단위 트레이싱으로 실패 지점 추적
+
+외부 API(항공·숙소·장소) 연동은 팀원이 담당했습니다.
+
 ---
 
 ## 💻 DEMO (서비스 시연)
