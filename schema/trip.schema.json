@@ -1,5 +1,89 @@
 {
   "$defs": {
+    "ChangeRequest": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "agent",
+            "user",
+            "parent"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "ops": {
+          "items": {
+            "$ref": "#/$defs/PatchOp"
+          },
+          "title": "Ops",
+          "type": "array"
+        },
+        "base_version": {
+          "title": "Base Version",
+          "type": "integer"
+        },
+        "status": {
+          "default": "pending",
+          "enum": [
+            "applied",
+            "blocked",
+            "pending"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "blocked_by": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Blocked By",
+          "type": "array"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        },
+        "alternatives": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Fix"
+          },
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "applied_version": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applied Version"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "summary",
+        "ops",
+        "base_version"
+      ],
+      "title": "ChangeRequest",
+      "type": "object"
+    },
     "Constraints": {
       "properties": {
         "max_continuous_walk_min": {
@@ -148,6 +232,44 @@
       "title": "Day",
       "type": "object"
     },
+    "DayMetrics": {
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "parent_walk_min": {
+          "title": "Parent Walk Min",
+          "type": "integer"
+        },
+        "map_walk_min": {
+          "title": "Map Walk Min",
+          "type": "integer"
+        },
+        "max_continuous_walk_min": {
+          "title": "Max Continuous Walk Min",
+          "type": "integer"
+        },
+        "rest_count": {
+          "title": "Rest Count",
+          "type": "integer"
+        },
+        "violations": {
+          "default": 0,
+          "title": "Violations",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "date",
+        "parent_walk_min",
+        "map_walk_min",
+        "max_continuous_walk_min",
+        "rest_count"
+      ],
+      "title": "DayMetrics",
+      "type": "object"
+    },
     "DayWeather": {
       "properties": {
         "date": {
@@ -263,6 +385,14 @@
           "default": false,
           "title": "Applied",
           "type": "boolean"
+        },
+        "ops": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PatchOp"
+          },
+          "title": "Ops",
+          "type": "array"
         }
       },
       "required": [
@@ -353,6 +483,26 @@
         "parent_walk_total_min": {
           "title": "Parent Walk Total Min",
           "type": "integer"
+        },
+        "map_walk_total_min": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Map Walk Total Min"
+        },
+        "per_day": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/DayMetrics"
+          },
+          "title": "Per Day",
+          "type": "array"
         }
       },
       "required": [
@@ -587,6 +737,54 @@
       "title": "ParentProfile",
       "type": "object"
     },
+    "PatchOp": {
+      "properties": {
+        "op": {
+          "enum": [
+            "set",
+            "insert_after",
+            "remove"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "target": {
+          "default": "item",
+          "enum": [
+            "item",
+            "place"
+          ],
+          "title": "Target",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "op",
+        "id"
+      ],
+      "title": "PatchOp",
+      "type": "object"
+    },
     "Place": {
       "properties": {
         "id": {
@@ -671,6 +869,30 @@
           ],
           "title": "Data Quality",
           "type": "string"
+        },
+        "onsite_walk_m": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onsite Walk M"
+        },
+        "onsite_stairs": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onsite Stairs"
         }
       },
       "required": [
@@ -731,6 +953,18 @@
           ],
           "title": "Added By",
           "type": "string"
+        },
+        "onsite_walk_m": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onsite Walk M"
         }
       },
       "required": [
@@ -758,6 +992,17 @@
         },
         "metrics": {
           "$ref": "#/$defs/Metrics"
+        },
+        "baseline": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Metrics"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -887,6 +1132,14 @@
       ],
       "title": "Updated By",
       "type": "string"
+    },
+    "changes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ChangeRequest"
+      },
+      "title": "Changes",
+      "type": "array"
     }
   },
   "required": [

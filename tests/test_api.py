@@ -39,6 +39,17 @@ def test_put_if_match_conflict(client, demo_trip):
     assert stale.status_code == 409
 
 
+def test_put_validation(client, demo_trip):
+    body = demo_trip.model_dump(mode="json")
+    client.put(f"/api/trips/{demo_trip.id}", json=body)  # version 1
+    report = body["validation"]
+    r = client.put(f"/api/trips/{demo_trip.id}/validation", json=report)
+    assert r.status_code == 200 and r.json()["version"] == 1
+    report["trip_version"] = 99
+    assert client.put(f"/api/trips/{demo_trip.id}/validation", json=report).status_code == 409
+    assert client.put("/api/trips/none/validation", json=report).status_code == 404
+
+
 def test_put_id_mismatch(client, demo_trip):
     body = demo_trip.model_dump(mode="json")
     assert client.put("/api/trips/other", json=body).status_code == 400

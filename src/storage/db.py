@@ -6,7 +6,7 @@ expected_version을 주면 저장된 버전과 다를 때 VersionConflict — �
 import sqlite3
 from pathlib import Path
 
-from src.schema.trip import ParentProfile, Trip
+from src.schema.trip import ParentProfile, Trip, ValidationReport
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS trips (
@@ -62,6 +62,28 @@ def save_trip(
             (saved.id, saved.version, saved.model_dump_json()),
         )
     return saved
+
+
+def save_validation(conn: sqlite3.Connection, trip_id: str, report: ValidationReport) -> Trip:
+    """검증 결과만 저장. version을 올리지 않는다.
+
+    report.trip_version이 저장된 version과 다르면(그 사이 일정이 바뀜) VersionConflict —
+    낡은 검증 결과가 최신 일정에 붙는 것을 막는다.
+    """
+    with conn:
+        row = conn.execute("SELECT version, data FROM trips WHERE id = ?", (trip_id,)).fetchone()
+        if row is None:
+            raise KeyError(trip_id)
+        if report.trip_version != row[0]:
+            raise VersionConflict(row[0], report.trip_version)
+        trip = Trip.model_validate_json(row[1])
+        if report.baseline is None:  # 첫 검증 지표를 보정 전 기준으로 유지
+            prev = trip.validation
+            baseline = prev.baseline if prev and prev.baseline else (prev.metrics if prev else report.metrics)
+            report = report.model_copy(update={"baseline": baseline})
+        trip = trip.model_copy(update={"validation": report})
+        conn.execute("UPDATE trips SET data = ? WHERE id = ?", (trip.model_dump_json(), trip_id))
+    return trip
 
 
 def load_profile(conn: sqlite3.Connection, profile_id: str) -> ParentProfile | None:

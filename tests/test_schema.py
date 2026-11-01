@@ -35,5 +35,16 @@ def test_two_walking_violations(demo_trip: Trip):
     assert {i.rule for i in v.issues} == {"continuous_walk", "stairs"}
 
 
+def test_p0_fields(demo_trip: Trip):
+    v = demo_trip.validation
+    assert v.baseline is not None and v.metrics.map_walk_total_min is not None
+    assert [d.date for d in v.metrics.per_day] == [d.date for d in demo_trip.days]
+    assert sum(d.violations for d in v.metrics.per_day) == v.metrics.violations
+    assert demo_trip.places["p-marble"].onsite_walk_m == 600
+    assert all(f.ops for i in v.issues for f in i.fixes if f.kind != "add_rest")
+    blocked = [c for c in demo_trip.changes if c.status == "blocked"]
+    assert blocked and blocked[0].blocked_by == ["avoid_stairs"] and blocked[0].alternatives
+
+
 def test_roundtrip_json(demo_trip: Trip):
     assert Trip.model_validate_json(demo_trip.model_dump_json()) == demo_trip

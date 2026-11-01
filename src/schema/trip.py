@@ -13,8 +13,16 @@ draft 대비 변경 (v1)
 - [추가] Day.items 에 discriminator("type") — 파싱 안정 + TS 유니온 타입 생성
 - [타입 완화] DayWeather.max_temp_c, rain_prob → Optional
   Open-Meteo 시즌 예보(D+17~)·과거 데이터는 강수확률을 주지 않아 필수면 Trip 저장이 깨짐.
+
+v1.1 (기획 최종본 검토 P0)
+- [추가] Place.onsite_walk_m / onsite_stairs, Stop.onsite_walk_m — 장소 내부 보행(주차장→입구, 사원 계단)
+- [추가] PatchOp, Fix.ops — 대안을 코드가 그대로 적용할 수 있는 변경 명령
+- [추가] ChangeRequest, Trip.changes — 필수 조건 위반 변경은 blocked + 대안
+- [추가] DayMetrics, Metrics.per_day / map_walk_total_min — 하루 카드·전후 비교
+- [추가] ValidationReport.baseline — 첫 검증(보정 전) 지표 보관
+- 검증 결과 저장은 version을 올리지 않음 (storage.save_validation). validation.trip_version == version 이면 최신.
 """
-from typing import Annotated, Literal, Optional, Union
+from typing import Annotated, Any, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -57,6 +65,8 @@ class Place(BaseModel):
     is_korean_food: bool = False
     review_note: Optional[str] = None           # 후기 근거 한 줄 (식당 패널)
     data_quality: DataQuality = "api"           # 데모용 수작업 데이터 표시
+    onsite_walk_m: Optional[int] = None         # [v1.1] 장소 안에서 걷는 거리 (주차장→입구→관람 동선)
+    onsite_stairs: Optional[bool] = None        # [v1.1] 관람 동선에 계단이 있는지 (has_stairs는 입구 기준)
 
 
 class Stop(BaseModel):
@@ -68,6 +78,7 @@ class Stop(BaseModel):
     kind: Literal["visit", "meal", "rest", "hotel"]
     must_visit: bool = False
     added_by: Literal["agent", "user", "validator"] = "agent"
+    onsite_walk_m: Optional[int] = None         # [v1.1] 이 방문에서만의 값 (예: 중턱까지만 관람). None이면 Place 값
 
 
 class Move(BaseModel):
@@ -104,6 +115,14 @@ class DayWeather(BaseModel):                    # 날씨 패널 + 더위 보정 
 
 
 # ── 3. 검증 결과 (걸음 다시 재기) ────────────────────────────────
+class PatchOp(BaseModel):                       # [v1.1] 일정에 대한 변경 명령 1개
+    op: Literal["set", "insert_after", "remove"]
+    target: Literal["item", "place"] = "item"
+    id: str                                     # 대상 Stop/Move id (target=place면 Place id)
+    field: Optional[str] = None                 # set: 바꿀 필드 이름 ("mode")
+    value: Any = None             # set: 새 값 / insert_after: 넣을 Stop·Move·Place dict
+
+
 class Fix(BaseModel):
     id: str
     kind: Literal["to_taxi", "add_rest", "swap_place", "drop_item", "plan_b"]
@@ -111,6 +130,7 @@ class Fix(BaseModel):
     delta_cost_krw: int = 0
     delta_walk_min: int = 0
     applied: bool = False
+    ops: list[PatchOp] = []                     # [v1.1] 적용 시 실행할 변경. 비어 있으면 설명만
 
 
 class Issue(BaseModel):
@@ -124,18 +144,43 @@ class Issue(BaseModel):
     fixes: list[Fix] = []
 
 
+class DayMetrics(BaseModel):                    # [v1.1] 하루 카드 "천천히 걷기 40분 · 쉬는 곳 3번"
+    date: str
+    parent_walk_min: int
+    map_walk_min: int
+    max_continuous_walk_min: int
+    rest_count: int
+    violations: int = 0
+
+
 class Metrics(BaseModel):                       # 발표 핵심 지표 3개 + 보조
     violations: int
     must_visit_kept_ratio: float
     extra_cost_per_fix_krw: int
     max_continuous_walk_min: int
     parent_walk_total_min: int
+    map_walk_total_min: Optional[int] = None    # [v1.1] 같은 일정의 지도 기준 합계 (70분 → 105분 비교)
+    per_day: list[DayMetrics] = []              # [v1.1]
 
 
 class ValidationReport(BaseModel):
     trip_version: int                           # 어느 버전을 검사했는지
     issues: list[Issue]
     metrics: Metrics
+    baseline: Optional[Metrics] = None          # [v1.1] 보정 전(첫 검증) 지표. 전후 비교 화면용
+
+
+class ChangeRequest(BaseModel):                 # [v1.1] 에이전트·자녀·승인된 부모님 의견이 낸 변경
+    id: str
+    source: Literal["agent", "user", "parent"]
+    summary: str                                # "둘째 날 오후 일정 빼기"
+    ops: list[PatchOp]
+    base_version: int                           # 이 버전을 보고 만든 요청
+    status: Literal["applied", "blocked", "pending"] = "pending"
+    blocked_by: list[str] = []                  # 깨지는 must_keep 키 ("avoid_stairs")
+    reason: str = ""                            # "계단 회피 조건 위반: 오행산 정상 계단"
+    alternatives: list[Fix] = []                # blocked일 때 대신 제시한 대안
+    applied_version: Optional[int] = None       # 적용 후 Trip version
 
 
 # ── 4. 예산 · 부모님 의견 ───────────────────────────────────────
@@ -176,3 +221,4 @@ class Trip(BaseModel):
     feedback: list[ParentFeedback] = []
     guide_selected: bool = False
     updated_by: Literal["agent", "user", "validator", "system"] = "system"
+    changes: list[ChangeRequest] = []           # [v1.1] 변경 요청 기록 (blocked 포함)

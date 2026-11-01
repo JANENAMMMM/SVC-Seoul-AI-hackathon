@@ -6,8 +6,8 @@ from functools import lru_cache
 from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.schema.trip import Trip
-from src.storage import VersionConflict, connect, load_trip, save_trip
+from src.schema.trip import Trip, ValidationReport
+from src.storage import VersionConflict, connect, load_trip, save_trip, save_validation
 
 app = FastAPI(title="반걸음 API", version="0.1.0")
 app.add_middleware(
@@ -52,5 +52,18 @@ def put_trip(
         raise HTTPException(400, "path id와 body id가 다릅니다")
     try:
         return save_trip(conn, trip, expected_version=if_match)
+    except VersionConflict as e:
+        raise HTTPException(409, {"message": str(e), "current_version": e.current})
+
+
+@app.put("/api/trips/{trip_id}/validation", response_model=Trip)
+def put_validation(
+    trip_id: str, report: ValidationReport, conn: sqlite3.Connection = Depends(get_conn)
+) -> Trip:
+    """검증 엔진 전용. version을 올리지 않고, report.trip_version이 현재와 다르면 409."""
+    try:
+        return save_validation(conn, trip_id, report)
+    except KeyError:
+        raise HTTPException(404, f"trip {trip_id} not found")
     except VersionConflict as e:
         raise HTTPException(409, {"message": str(e), "current_version": e.current})
