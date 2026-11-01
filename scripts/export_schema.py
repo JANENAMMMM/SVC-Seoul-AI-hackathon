@@ -2,8 +2,8 @@
 
 사용:
     uv run python scripts/export_schema.py
-    # → schema/trip.schema.json 생성. 프론트에서:
-    npx json-schema-to-typescript@15.0.4 -i ../schema/trip.schema.json -o src/lib/trip.gen.ts
+    # → src/schema/trip.schema.json 생성. 프론트에서:
+    npx json-schema-to-typescript@15.0.4 -i ../src/schema/trip.schema.json -o src/lib/trip.gen.ts
 
 스키마를 바꾸면 이 스크립트를 다시 돌리고 두 파일을 같이 커밋한다.
 """
@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.schema.trip import Trip  # noqa: E402
 
-OUT = ROOT / "schema" / "trip.schema.json"
+OUT = ROOT / "src" / "schema" / "trip.schema.json"
 
 
 def main() -> None:
