@@ -1,0 +1,153 @@
+{
+  "id": "demo-danang-001",
+  "version": 1,
+  "destination": "다낭",
+  "check_in": "2026-12-03",
+  "check_out": "2026-12-06",
+  "budget_krw": 3000000,
+  "adults": 2,
+  "parents": [
+    {
+      "id": "parent-mom",
+      "name": "어머니",
+      "answers": {"q_stairs": "계단 한 층은 쉬었다 가요", "q_walk_15": "15분은 괜찮아요"},
+      "walking_grade": "normal",
+      "walking_speed_mps": 0.8,
+      "speed_source": "rule",
+      "confirmed_by_parent": true
+    },
+    {
+      "id": "parent-dad",
+      "name": "아버지",
+      "answers": {"q_stairs": "무릎 때문에 계단은 힘들어요", "q_walk_15": "10분 넘으면 쉬어야 해요"},
+      "walking_grade": "limited",
+      "walking_speed_mps": 0.7,
+      "speed_source": "rule",
+      "confirmed_by_parent": false
+    }
+  ],
+  "constraints": {
+    "max_continuous_walk_min": 20,
+    "max_daily_walk_m": 3000,
+    "rest_interval_m": 50,
+    "avoid_stairs": true,
+    "day_start": "09:30",
+    "day_end": "19:00",
+    "food_restrictions": ["raw", "spicy"],
+    "must_visit_place_ids": ["p-marble", "p-bana"],
+    "must_keep": ["avoid_stairs", "max_continuous_walk_min"]
+  },
+  "places": {
+    "p-hotel": {"id": "p-hotel", "name": "노보텔 다낭 프리미어 한리버", "lat": 16.0771, "lng": 108.2237, "category": "hotel", "address": "36 Bach Dang, Hai Chau, Da Nang", "has_stairs": false},
+    "p-hanmarket": {"id": "p-hanmarket", "name": "한 시장", "lat": 16.0684, "lng": 108.2241, "category": "attraction", "address": "119 Tran Phu, Hai Chau, Da Nang", "opening_hours": "06:00-19:00", "has_stairs": false},
+    "p-kfood": {"id": "p-kfood", "name": "다낭 한식당 소담", "lat": 16.0640, "lng": 108.2290, "category": "restaurant", "is_korean_food": true, "review_note": "부모님 동반 후기 다수 · 맵지 않은 메뉴 있음", "data_quality": "manual"},
+    "p-marble": {"id": "p-marble", "name": "오행산(마블마운틴)", "lat": 16.0040, "lng": 108.2630, "category": "attraction", "address": "Hoa Hai, Ngu Hanh Son, Da Nang", "opening_hours": "07:00-17:30", "has_stairs": true, "data_quality": "manual"},
+    "p-marble-gate": {"id": "p-marble-gate", "name": "오행산 주차장", "lat": 16.0012, "lng": 108.2668, "category": "other", "has_stairs": false, "data_quality": "manual"},
+    "p-seafood": {"id": "p-seafood", "name": "해변 해산물 식당 (익힌 요리)", "lat": 16.0610, "lng": 108.2470, "category": "restaurant", "review_note": "구이·찜 위주, 날것 제외 주문 가능", "data_quality": "manual"},
+    "p-bana": {"id": "p-bana", "name": "바나힐", "lat": 15.9977, "lng": 107.9881, "category": "attraction", "opening_hours": "08:00-17:00", "has_stairs": false, "data_quality": "manual"},
+    "p-cafe": {"id": "p-cafe", "name": "한강변 카페", "lat": 16.0750, "lng": 108.2240, "category": "cafe", "has_stairs": false, "data_quality": "manual"}
+  },
+  "hotel_place_id": "p-hotel",
+  "days": [
+    {
+      "date": "2026-12-03",
+      "density": "relaxed",
+      "items": [
+        {"type": "stop", "id": "d1-s1", "place_id": "p-hotel", "start": "14:00", "end": "16:00", "kind": "hotel"},
+        {"type": "move", "id": "d1-m1", "from_stop_id": "d1-s1", "to_stop_id": "d1-s2", "mode": "taxi", "distance_m": 1100, "map_duration_min": 5, "parent_duration_min": 5, "cost_krw": 2500, "data_quality": "estimated"},
+        {"type": "stop", "id": "d1-s2", "place_id": "p-hanmarket", "start": "16:10", "end": "17:10", "kind": "visit"},
+        {"type": "move", "id": "d1-m2", "from_stop_id": "d1-s2", "to_stop_id": "d1-s3", "mode": "taxi", "distance_m": 700, "map_duration_min": 4, "parent_duration_min": 4, "cost_krw": 2000, "data_quality": "estimated"},
+        {"type": "stop", "id": "d1-s3", "place_id": "p-kfood", "start": "17:30", "end": "18:40", "kind": "meal"}
+      ]
+    },
+    {
+      "date": "2026-12-04",
+      "density": "normal",
+      "items": [
+        {"type": "stop", "id": "d2-s0", "place_id": "p-hotel", "start": "09:30", "end": "09:40", "kind": "hotel"},
+        {"type": "move", "id": "d2-m0", "from_stop_id": "d2-s0", "to_stop_id": "d2-s1", "mode": "taxi", "distance_m": 9500, "map_duration_min": 20, "parent_duration_min": 20, "cost_krw": 9000, "data_quality": "estimated"},
+        {"type": "stop", "id": "d2-s1", "place_id": "p-marble-gate", "start": "10:00", "end": "10:05", "kind": "rest"},
+        {"type": "move", "id": "d2-m1", "from_stop_id": "d2-s1", "to_stop_id": "d2-s2", "mode": "walk", "distance_m": 1100, "map_duration_min": 14, "parent_duration_min": 26, "has_stairs": true, "data_quality": "estimated"},
+        {"type": "stop", "id": "d2-s2", "place_id": "p-marble", "start": "10:31", "end": "12:00", "kind": "visit", "must_visit": true},
+        {"type": "move", "id": "d2-m2", "from_stop_id": "d2-s2", "to_stop_id": "d2-s3", "mode": "taxi", "distance_m": 6500, "map_duration_min": 15, "parent_duration_min": 15, "cost_krw": 7000, "data_quality": "estimated"},
+        {"type": "stop", "id": "d2-s3", "place_id": "p-seafood", "start": "12:20", "end": "13:30", "kind": "meal"},
+        {"type": "move", "id": "d2-m3", "from_stop_id": "d2-s3", "to_stop_id": "d2-s4", "mode": "taxi", "distance_m": 3000, "map_duration_min": 10, "parent_duration_min": 10, "cost_krw": 4000, "data_quality": "estimated"},
+        {"type": "stop", "id": "d2-s4", "place_id": "p-hotel", "start": "13:40", "end": "16:00", "kind": "rest"}
+      ]
+    },
+    {
+      "date": "2026-12-05",
+      "density": "normal",
+      "items": [
+        {"type": "stop", "id": "d3-s0", "place_id": "p-hotel", "start": "09:30", "end": "09:40", "kind": "hotel"},
+        {"type": "move", "id": "d3-m0", "from_stop_id": "d3-s0", "to_stop_id": "d3-s1", "mode": "car", "distance_m": 30000, "map_duration_min": 45, "parent_duration_min": 45, "cost_krw": 45000, "data_quality": "estimated"},
+        {"type": "stop", "id": "d3-s1", "place_id": "p-bana", "start": "10:30", "end": "15:30", "kind": "visit", "must_visit": true},
+        {"type": "move", "id": "d3-m1", "from_stop_id": "d3-s1", "to_stop_id": "d3-s2", "mode": "car", "distance_m": 30000, "map_duration_min": 45, "parent_duration_min": 45, "cost_krw": 45000, "data_quality": "estimated"},
+        {"type": "stop", "id": "d3-s2", "place_id": "p-hotel", "start": "16:20", "end": "18:00", "kind": "rest"}
+      ]
+    },
+    {
+      "date": "2026-12-06",
+      "density": "relaxed",
+      "items": [
+        {"type": "stop", "id": "d4-s0", "place_id": "p-hotel", "start": "09:30", "end": "10:30", "kind": "hotel"},
+        {"type": "move", "id": "d4-m0", "from_stop_id": "d4-s0", "to_stop_id": "d4-s1", "mode": "walk", "distance_m": 250, "map_duration_min": 3, "parent_duration_min": 6, "has_stairs": false, "data_quality": "estimated"},
+        {"type": "stop", "id": "d4-s1", "place_id": "p-cafe", "start": "10:40", "end": "11:40", "kind": "rest"}
+      ]
+    }
+  ],
+  "weather": [
+    {"date": "2026-12-03", "max_temp_c": 26.5, "min_temp_c": 21.0, "apparent_max_temp_c": 29.0, "rain_prob": null, "source": "seasonal"},
+    {"date": "2026-12-04", "max_temp_c": 27.0, "min_temp_c": 21.5, "apparent_max_temp_c": 30.5, "rain_prob": null, "heat_risk_hours": ["12:00-14:00"], "source": "seasonal"},
+    {"date": "2026-12-05", "max_temp_c": 25.5, "min_temp_c": 20.5, "rain_prob": null, "source": "seasonal"},
+    {"date": "2026-12-06", "max_temp_c": null, "rain_prob": null, "source": "seasonal"}
+  ],
+  "validation": {
+    "trip_version": 1,
+    "issues": [
+      {
+        "id": "iss-1",
+        "item_id": "d2-m1",
+        "rule": "continuous_walk",
+        "severity": "must",
+        "message": "주차장→오행산 입구 도보 26분 (한도 20분)",
+        "evidence": "불편 등급 0.7 m/s 기준 · 1,100m · 지도 14분",
+        "fixes": [
+          {"id": "fix-1a", "kind": "to_taxi", "description": "도보 26분 → 입구까지 전동카트/택시", "delta_cost_krw": 4000, "delta_walk_min": -24},
+          {"id": "fix-1b", "kind": "add_rest", "description": "중간 벤치 휴식 2회 추가", "delta_walk_min": 0}
+        ]
+      },
+      {
+        "id": "iss-2",
+        "item_id": "d2-s2",
+        "rule": "stairs",
+        "severity": "must",
+        "message": "오행산 수이산 정상부 계단 구간",
+        "evidence": "계단 회피 필수 조건 · 엘리베이터는 중턱까지만 (수작업 확인)",
+        "fixes": [
+          {"id": "fix-2a", "kind": "plan_b", "description": "엘리베이터로 중턱 사원까지만 관람", "delta_cost_krw": 1500, "delta_walk_min": -10},
+          {"id": "fix-2b", "kind": "swap_place", "description": "오행산 → 린응사(계단 적음)로 교체", "delta_cost_krw": 0, "delta_walk_min": -15}
+        ]
+      }
+    ],
+    "metrics": {
+      "violations": 2,
+      "must_visit_kept_ratio": 1.0,
+      "extra_cost_per_fix_krw": 2750,
+      "max_continuous_walk_min": 26,
+      "parent_walk_total_min": 32
+    }
+  },
+  "costs": [
+    {"category": "flight", "amount_krw": 1200000},
+    {"category": "hotel", "amount_krw": 540000},
+    {"category": "taxi", "amount_krw": 114500},
+    {"category": "ticket", "amount_krw": 200000},
+    {"category": "food", "amount_krw": 300000}
+  ],
+  "feedback": [
+    {"id": "fb-1", "trip_version": 1, "item_id": "d2-s2", "channel": "button", "value": "too_hard", "status": "pending"}
+  ],
+  "guide_selected": false,
+  "updated_by": "validator"
+}

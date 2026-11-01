@@ -1,0 +1,904 @@
+{
+  "$defs": {
+    "Constraints": {
+      "properties": {
+        "max_continuous_walk_min": {
+          "default": 20,
+          "title": "Max Continuous Walk Min",
+          "type": "integer"
+        },
+        "max_daily_walk_m": {
+          "default": 5000,
+          "title": "Max Daily Walk M",
+          "type": "integer"
+        },
+        "rest_interval_m": {
+          "default": 100,
+          "title": "Rest Interval M",
+          "type": "integer"
+        },
+        "avoid_stairs": {
+          "default": false,
+          "title": "Avoid Stairs",
+          "type": "boolean"
+        },
+        "day_start": {
+          "default": "09:00",
+          "title": "Day Start",
+          "type": "string"
+        },
+        "day_end": {
+          "default": "19:00",
+          "title": "Day End",
+          "type": "string"
+        },
+        "food_restrictions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Food Restrictions",
+          "type": "array"
+        },
+        "must_visit_place_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Must Visit Place Ids",
+          "type": "array"
+        },
+        "must_keep": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Must Keep",
+          "type": "array"
+        }
+      },
+      "title": "Constraints",
+      "type": "object"
+    },
+    "CostLine": {
+      "properties": {
+        "category": {
+          "enum": [
+            "flight",
+            "hotel",
+            "taxi",
+            "food",
+            "ticket",
+            "guide",
+            "other"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "amount_krw": {
+          "title": "Amount Krw",
+          "type": "integer"
+        },
+        "is_comfort_cost": {
+          "default": false,
+          "title": "Is Comfort Cost",
+          "type": "boolean"
+        },
+        "fix_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fix Id"
+        }
+      },
+      "required": [
+        "category",
+        "amount_krw"
+      ],
+      "title": "CostLine",
+      "type": "object"
+    },
+    "Day": {
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "density": {
+          "default": "normal",
+          "enum": [
+            "relaxed",
+            "normal",
+            "packed"
+          ],
+          "title": "Density",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "move": "#/$defs/Move",
+                "stop": "#/$defs/Stop"
+              },
+              "propertyName": "type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Stop"
+              },
+              {
+                "$ref": "#/$defs/Move"
+              }
+            ]
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "date"
+      ],
+      "title": "Day",
+      "type": "object"
+    },
+    "DayWeather": {
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "max_temp_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Temp C"
+        },
+        "rain_prob": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rain Prob"
+        },
+        "heat_risk_hours": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Heat Risk Hours",
+          "type": "array"
+        },
+        "min_temp_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Temp C"
+        },
+        "apparent_max_temp_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Apparent Max Temp C"
+        },
+        "source": {
+          "default": "forecast",
+          "enum": [
+            "forecast",
+            "seasonal",
+            "archive",
+            "manual"
+          ],
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date"
+      ],
+      "title": "DayWeather",
+      "type": "object"
+    },
+    "Fix": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "to_taxi",
+            "add_rest",
+            "swap_place",
+            "drop_item",
+            "plan_b"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "delta_cost_krw": {
+          "default": 0,
+          "title": "Delta Cost Krw",
+          "type": "integer"
+        },
+        "delta_walk_min": {
+          "default": 0,
+          "title": "Delta Walk Min",
+          "type": "integer"
+        },
+        "applied": {
+          "default": false,
+          "title": "Applied",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "description"
+      ],
+      "title": "Fix",
+      "type": "object"
+    },
+    "Issue": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "rule": {
+          "enum": [
+            "continuous_walk",
+            "daily_walk",
+            "rest_interval",
+            "stairs",
+            "heat",
+            "opening_hours",
+            "food"
+          ],
+          "title": "Rule",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "must",
+            "soft"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "evidence": {
+          "default": "",
+          "title": "Evidence",
+          "type": "string"
+        },
+        "fixes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Fix"
+          },
+          "title": "Fixes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "item_id",
+        "rule",
+        "severity",
+        "message"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "Metrics": {
+      "properties": {
+        "violations": {
+          "title": "Violations",
+          "type": "integer"
+        },
+        "must_visit_kept_ratio": {
+          "title": "Must Visit Kept Ratio",
+          "type": "number"
+        },
+        "extra_cost_per_fix_krw": {
+          "title": "Extra Cost Per Fix Krw",
+          "type": "integer"
+        },
+        "max_continuous_walk_min": {
+          "title": "Max Continuous Walk Min",
+          "type": "integer"
+        },
+        "parent_walk_total_min": {
+          "title": "Parent Walk Total Min",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "violations",
+        "must_visit_kept_ratio",
+        "extra_cost_per_fix_krw",
+        "max_continuous_walk_min",
+        "parent_walk_total_min"
+      ],
+      "title": "Metrics",
+      "type": "object"
+    },
+    "Move": {
+      "properties": {
+        "type": {
+          "const": "move",
+          "default": "move",
+          "title": "Type",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "from_stop_id": {
+          "title": "From Stop Id",
+          "type": "string"
+        },
+        "to_stop_id": {
+          "title": "To Stop Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "walk",
+            "taxi",
+            "car"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "distance_m": {
+          "title": "Distance M",
+          "type": "integer"
+        },
+        "map_duration_min": {
+          "title": "Map Duration Min",
+          "type": "integer"
+        },
+        "parent_duration_min": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Duration Min"
+        },
+        "cost_krw": {
+          "default": 0,
+          "title": "Cost Krw",
+          "type": "integer"
+        },
+        "has_stairs": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Has Stairs"
+        },
+        "data_quality": {
+          "default": "api",
+          "enum": [
+            "api",
+            "manual",
+            "estimated"
+          ],
+          "title": "Data Quality",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "from_stop_id",
+        "to_stop_id",
+        "mode",
+        "distance_m",
+        "map_duration_min"
+      ],
+      "title": "Move",
+      "type": "object"
+    },
+    "ParentFeedback": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "trip_version": {
+          "title": "Trip Version",
+          "type": "integer"
+        },
+        "item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Id"
+        },
+        "channel": {
+          "enum": [
+            "button",
+            "voice"
+          ],
+          "title": "Channel",
+          "type": "string"
+        },
+        "value": {
+          "enum": [
+            "like",
+            "too_hard",
+            "answer"
+          ],
+          "title": "Value",
+          "type": "string"
+        },
+        "transcript": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transcript"
+        },
+        "status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "trip_version",
+        "channel",
+        "value"
+      ],
+      "title": "ParentFeedback",
+      "type": "object"
+    },
+    "ParentProfile": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "answers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Answers",
+          "type": "object"
+        },
+        "walking_grade": {
+          "enum": [
+            "easy",
+            "normal",
+            "limited"
+          ],
+          "title": "Walking Grade",
+          "type": "string"
+        },
+        "walking_speed_mps": {
+          "title": "Walking Speed Mps",
+          "type": "number"
+        },
+        "speed_source": {
+          "default": "rule",
+          "enum": [
+            "rule",
+            "measured",
+            "health_app"
+          ],
+          "title": "Speed Source",
+          "type": "string"
+        },
+        "confirmed_by_parent": {
+          "default": false,
+          "title": "Confirmed By Parent",
+          "type": "boolean"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        }
+      },
+      "required": [
+        "name",
+        "walking_grade",
+        "walking_speed_mps"
+      ],
+      "title": "ParentProfile",
+      "type": "object"
+    },
+    "Place": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "lat": {
+          "title": "Lat",
+          "type": "number"
+        },
+        "lng": {
+          "title": "Lng",
+          "type": "number"
+        },
+        "category": {
+          "enum": [
+            "attraction",
+            "restaurant",
+            "cafe",
+            "hotel",
+            "other"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "address": {
+          "default": "",
+          "title": "Address",
+          "type": "string"
+        },
+        "opening_hours": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opening Hours"
+        },
+        "has_stairs": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Has Stairs"
+        },
+        "is_korean_food": {
+          "default": false,
+          "title": "Is Korean Food",
+          "type": "boolean"
+        },
+        "review_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Note"
+        },
+        "data_quality": {
+          "default": "api",
+          "enum": [
+            "api",
+            "manual",
+            "estimated"
+          ],
+          "title": "Data Quality",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "lat",
+        "lng",
+        "category"
+      ],
+      "title": "Place",
+      "type": "object"
+    },
+    "Stop": {
+      "properties": {
+        "type": {
+          "const": "stop",
+          "default": "stop",
+          "title": "Type",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "place_id": {
+          "title": "Place Id",
+          "type": "string"
+        },
+        "start": {
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "title": "End",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "visit",
+            "meal",
+            "rest",
+            "hotel"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "must_visit": {
+          "default": false,
+          "title": "Must Visit",
+          "type": "boolean"
+        },
+        "added_by": {
+          "default": "agent",
+          "enum": [
+            "agent",
+            "user",
+            "validator"
+          ],
+          "title": "Added By",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "place_id",
+        "start",
+        "end",
+        "kind"
+      ],
+      "title": "Stop",
+      "type": "object"
+    },
+    "ValidationReport": {
+      "properties": {
+        "trip_version": {
+          "title": "Trip Version",
+          "type": "integer"
+        },
+        "issues": {
+          "items": {
+            "$ref": "#/$defs/Issue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "metrics": {
+          "$ref": "#/$defs/Metrics"
+        }
+      },
+      "required": [
+        "trip_version",
+        "issues",
+        "metrics"
+      ],
+      "title": "ValidationReport",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "version": {
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "destination": {
+      "title": "Destination",
+      "type": "string"
+    },
+    "check_in": {
+      "title": "Check In",
+      "type": "string"
+    },
+    "check_out": {
+      "title": "Check Out",
+      "type": "string"
+    },
+    "budget_krw": {
+      "title": "Budget Krw",
+      "type": "integer"
+    },
+    "adults": {
+      "title": "Adults",
+      "type": "integer"
+    },
+    "parents": {
+      "items": {
+        "$ref": "#/$defs/ParentProfile"
+      },
+      "title": "Parents",
+      "type": "array"
+    },
+    "constraints": {
+      "$ref": "#/$defs/Constraints"
+    },
+    "places": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Place"
+      },
+      "default": {},
+      "title": "Places",
+      "type": "object"
+    },
+    "days": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Day"
+      },
+      "title": "Days",
+      "type": "array"
+    },
+    "hotel_place_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Hotel Place Id"
+    },
+    "weather": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DayWeather"
+      },
+      "title": "Weather",
+      "type": "array"
+    },
+    "validation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ValidationReport"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "costs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CostLine"
+      },
+      "title": "Costs",
+      "type": "array"
+    },
+    "feedback": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ParentFeedback"
+      },
+      "title": "Feedback",
+      "type": "array"
+    },
+    "guide_selected": {
+      "default": false,
+      "title": "Guide Selected",
+      "type": "boolean"
+    },
+    "updated_by": {
+      "default": "system",
+      "enum": [
+        "agent",
+        "user",
+        "validator",
+        "system"
+      ],
+      "title": "Updated By",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "destination",
+    "check_in",
+    "check_out",
+    "budget_krw",
+    "adults",
+    "parents",
+    "constraints"
+  ],
+  "title": "Trip",
+  "type": "object"
+}
