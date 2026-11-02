@@ -1,0 +1,278 @@
+{
+ "marble_mountains": {
+  "steps_count": 156,
+  "steps_note": "Thuy Son 정상까지 약 156계단; 전체 관람 시 약 400계단 추정(가이드별 상이)",
+  "elevator": true,
+  "elevator_note": "15,000 VND 편도; 지상~Linh Ung/Tam Thai 구간 100~156계단 생략, 동굴/정상은 계단 필요",
+  "internal_route_km": 1.75,
+  "internal_route_note": "OSM 공개 GPS trace 13개(타임스탬프) 구간 거리 중앙값 약 1.75km (alt_probe.py)",
+  "trail_gain_m": null,
+  "source_url": [
+   "https://hoiandaytrip.com/marble-mountains-elevator/",
+   "https://sunparadiseland.com/en/SunParadiseLandDaNang/tin-tuc/marble-mountains-da-nang-the-complete-2026-guide-18496",
+   "https://api.openstreetmap.org/api/0.6/trackpoints?bbox=108.255,15.995,108.272,16.010"
+  ],
+  "id": "dad-02",
+  "steps_unavoidable": true,
+  "exposure": "mixed",
+  "surface": "uneven stone steps, slippery caves",
+  "wheelchair": null,
+  "steps_source_type": "travel blog/guide (estimate)"
+ },
+ "ba_na_hills": {
+  "steps_count": null,
+  "elevator": null,
+  "internal_route_km": 8.86,
+  "internal_route_note": "OSM trace 1개(maximaximax/11971420): 8.86km/4h10m + 4.49km/1h06m. 표본 1개라 신뢰 낮음",
+  "trail_gain_m": null,
+  "trail_gain_note": "Wikiloc '14 parque' 14.8km, gain 1488m 표기는 케이블카 포함 오염값으로 판단해 제외",
+  "source_url": [
+   "https://www.openstreetmap.org/user/maximaximax/traces/11971420",
+   "https://www.wikiloc.com/walking-trails/14-parque-258291322"
+  ],
+  "id": "dad-01",
+  "cable_car": {
+   "length_m": 5801,
+   "vertical_m": 1368,
+   "note": "전 구간 케이블카, 입장권 포함"
+  },
+  "summit_elevation_m": 1487,
+  "golden_bridge_elevation_m": 1414,
+  "golden_bridge_length_m": 150,
+  "exposure": "mixed (산정 고원, 일부 실내 Fantasy Park)",
+  "heat_note": "산정 기온 저지대보다 낮음, 안개·비 잦음",
+  "wheelchair": "guide sources conflict; 일부 전망대·계단 존재",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/B%C3%A0_N%C3%A0_Hills",
+    "type": "encyclopedia",
+    "confidence": "medium"
+   },
+   {
+    "url": "https://news.destination-asia.com/walking-the-golden-bridge-in-ba-na-hill/",
+    "type": "travel blog",
+    "confidence": "medium"
+   }
+  ]
+ },
+ "hoi_an_ancient_town": {
+  "id": "dad-03",
+  "steps_count": 0,
+  "steps_unavoidable": false,
+  "site_area_ha": 30,
+  "area_note": "UNESCO 핵심구역 약 30ha",
+  "surface": "평지 포장도로, 일부 좁은 골목",
+  "exposure": "outdoor (고택 실내 일부)",
+  "alternatives": "보행자 전용(차량 제한 시간대), 시클로·보트 유료",
+  "vehicle_free_hours": "09:00-21:30(여름)/21:00(겨울) 티켓 구역",
+  "heat_note": "낮 더위·그늘 적음, 저녁 방문 일반적; 우기 침수 가능",
+  "wheelchair": null,
+  "sources": [
+   {
+    "url": "https://danangfantasticity.com/hoi-an-ancient-town-entrance-tickets-2026",
+    "type": "tourism board",
+    "confidence": "high"
+   },
+   {
+    "url": "https://whc.unesco.org/en/list/948",
+    "type": "UNESCO",
+    "confidence": "high"
+   }
+  ]
+ },
+ "linh_ung_pagoda": {
+  "id": "dad-04",
+  "steps_count": null,
+  "steps_note": "주차장~불상 짧은 계단·고르지 않은 바닥(가이드)",
+  "steps_unavoidable": false,
+  "statue_height_m": 67,
+  "site_area_ha": 20,
+  "exposure": "outdoor",
+  "alternatives": "차량으로 경내 주차장까지 접근",
+  "cost": "무료",
+  "wheelchair": null,
+  "sources": [
+   {
+    "url": "https://danangfantasticity.com/en/linh-ung-pagoda",
+    "type": "tourism board",
+    "confidence": "high"
+   },
+   {
+    "url": "https://www.nomadotravel.app/en/attractions/lady-buddha-son-tra",
+    "type": "travel guide",
+    "confidence": "low"
+   }
+  ]
+ },
+ "my_khe_beach": {
+  "id": "dad-05",
+  "steps_count": 0,
+  "surface": "sand",
+  "exposure": "outdoor, 그늘 적음",
+  "heat_note": "한낮 직사광선; 이른 아침/늦은 오후 권장(가이드)",
+  "wheelchair": null,
+  "sources": []
+ },
+ "dragon_bridge": {
+  "id": "dad-06",
+  "steps_count": 0,
+  "surface": "포장 인도",
+  "exposure": "outdoor, night",
+  "night_show": "금·토·일 21:00 불·물 쇼(약 10~15분, 운영사 발언)",
+  "cost": "무료",
+  "seating": "공식 좌석 없음, 입석 혼잡",
+  "sources": [
+   {
+    "url": "https://news.tuoitre.vn/da-nangs-dragon-bridge-to-stage-six-consecutive-fire-shows-for-national-day-103260824211245513.htm",
+    "type": "news (operator quote)",
+    "confidence": "high"
+   },
+   {
+    "url": "https://danangfantasticity.com/the-dragon-show",
+    "type": "tourism board",
+    "confidence": "high"
+   }
+  ]
+ },
+ "han_market": {
+  "id": "dad-07",
+  "floors": 2,
+  "floor_note": "1층 식품·기념품, 2층 의류(가이드)",
+  "exposure": "indoor (비냉방 추정, 미확인)",
+  "surface": "평탄 실내, 혼잡한 좁은 통로",
+  "wheelchair": null,
+  "sources": [
+   {
+    "url": "https://danangfantasticity.com/en/shopping/han-market",
+    "type": "tourism board",
+    "confidence": "medium"
+   }
+  ]
+ },
+ "da_nang_cathedral": {
+  "id": "dad-08",
+  "steps_count": null,
+  "exposure": "outdoor 외관 위주(내부는 미사 시간 외 제한)",
+  "surface": "평지",
+  "wheelchair": null,
+  "sources": [],
+  "note": "공식 수치 미확보"
+ },
+ "cham_museum": {
+  "id": "dad-09",
+  "exposure": "indoor/semi-open galleries",
+  "air_conditioned": "conflicting (일부 갤러리만 냉방 보고)",
+  "wheelchair": "accessible entrance/restroom (리스팅, 미검증)",
+  "surface": "평탄 실내",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Museum_of_Cham_Sculpture",
+    "type": "encyclopedia",
+    "confidence": "medium"
+   },
+   {
+    "url": "https://airial.travel/attractions/vietnam/museum-of-cham-sculpture-da-nang-xub3osp-",
+    "type": "listing",
+    "confidence": "low"
+   }
+  ]
+ },
+ "asia_park": {
+  "id": "dad-10",
+  "sun_wheel_height_m": 115,
+  "exposure": "outdoor, 주로 야간 운영",
+  "alternatives": "관람차(좌석 탑승)",
+  "surface": "포장",
+  "wheelchair": null,
+  "sources": [
+   {
+    "url": "https://www.nomadotravel.app/en/attractions/asia-park-sun-wheel",
+    "type": "travel guide",
+    "confidence": "low"
+   }
+  ]
+ },
+ "nui_than_tai": {
+  "id": "dad-11",
+  "site_area_ha": 60,
+  "area_note": "KKday는 165ha(이상값)",
+  "alternatives": "단지 내 전동 셔틀",
+  "surface": "경사지, 계단·고르지 않은 길(가이드)",
+  "exposure": "outdoor (온천풀)",
+  "wheelchair": "no formal access (가이드)",
+  "sources": [
+   {
+    "url": "https://www.klook.com/activity/16861-nui-than-tai-hot-springs-da-nang/",
+    "type": "booking platform",
+    "confidence": "low"
+   },
+   {
+    "url": "https://www.nomadotravel.app/en/attractions/nui-than-tai-hot-springs",
+    "type": "travel guide",
+    "confidence": "low"
+   }
+  ]
+ },
+ "my_son_sanctuary": {
+  "id": "dad-12",
+  "alternatives": "매표소~유적 전동차 (요금·거리 미확보)",
+  "surface": "흙길·벽돌 유적, 고르지 않음",
+  "exposure": "outdoor, 그늘 일부(숲)",
+  "heat_note": "오전 일찍 방문 권장(가이드)",
+  "wheelchair": null,
+  "sources": [
+   {
+    "url": "https://whc.unesco.org/en/list/949",
+    "type": "UNESCO",
+    "confidence": "high"
+   }
+  ]
+ },
+ "hai_van_pass": {
+  "id": "dad-13",
+  "summit_elevation_m": 496,
+  "route_length_km": 20,
+  "route_note": "20~21km(출처별)",
+  "exposure": "차량 이동 위주, 정상 관문 짧은 도보",
+  "surface": "정상 Hai Van Gate 주변 계단·돌길",
+  "wheelchair": null,
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/H%E1%BA%A3i_V%C3%A2n_Pass",
+    "type": "encyclopedia",
+    "confidence": "high"
+   }
+  ]
+ },
+ "hoi_an_night_market": {
+  "id": "dad-14",
+  "steps_count": 0,
+  "exposure": "outdoor, night",
+  "surface": "평지, 매우 혼잡",
+  "night": "저녁 운영(Nguyen Hoang 거리)",
+  "wheelchair": null,
+  "sources": []
+ },
+ "cam_thanh_coconut": {
+  "id": "dad-15",
+  "site_area_ha": 100,
+  "area_note": "약 100ha(출처별 55~100+)",
+  "alternatives": "바구니배(필수 탑승)",
+  "boat_duration_min": 45,
+  "cost": "입장 30,000VND, 배 120,000~200,000VND/인(가이드)",
+  "surface": "boat boarding(흔들림, 낮은 승선)",
+  "exposure": "outdoor, 그늘 적음",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/B%E1%BA%A3y_M%E1%BA%ABu_Coconut_Forest",
+    "type": "encyclopedia",
+    "confidence": "medium"
+   },
+   {
+    "url": "https://goodmorning-hoian.com/en/basket-boat-hoi-an/",
+    "type": "travel blog",
+    "confidence": "low"
+   }
+  ]
+ }
+}

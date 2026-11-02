@@ -1,0 +1,184 @@
+[
+ {
+  "id": "dad-01",
+  "name_ko": "바나힐 썬월드",
+  "name_en": "Sun World Ba Na Hills",
+  "candidates_n": 27,
+  "zone_type": "buffer_300m",
+  "area_m2": 282743,
+  "match_method": "linear/point site: 300m buffer around nearest OSM name match",
+  "osm_type": "node",
+  "osm_id": 4122433690,
+  "osm_name": "Núi Bà Nà",
+  "osm_tags": {
+   "name:en": "Bà Nà Mountain",
+   "natural": "peak"
+  },
+  "pedestrian_way_count": 9,
+  "pedestrian_length_m": 987,
+  "pedestrian_density_m_per_ha": 34.9,
+  "steps_count": 2,
+  "steps_length_m": 163,
+  "step_count_sum": null,
+  "steps_with_step_count": 0,
+  "aerialway": true,
+  "aerialways": [
+   {
+    "id": 1107381521,
+    "type": "gondola",
+    "name": null,
+    "length_m": 5654
+   }
+  ],
+  "rail_shuttle": [],
+  "elevator_count": 0,
+  "conveying_count": 0,
+  "bench_count": 0,
+  "toilets_count": 1,
+  "shelter_count": 0,
+  "elevation": {
+   "sample_step_m": 40,
+   "n_samples": 33,
+   "min_m": 1437.0,
+   "max_m": 1482.0,
+   "range_m": 45.0,
+   "main_way_id": 1109970008,
+   "main_way_len_m": 341,
+   "main_way_name": null,
+   "main_way_climb_m": 28.0,
+   "network_climb_m": 81.0,
+   "walk_only_climb_m": 45.0,
+   "walk_only_method": "max elevation range within 800m clusters around aerialway terminals (+unserved cluster)"
+  },
+  "quality": {
+   "surface_cov_pct": 14.6,
+   "incline_cov_pct": 0.0,
+   "sac_scale_cov_pct": 0.0,
+   "wheelchair_cov_pct": 0.0,
+   "step_count_cov_pct_of_steps": 0.0,
+   "handrail_cov_pct_of_steps": 0.0,
+   "dem": "Open-Meteo elevation (Copernicus GLO-90, ~90 m)"
+  },
+  "quality_flags": [
+   "zone_is_buffer",
+   "steps_without_step_count",
+   "low_surface_coverage",
+   "incline_mostly_missing"
+  ]
+ },
+ {
+  "id": "dad-02",
+  "name_ko": "오행산(마블마운틴)",
+  "name_en": "Marble Mountains",
+  "candidates_n": 33,
+  "zone_type": "buffer_300m",
+  "area_m2": 282743,
+  "match_method": "linear/point site: 300m buffer around nearest OSM name match",
+  "osm_type": "node",
+  "osm_id": 12622064034,
+  "osm_name": "Marble Mountains Museum",
+  "osm_tags": {
+   "tourism": "museum"
+  },
+  "pedestrian_way_count": 56,
+  "pedestrian_length_m": 1714,
+  "pedestrian_density_m_per_ha": 60.6,
+  "steps_count": 10,
+  "steps_length_m": 205,
+  "step_count_sum": 113,
+  "steps_with_step_count": 3,
+  "aerialway": false,
+  "aerialways": [],
+  "rail_shuttle": [],
+  "elevator_count": 1,
+  "conveying_count": 0,
+  "bench_count": 7,
+  "toilets_count": 0,
+  "shelter_count": 0,
+  "elevation": {
+   "sample_step_m": 40,
+   "n_samples": 126,
+   "min_m": 7.0,
+   "max_m": 80.0,
+   "range_m": 73.0,
+   "main_way_id": 1127946256,
+   "main_way_len_m": 226,
+   "main_way_name": null,
+   "main_way_climb_m": 29.0,
+   "network_climb_m": 361.0,
+   "walk_only_climb_m": 73.0,
+   "walk_only_method": "no aerialway: equals walkway elevation range"
+  },
+  "quality": {
+   "surface_cov_pct": 30.7,
+   "incline_cov_pct": 8.3,
+   "sac_scale_cov_pct": 0.0,
+   "wheelchair_cov_pct": 0.0,
+   "step_count_cov_pct_of_steps": 30.0,
+   "handrail_cov_pct_of_steps": 57.8,
+   "dem": "Open-Meteo elevation (Copernicus GLO-90, ~90 m)"
+  },
+  "quality_flags": [
+   "zone_is_buffer"
+  ]
+ },
+ {
+  "id": "dad-03",
+  "name_ko": "호이안 구시가지",
+  "name_en": "Hoi An Ancient Town",
+  "candidates_n": 28,
+  "zone_type": "buffer_300m",
+  "area_m2": 282743,
+  "match_method": "linear/point site: 300m buffer around nearest OSM name match",
+  "osm_type": "node",
+  "osm_id": 4601279489,
+  "osm_name": "Phố cổ Hội An",
+  "osm_tags": {
+   "name:en": "Hoi An Old Town",
+   "place": "quarter"
+  },
+  "pedestrian_way_count": 52,
+  "pedestrian_length_m": 2512,
+  "pedestrian_density_m_per_ha": 88.8,
+  "steps_count": 1,
+  "steps_length_m": 6,
+  "step_count_sum": null,
+  "steps_with_step_count": 0,
+  "aerialway": false,
+  "aerialways": [],
+  "rail_shuttle": [],
+  "elevator_count": 0,
+  "conveying_count": 0,
+  "bench_count": 7,
+  "toilets_count": 6,
+  "shelter_count": 0,
+  "elevation": {
+   "sample_step_m": 40,
+   "n_samples": 129,
+   "min_m": 2.0,
+   "max_m": 9.0,
+   "range_m": 7.0,
+   "main_way_id": 751926702,
+   "main_way_len_m": 293,
+   "main_way_name": null,
+   "main_way_climb_m": 2.0,
+   "network_climb_m": 15.0,
+   "walk_only_climb_m": 7.0,
+   "walk_only_method": "no aerialway: equals walkway elevation range"
+  },
+  "quality": {
+   "surface_cov_pct": 32.2,
+   "incline_cov_pct": 0.2,
+   "sac_scale_cov_pct": 0.0,
+   "wheelchair_cov_pct": 5.9,
+   "step_count_cov_pct_of_steps": 0.0,
+   "handrail_cov_pct_of_steps": 100.0,
+   "dem": "Open-Meteo elevation (Copernicus GLO-90, ~90 m)"
+  },
+  "quality_flags": [
+   "zone_is_buffer",
+   "steps_without_step_count",
+   "incline_mostly_missing"
+  ]
+ }
+]

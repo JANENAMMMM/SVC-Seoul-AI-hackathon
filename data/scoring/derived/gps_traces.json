@@ -1,0 +1,976 @@
+{
+ "source": "OSM api/0.6/trackpoints + Open-Meteo elevation",
+ "generated": "2026-11-02",
+ "sites": [
+  {
+   "id": "dad-01",
+   "name_ko": "바나힐 썬월드",
+   "name_en": "Sun World Ba Na Hills",
+   "lat": 16.0265625,
+   "lng": 108.03281249999999,
+   "zone": {
+    "bbox": [
+     108.01879294566079,
+     16.013087832375135,
+     108.04683205433919,
+     16.040037167624867
+    ],
+    "source": "point_bbox_1500m"
+   },
+   "pages_fetched": 1,
+   "filter_stats": {
+    "raw_segments": 3,
+    "untimed_segments": 1,
+    "rejected": {
+     "jump": 2
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-02",
+   "name_ko": "오행산(마블마운틴)",
+   "name_en": "Marble Mountains",
+   "lat": 16.0037104,
+   "lng": 108.2631605,
+   "zone": {
+    "bbox": [
+     108.25942238014376,
+     16.000117155300035,
+     108.26689861985624,
+     16.007303644699963
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 4,
+   "filter_stats": {
+    "raw_segments": 40,
+    "untimed_segments": 3,
+    "rejected": {
+     "jump": 3,
+     "fast": 23,
+     "too_short": 3
+    }
+   },
+   "summary": {
+    "n_traces": 5,
+    "median_km": 1.7,
+    "p25_km": 1.692,
+    "p75_km": 2.86,
+    "median_duration_min": 87.5,
+    "median_ascent_m": 177.0,
+    "median_speed_mps": 0.87,
+    "coverage": "usable"
+   },
+   "traces": [
+    {
+     "trace": "/user/taki3hira/traces/12446921",
+     "n_segments": 2,
+     "walked_km": 1.7,
+     "duration_min": 96.6,
+     "moving_min": 32.5,
+     "avg_speed_mps": 0.87,
+     "ascent_m": 177.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/Rick-Rainer%20Ludwig/traces/12146711",
+     "n_segments": 2,
+     "walked_km": 2.86,
+     "duration_min": 133.3,
+     "moving_min": 65.7,
+     "avg_speed_mps": 0.73,
+     "ascent_m": 255.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/maximaximax/traces/11971420",
+     "n_segments": 2,
+     "walked_km": 1.692,
+     "duration_min": 34.8,
+     "moving_min": 20.2,
+     "avg_speed_mps": 1.4,
+     "ascent_m": 142.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898049287040",
+     "n_segments": 1,
+     "walked_km": 0.303,
+     "duration_min": 14.3,
+     "moving_min": 8.8,
+     "avg_speed_mps": 0.57,
+     "ascent_m": 15.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337225",
+     "n_segments": 5,
+     "walked_km": 4.42,
+     "duration_min": 87.5,
+     "moving_min": 57.9,
+     "avg_speed_mps": 1.27,
+     "ascent_m": 269.0,
+     "aerialway_overlap": false
+    }
+   ]
+  },
+  {
+   "id": "dad-03",
+   "name_ko": "호이안 구시가지",
+   "name_en": "Hoi An Ancient Town",
+   "lat": 15.8771477,
+   "lng": 108.3286201,
+   "zone": {
+    "bbox": [
+     108.32301645676877,
+     15.871757832950054,
+     108.33422374323122,
+     15.882537567049946
+    ],
+    "source": "point_bbox_600m"
+   },
+   "pages_fetched": 15,
+   "filter_stats": {
+    "raw_segments": 101,
+    "untimed_segments": 8,
+    "rejected": {
+     "fast": 37,
+     "jump": 4,
+     "too_short": 23,
+     "trace_too_fast_or_short": 7
+    }
+   },
+   "summary": {
+    "n_traces": 18,
+    "median_km": 2.775,
+    "p25_km": 1.314,
+    "p75_km": 5.045,
+    "median_duration_min": 71.35,
+    "median_ascent_m": 12.0,
+    "median_speed_mps": 1.06,
+    "coverage": "usable"
+   },
+   "traces": [
+    {
+     "trace": "/user/aakerbeere/traces/2102823",
+     "n_segments": 5,
+     "walked_km": 1.035,
+     "duration_min": 36.6,
+     "moving_min": 20.9,
+     "avg_speed_mps": 0.83,
+     "ascent_m": 6.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/DRW/traces/1846283",
+     "n_segments": 1,
+     "walked_km": 0.622,
+     "duration_min": 7.9,
+     "moving_min": 7.9,
+     "avg_speed_mps": 1.31,
+     "ascent_m": 6.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898043724032",
+     "n_segments": 1,
+     "walked_km": 6.013,
+     "duration_min": 168.6,
+     "moving_min": 56.0,
+     "avg_speed_mps": 1.79,
+     "ascent_m": 27.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898043971456",
+     "n_segments": 3,
+     "walked_km": 2.403,
+     "duration_min": 94.5,
+     "moving_min": 49.3,
+     "avg_speed_mps": 0.81,
+     "ascent_m": 17.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898043974720",
+     "n_segments": 1,
+     "walked_km": 1.703,
+     "duration_min": 62.1,
+     "moving_min": 47.2,
+     "avg_speed_mps": 0.6,
+     "ascent_m": 5.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898043977792",
+     "n_segments": 1,
+     "walked_km": 1.621,
+     "duration_min": 46.9,
+     "moving_min": 38.8,
+     "avg_speed_mps": 0.7,
+     "ascent_m": 10.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/westnordost/traces/1562968",
+     "n_segments": 4,
+     "walked_km": 7.619,
+     "duration_min": 209.5,
+     "moving_min": 132.2,
+     "avg_speed_mps": 0.96,
+     "ascent_m": 53.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/westnordost/traces/1562966",
+     "n_segments": 2,
+     "walked_km": 3.674,
+     "duration_min": 135.2,
+     "moving_min": 73.7,
+     "avg_speed_mps": 0.83,
+     "ascent_m": 13.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/westnordost/traces/1562965",
+     "n_segments": 1,
+     "walked_km": 2.112,
+     "duration_min": 80.6,
+     "moving_min": 47.3,
+     "avg_speed_mps": 0.74,
+     "ascent_m": 12.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/romge/traces/1503414",
+     "n_segments": 4,
+     "walked_km": 3.147,
+     "duration_min": 50.4,
+     "moving_min": 25.8,
+     "avg_speed_mps": 2.04,
+     "ascent_m": 12.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/moggus/traces/1424165",
+     "n_segments": 1,
+     "walked_km": 0.974,
+     "duration_min": 13.6,
+     "moving_min": 7.5,
+     "avg_speed_mps": 2.16,
+     "ascent_m": 7.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337239",
+     "n_segments": 2,
+     "walked_km": 4.459,
+     "duration_min": 45.4,
+     "moving_min": 14.1,
+     "avg_speed_mps": 5.29,
+     "ascent_m": 34.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337232",
+     "n_segments": 5,
+     "walked_km": 8.851,
+     "duration_min": 150.3,
+     "moving_min": 69.9,
+     "avg_speed_mps": 2.11,
+     "ascent_m": 66.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337227",
+     "n_segments": 6,
+     "walked_km": 7.078,
+     "duration_min": 124.0,
+     "moving_min": 47.1,
+     "avg_speed_mps": 2.51,
+     "ascent_m": 36.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337225",
+     "n_segments": 7,
+     "walked_km": 5.24,
+     "duration_min": 186.1,
+     "moving_min": 85.5,
+     "avg_speed_mps": 1.02,
+     "ascent_m": 24.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/FredB/traces/1152304",
+     "n_segments": 5,
+     "walked_km": 3.515,
+     "duration_min": 85.2,
+     "moving_min": 40.0,
+     "avg_speed_mps": 1.47,
+     "ascent_m": null,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/FredB/traces/1152302",
+     "n_segments": 1,
+     "walked_km": 0.456,
+     "duration_min": 7.3,
+     "moving_min": 7.2,
+     "avg_speed_mps": 1.05,
+     "ascent_m": 4.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/FredB/traces/1152300",
+     "n_segments": 2,
+     "walked_km": 1.211,
+     "duration_min": 36.0,
+     "moving_min": 18.9,
+     "avg_speed_mps": 1.07,
+     "ascent_m": 6.0,
+     "aerialway_overlap": false
+    }
+   ]
+  },
+  {
+   "id": "dad-04",
+   "name_ko": "영흥사(린응사, 손짜반도)",
+   "name_en": "Linh Ung Pagoda Son Tra",
+   "lat": 16.100205499999998,
+   "lng": 108.2778816,
+   "zone": {
+    "bbox": [
+     108.27414166829531,
+     16.096612255300034,
+     108.28162153170469,
+     16.10379874469996
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 1,
+   "filter_stats": {
+    "raw_segments": 4,
+    "untimed_segments": 1,
+    "rejected": {
+     "too_short": 1,
+     "fast": 1
+    }
+   },
+   "summary": {
+    "n_traces": 1,
+    "median_km": 0.917,
+    "p25_km": 0.917,
+    "p75_km": 0.917,
+    "median_duration_min": 7.7,
+    "median_ascent_m": 83.0,
+    "median_speed_mps": 3.15,
+    "coverage": "none"
+   },
+   "traces": [
+    {
+     "trace": "/user/worldwidewolford/traces/1288482",
+     "n_segments": 1,
+     "walked_km": 0.917,
+     "duration_min": 7.7,
+     "moving_min": 4.8,
+     "avg_speed_mps": 3.15,
+     "ascent_m": 83.0,
+     "aerialway_overlap": false
+    }
+   ]
+  },
+  {
+   "id": "dad-05",
+   "name_ko": "미케 해변",
+   "name_en": "My Khe Beach",
+   "lat": 16.0616944,
+   "lng": 108.24693459999999,
+   "zone": {
+    "bbox": [
+     108.24319539288459,
+     16.058101155300037,
+     108.25067380711539,
+     16.065287644699964
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 1,
+   "filter_stats": {
+    "raw_segments": 16,
+    "untimed_segments": 1,
+    "rejected": {
+     "fast": 13,
+     "jump": 2
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-06",
+   "name_ko": "용다리",
+   "name_en": "Dragon Bridge",
+   "lat": 16.0611042,
+   "lng": 108.2276926,
+   "zone": {
+    "bbox": [
+     108.22395340397394,
+     16.057510955300035,
+     108.23143179602606,
+     16.064697444699963
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 1,
+   "filter_stats": {
+    "raw_segments": 13,
+    "untimed_segments": 1,
+    "rejected": {
+     "jump": 2,
+     "too_short": 2,
+     "fast": 8
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-07",
+   "name_ko": "한시장",
+   "name_en": "Han Market",
+   "lat": 16.068083599999998,
+   "lng": 108.224069,
+   "zone": {
+    "bbox": [
+     108.22032967280762,
+     16.064490355300034,
+     108.22780832719238,
+     16.07167684469996
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 2,
+   "filter_stats": {
+    "raw_segments": 16,
+    "untimed_segments": 2,
+    "rejected": {
+     "fast": 13,
+     "jump": 1
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-08",
+   "name_ko": "다낭 대성당(핑크성당)",
+   "name_en": "Da Nang Cathedral",
+   "lat": 16.066667199999998,
+   "lng": 108.22318729999999,
+   "zone": {
+    "bbox": [
+     108.21944799943175,
+     16.063073955300034,
+     108.22692660056823,
+     16.07026044469996
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 2,
+   "filter_stats": {
+    "raw_segments": 16,
+    "untimed_segments": 2,
+    "rejected": {
+     "fast": 11,
+     "jump": 1,
+     "trace_too_fast_or_short": 2
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-09",
+   "name_ko": "참 조각 박물관",
+   "name_en": "Museum of Cham Sculpture",
+   "lat": 16.0603007,
+   "lng": 108.2232677,
+   "zone": {
+    "bbox": [
+     108.21952851907024,
+     16.056707455300035,
+     108.22700688092975,
+     16.063893944699963
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 2,
+   "filter_stats": {
+    "raw_segments": 18,
+    "untimed_segments": 2,
+    "rejected": {
+     "fast": 14,
+     "too_short": 1,
+     "jump": 1
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-10",
+   "name_ko": "아시아파크(썬휠)",
+   "name_en": "Asia Park Sun World Da Nang Wonders",
+   "lat": 16.0412139,
+   "lng": 108.22563319999999,
+   "zone": {
+    "bbox": [
+     108.2218943774245,
+     16.037620655300035,
+     108.22937202257548,
+     16.044807144699963
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 1,
+   "filter_stats": {
+    "raw_segments": 6,
+    "untimed_segments": 1,
+    "rejected": {
+     "fast": 5
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-11",
+   "name_ko": "누이탄타이 온천공원",
+   "name_en": "Nui Than Tai Hot Springs Park",
+   "lat": 15.9678512,
+   "lng": 108.0198053,
+   "zone": {
+    "bbox": [
+     108.0160678503088,
+     15.964257955300036,
+     108.0235427496912,
+     15.971444444699964
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 1,
+   "filter_stats": {
+    "raw_segments": 0,
+    "untimed_segments": 0,
+    "rejected": {}
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-12",
+   "name_ko": "미선 유적지",
+   "name_en": "My Son Sanctuary",
+   "lat": 15.7687821,
+   "lng": 108.11931539999999,
+   "zone": {
+    "bbox": [
+     108.11184787945517,
+     15.761595610600072,
+     108.12678292054481,
+     15.775968589399927
+    ],
+    "source": "point_bbox_800m"
+   },
+   "pages_fetched": 2,
+   "filter_stats": {
+    "raw_segments": 8,
+    "untimed_segments": 2,
+    "rejected": {
+     "too_short": 1,
+     "fast": 2
+    }
+   },
+   "summary": {
+    "n_traces": 3,
+    "median_km": 3.851,
+    "p25_km": 3.415,
+    "p75_km": 4.181,
+    "median_duration_min": 88.8,
+    "median_ascent_m": 120.0,
+    "median_speed_mps": 1.84,
+    "coverage": "weak"
+   },
+   "traces": [
+    {
+     "trace": "/user/moggus/traces/1424165",
+     "n_segments": 1,
+     "walked_km": 3.851,
+     "duration_min": 88.8,
+     "moving_min": 34.0,
+     "avg_speed_mps": 1.89,
+     "ascent_m": 121.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/jb_osm_test/traces/992898",
+     "n_segments": 1,
+     "walked_km": 4.51,
+     "duration_min": 120.0,
+     "moving_min": 76.8,
+     "avg_speed_mps": 0.98,
+     "ascent_m": 120.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/richlv/traces/884155",
+     "n_segments": 3,
+     "walked_km": 2.98,
+     "duration_min": 35.0,
+     "moving_min": 27.0,
+     "avg_speed_mps": 1.84,
+     "ascent_m": 105.0,
+     "aerialway_overlap": false
+    }
+   ]
+  },
+  {
+   "id": "dad-13",
+   "name_ko": "하이반 고개",
+   "name_en": "Hai Van Pass",
+   "lat": 16.2,
+   "lng": 108.133333,
+   "zone": {
+    "bbox": [
+     108.11930118054117,
+     16.186525332375133,
+     108.14736481945882,
+     16.213474667624865
+    ],
+    "source": "point_bbox_1500m"
+   },
+   "pages_fetched": 3,
+   "filter_stats": {
+    "raw_segments": 12,
+    "untimed_segments": 3,
+    "rejected": {
+     "fast": 6,
+     "jump": 2,
+     "trace_too_fast_or_short": 1
+    }
+   },
+   "summary": {
+    "n_traces": 0,
+    "median_km": null,
+    "p25_km": null,
+    "p75_km": null,
+    "median_duration_min": null,
+    "median_ascent_m": null,
+    "median_speed_mps": null,
+    "coverage": "none"
+   },
+   "traces": []
+  },
+  {
+   "id": "dad-14",
+   "name_ko": "호이안 야시장",
+   "name_en": "Hoi An Night Market",
+   "lat": 15.875503,
+   "lng": 108.3262087,
+   "zone": {
+    "bbox": [
+     108.322472968345,
+     15.871909755300036,
+     108.329944431655,
+     15.879096244699964
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 8,
+   "filter_stats": {
+    "raw_segments": 50,
+    "untimed_segments": 4,
+    "rejected": {
+     "jump": 3,
+     "fast": 22,
+     "too_short": 8,
+     "trace_too_fast_or_short": 2
+    }
+   },
+   "summary": {
+    "n_traces": 14,
+    "median_km": 1.143,
+    "p25_km": 0.507,
+    "p75_km": 2.089,
+    "median_duration_min": 42.15,
+    "median_ascent_m": 6.0,
+    "median_speed_mps": 0.88,
+    "coverage": "usable"
+   },
+   "traces": [
+    {
+     "trace": "/user/aakerbeere/traces/2102823",
+     "n_segments": 4,
+     "walked_km": 0.74,
+     "duration_min": 30.9,
+     "moving_min": 15.2,
+     "avg_speed_mps": 0.81,
+     "ascent_m": 6.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898044764032",
+     "n_segments": 2,
+     "walked_km": 2.784,
+     "duration_min": 140.6,
+     "moving_min": 36.2,
+     "avg_speed_mps": 1.28,
+     "ascent_m": 17.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898044764224",
+     "n_segments": 2,
+     "walked_km": 1.007,
+     "duration_min": 52.3,
+     "moving_min": 23.9,
+     "avg_speed_mps": 0.7,
+     "ascent_m": 6.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898044763904",
+     "n_segments": 1,
+     "walked_km": 0.43,
+     "duration_min": 16.3,
+     "moving_min": 16.3,
+     "avg_speed_mps": 0.44,
+     "ascent_m": 0.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "anon1898044765120",
+     "n_segments": 1,
+     "walked_km": 1.075,
+     "duration_min": 36.2,
+     "moving_min": 28.3,
+     "avg_speed_mps": 0.63,
+     "ascent_m": 7.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/westnordost/traces/1562968",
+     "n_segments": 3,
+     "walked_km": 2.285,
+     "duration_min": 64.9,
+     "moving_min": 44.6,
+     "avg_speed_mps": 0.85,
+     "ascent_m": 24.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/westnordost/traces/1562966",
+     "n_segments": 2,
+     "walked_km": 1.212,
+     "duration_min": 48.1,
+     "moving_min": 23.6,
+     "avg_speed_mps": 0.86,
+     "ascent_m": 4.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/westnordost/traces/1562965",
+     "n_segments": 1,
+     "walked_km": 1.42,
+     "duration_min": 65.6,
+     "moving_min": 36.7,
+     "avg_speed_mps": 0.65,
+     "ascent_m": 6.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337239",
+     "n_segments": 1,
+     "walked_km": 0.117,
+     "duration_min": 5.8,
+     "moving_min": 1.1,
+     "avg_speed_mps": 1.82,
+     "ascent_m": 0.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337232",
+     "n_segments": 4,
+     "walked_km": 1.5,
+     "duration_min": 35.2,
+     "moving_min": 24.5,
+     "avg_speed_mps": 1.02,
+     "ascent_m": 8.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337227",
+     "n_segments": 5,
+     "walked_km": 3.697,
+     "duration_min": 75.2,
+     "moving_min": 27.6,
+     "avg_speed_mps": 2.23,
+     "ascent_m": 21.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/lurkin001/traces/1337225",
+     "n_segments": 6,
+     "walked_km": 3.641,
+     "duration_min": 163.7,
+     "moving_min": 67.5,
+     "avg_speed_mps": 0.9,
+     "ascent_m": 13.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/FredB/traces/1152304",
+     "n_segments": 3,
+     "walked_km": 0.393,
+     "duration_min": 9.8,
+     "moving_min": 4.6,
+     "avg_speed_mps": 1.43,
+     "ascent_m": 5.0,
+     "aerialway_overlap": false
+    },
+    {
+     "trace": "/user/FredB/traces/1152300",
+     "n_segments": 1,
+     "walked_km": 0.316,
+     "duration_min": 5.5,
+     "moving_min": 5.5,
+     "avg_speed_mps": 0.95,
+     "ascent_m": 3.0,
+     "aerialway_overlap": false
+    }
+   ]
+  },
+  {
+   "id": "dad-15",
+   "name_ko": "껌탄 코코넛 마을(바구니배)",
+   "name_en": "Cam Thanh Coconut Village",
+   "lat": 15.888699599999999,
+   "lng": 108.3570829,
+   "zone": {
+    "bbox": [
+     108.35334692352787,
+     15.885106355300035,
+     108.36081887647212,
+     15.892292844699963
+    ],
+    "source": "point_bbox_400m"
+   },
+   "pages_fetched": 3,
+   "filter_stats": {
+    "raw_segments": 21,
+    "untimed_segments": 3,
+    "rejected": {
+     "fast": 18,
+     "jump": 1
+    }
+   },
+   "summary": {
+    "n_traces": 1,
+    "median_km": 0.14,
+    "p25_km": 0.14,
+    "p75_km": 0.14,
+    "median_duration_min": 2.7,
+    "median_ascent_m": 3.0,
+    "median_speed_mps": 2.6,
+    "coverage": "none"
+   },
+   "traces": [
+    {
+     "trace": "/user/lurkin001/traces/1337227",
+     "n_segments": 1,
+     "walked_km": 0.14,
+     "duration_min": 2.7,
+     "moving_min": 0.9,
+     "avg_speed_mps": 2.6,
+     "ascent_m": 3.0,
+     "aerialway_overlap": false
+    }
+   ]
+  }
+ ]
+}
