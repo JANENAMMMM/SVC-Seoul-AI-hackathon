@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>반걸음 기획안</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbfaf8;--ink:#16181d;--sub:#6b7078;--line:#dcd9d3;--soft:#f1efeb;--accent:#5c2d91;--accent2:#8a5cc2;--tint:#f3eef9;--warn:#b4472b}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;letter-spacing:-.01em;word-break:keep-all}
+.slide{display:none;height:100vh;padding:5vh 7vw 6vh;justify-content:safe center;border-top:6px solid var(--accent);flex-direction:column;overflow:auto}
+.slide.on{display:flex}
+.head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:4vh;font-size:13px;color:var(--sub)}
+.head b{color:var(--accent);font-weight:700;letter-spacing:.04em}
+h1{font-size:clamp(34px,4.6vw,60px);font-weight:700;line-height:1.2}
+h2{font-size:clamp(22px,2.5vw,34px);font-weight:700;line-height:1.35;margin-bottom:3.5vh;max-width:28em}
+h3{font-size:clamp(15px,1.3vw,18px);font-weight:700;margin-bottom:8px}
+p,li,td,th{font-size:clamp(14px,1.15vw,17px);line-height:1.65}
+.sub{color:var(--sub)}
+.src{font-size:12px;color:var(--sub)}
+.cols{display:grid;gap:3vw}
+.c2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.c3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.block{border-top:2px solid var(--accent);padding-top:12px}
+.block.lt{border-top:1px solid var(--line)}
+.num{font-size:12px;color:var(--sub);font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+ul,ol{padding-left:18px}
+li{margin-bottom:2px}
+.kpi{font-size:clamp(26px,2.6vw,38px);font-weight:700;color:var(--accent);line-height:1.1}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--sub);font-weight:500;border-bottom:1px solid var(--accent)}
+td.ours{color:var(--accent);font-weight:500}
+.grade{display:grid;grid-template-columns:44px 1fr;gap:6px 12px;align-items:baseline}
+.grade b{font-weight:700}
+.flow{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0;border:1px solid var(--line);margin-bottom:4vh}
+.flow>div{padding:14px 16px;border-right:1px solid var(--line);position:relative}
+.flow>div:last-child{border-right:0;background:var(--tint)}
+.flow .step{font-size:12px;color:var(--sub);margin-bottom:4px}
+.bars{display:flex;gap:14px;align-items:flex-end;height:120px;border-bottom:1px solid var(--ink);margin:10px 0 6px}
+.bars div{flex:1;background:var(--line);position:relative}
+.bars div.over{background:var(--warn)}
+.bars div span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;color:var(--sub)}
+.bl{display:flex;gap:14px}.bl span{flex:1;text-align:center;font-size:12px;color:var(--sub)}
+.cover{justify-content:center;background:linear-gradient(90deg,var(--tint) 0 38%,var(--bg) 38%)}
+.cover .meta{margin-top:5vh;display:flex;gap:4vw;font-size:14px;color:var(--sub);border-top:1px solid var(--ink);padding-top:12px}
+.statement{font-size:clamp(17px,1.6vw,22px);line-height:1.6;max-width:36em;border-left:3px solid var(--accent);padding-left:16px;margin-top:4vh}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch;margin-bottom:3vh}
+.pipe .lane{border:1px solid var(--line);border-right:0;padding:12px 14px;background:#fff}
+.pipe .lane:last-child{border-right:1px solid var(--line)}
+.pipe .lane h3{font-size:14px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.pipe .lane p{font-size:13px;line-height:1.55}
+.tagx{display:inline-block;font-size:11px;padding:1px 7px;border:1px solid var(--line);color:var(--sub);margin:2px 2px 0 0}
+.tagx.r{border-color:var(--accent);color:var(--accent)}
+.tagx.l{border-color:var(--warn);color:var(--warn)}
+.tagx.h{background:var(--accent);color:#fff;border-color:var(--accent)}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--sub);margin-bottom:2vh}
+.tl{display:flex;gap:4px;margin:6px 0}
+.tl div{flex:1;padding:8px 6px;font-size:12px;text-align:center;border:1px solid var(--line);background:#fff}
+.tl .H{background:#f3dcd5;border-color:#e2b3a5}.tl .M{background:#f2ead8;border-color:#dccba3}.tl .L{background:#e3ebe4;border-color:#b8cdbb}
+.tl .x{outline:2px solid var(--warn);outline-offset:-2px}
+.mock{border:1px solid var(--accent);background:#fff;font-size:12px}
+.mock .bar0{display:flex;gap:6px;align-items:center;padding:6px 10px;border-bottom:1px solid var(--line);background:var(--soft)}
+.mock .bar0 i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.mock .bar0 span{margin-left:8px;color:var(--sub)}
+.mock .body{display:grid;grid-template-columns:1.6fr 1fr;min-height:300px}
+.mock .main{padding:12px;border-right:1px solid var(--line)}
+.mock .side{padding:12px;background:#fcfcfb}
+.mock h4{font-size:13px;margin-bottom:6px}
+.mock .msg{border:1px solid var(--line);padding:6px 8px;margin-bottom:6px;line-height:1.5}
+.mock .msg.u{background:var(--tint);margin-left:20%}
+.mock .warn{border-left:3px solid var(--warn);padding:6px 8px;background:#fbf3f0;margin:8px 0;line-height:1.5}
+.mock table td,.mock table th{font-size:12px;padding:6px 8px}
+.btn{display:inline-block;border:1px solid var(--ink);padding:1px 8px;font-size:11px;margin-right:4px}
+.btn.p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card5{border:1px solid var(--ink);background:#fff;padding:16px;font-size:18px;line-height:1.6;max-width:300px}
+.card5 .d{font-size:13px;color:var(--sub)}
+.nav{position:fixed;right:20px;bottom:14px;font-size:12px;color:var(--sub);user-select:none;display:flex;gap:6px;align-items:center}
+.nav button{border:1px solid var(--line);background:var(--bg);padding:3px 10px;cursor:pointer;font-size:12px;color:var(--ink)}
+@media(max-width:760px){.slide{padding:4vh 16px 8vh}.flow{grid-auto-flow:row}.flow>div{border-right:0;border-bottom:1px solid var(--line)}}
+@page{size:1600px 900px;margin:0}
+@media print{html,body{height:auto}.slide{display:flex!important;width:1600px;height:900px;padding:56px 110px 56px!important;overflow:hidden;page-break-after:always;break-after:page}.nav{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<section class="slide cover on">
+  <p class="sub" style="margin-bottom:2vh">2026 SVC Seoul AI 해커톤 · 지정 과제 03 효도여행 설계 도우미</p>
+  <h1>반걸음</h1>
+  <p style="font-size:clamp(17px,1.7vw,24px);margin-top:2vh;max-width:30em">관광지 난이도와 배치 규칙으로 산정하는<br>부모님 여행의 하루 피로도</p>
+  <div class="meta"><span>1일차 기획안</span><span>남재은 · 김천지 · 이지원 · 노희윤</span><span>2026.11.02</span></div>
+</section>
+
+<section class="slide">
+  <div class="head"><b>01 문제와 고객</b><span>반걸음</span></div>
+  <h2>자녀는 출발 전, 일정이 부모님께 무리인지 판단할 근거를 갖고 있지 않다</h2>
+  <div class="cols c2" style="margin-bottom:4vh">
+    <div class="block">
+      <div class="num">고객</div>
+      <p><b>50대 이상 부모님</b>의 해외여행을 준비하는 <b>20~40대 자녀</b></p>
+      <p class="sub">평가 기준은 연령이 아닌 동행 가족 중 체력이 가장 낮은 구성원. 3대 가족여행까지 동일하게 적용</p>
+    </div>
+    <div class="block">
+      <div class="num">상황</div>
+      <p>패키지 상품 또는 직접 구성한 일정을 두고 부모님의 소화 가능 여부를 판단해야 하는 시점</p>
+      <p class="sub">고령층 여행 정보의 71.4%는 가족·지인을 통해 전달된다 <span class="src">— 경기연구원, 2024</span></p>
+    </div>
+  </div>
+  <div class="cols c3">
+    <div class="block lt">
+      <div class="num">불편 1</div>
+      <h3>일정표에 활동 부담이 없다</h3>
+      <p class="sub">관광지 간 이동 시간만 표기되고 관광지 내 활동량은 산정되지 않는다. 도쿄 패키지 기준 하루 2~3만 보 수준.</p>
+      <p class="src">하나투어 멘토링 · 주최측 설명</p>
+    </div>
+    <div class="block lt">
+      <div class="num">불편 2</div>
+      <h3>고강도 일정의 연속 배치</h3>
+      <p class="sub">고령층 관광지 불편 요인 1위는 경사·계단 등 이동 환경(23.1%). 부담은 개별 장소보다 배치 순서에서 누적된다.</p>
+      <p class="src">경기연구원, 2024</p>
+    </div>
+    <div class="block lt">
+      <div class="num">불편 3</div>
+      <h3>부모님께 전달하기 어렵다</h3>
+      <p class="sub">선택을 맡기면 "잘 모르겠다"로 끝나고, 일정 강도를 사전에 공유하지 못해 현지에서 갈등이 생긴다.</p>
+      <p class="src">위키트리 · 레이디경향 사례</p>
+    </div>
+  </div>
+  <div class="cols c3" style="margin-top:4vh">
+    <div><div class="kpi">63.3%</div><p class="sub">60대 해외여행 중 패키지 비중 <span class="src">— 오픈서베이 2025</span></p></div>
+    <div><div class="kpi">23.1%</div><p class="sub">경사·계단 등 이동 환경 불편 <span class="src">— 경기연구원 2024</span></p></div>
+    <div><div class="kpi">2~3만 보</div><p class="sub">도쿄 패키지 하루 보행량 <span class="src">— 주최측 설명</span></p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="head"><b>02 해결 아이디어</b><span>반걸음</span></div>
+  <h2>걸음 수 대신 관광지 난이도와 배치 규칙으로 "무리 없는 일정"을 정의한다</h2>
+  <div class="cols c3">
+    <div class="block">
+      <div class="num">A. 관광지 난이도</div>
+      <div class="grade">
+        <b>상</b><p class="sub">계단·언덕, 장시간 도보, 휴식 공간 부족, 긴 대기</p>
+        <b>중</b><p class="sub">평지이나 장시간 보행·대기</p>
+        <b>하</b><p class="sub">좌석·차량·실내 중심 (온천, 카페, 크루즈)</p>
+      </div>
+      <p class="sub" style="margin-top:10px">관광지 내부 보행 데이터는 대부분 존재하지 않는다. 현장 담당자가 판단하고 수정할 수 있는 3단계 등급을 기준으로 삼는다.</p>
+    </div>
+    <div class="block">
+      <div class="num">B. 배치 규칙</div>
+      <ol>
+        <li>난이도 상 연속 배치 금지</li>
+        <li>상 이후 휴식(하) 배치</li>
+        <li>일일 상 개수 상한 (가족 프로필 기준)</li>
+        <li>상은 오전 시간대 우선</li>
+      </ol>
+      <p class="sub" style="margin-top:10px">위반 시 순서 조정, 휴식 삽입, 동일 테마의 저강도 장소로 대체한다. 희망 방문지는 유지한다.</p>
+    </div>
+    <div class="block">
+      <div class="num">C. 일일 피로도</div>
+      <div class="bars">
+        <div style="height:42%"><span>적정</span></div>
+        <div class="over" style="height:92%"><span>초과</span></div>
+        <div style="height:64%"><span>주의</span></div>
+      </div>
+      <div class="bl"><span>Day 1</span><span>Day 2</span><span>Day 3</span></div>
+      <p class="sub" style="margin-top:10px">난이도 점수 합 + 이동 부담 − 휴식. 가족 허용치와 비교해 일자별로 표시한다.</p>
+      <p class="src">그래프는 예시</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="head"><b>02 해결 아이디어 — 기존 대안 비교</b><span>반걸음</span></div>
+  <h2>동선을 잇는 도구는 있지만, 피로가 쌓이는 순서를 평가하는 도구는 없다</h2>
+  <table>
+    <tr><th style="width:20%">기존 대안</th><th style="width:40%">한계</th><th>반걸음</th></tr>
+    <tr><td>패키지 일정표</td><td class="sub">이동 시간만 제공. 활동 강도는 고객이 추정</td><td class="ours">상품별 난이도와 일일 피로도 표기</td></tr>
+    <tr><td>여행 플래너·지도</td><td class="sub">장소 간 경로 연결에 그침</td><td class="ours">배치 규칙으로 고강도 연속 구간 탐지·조정</td></tr>
+    <tr><td>AI 여행 챗봇</td><td class="sub">조건을 문장으로만 반영. 동일 요청에도 결과가 달라짐</td><td class="ours">등급 DB와 규칙 기반 판정으로 결과 일관성 확보</td></tr>
+    <tr><td>자녀의 직접 검색</td><td class="sub">블로그·후기 반복 탐색, 판단 근거 정리 어려움</td><td class="ours">근거 리뷰가 연결된 등급, 부모님용 일정 카드 제공</td></tr>
+  </table>
+</section>
+
+<section class="slide">
+  <div class="head"><b>03 AI 활용 방식 — 난이도 산정</b><span>반걸음</span></div>
+  <h2>규칙 기반 분석을 우선하고, 등급은 자체 산식과 현장 담당자 검수로 확정한다</h2>
+  <div class="flow">
+    <div><div class="step">01 수집</div><p>관광지 속성<br><span class="sub">유형, 계단·경사, 소요 시간</span></p></div>
+    <div><div class="step">02 수집</div><p>Google 리뷰<br><span class="sub">"힘들다", "오래 걷는다", "계단이 많다"</span></p></div>
+    <div><div class="step">03 분석</div><p>규칙 기반 키워드 분석<br><span class="sub">판단이 어려운 리뷰만 sLLM으로 부담 요소 추출</span></p></div>
+    <div><div class="step">04 산정</div><p>자체 산식으로 등급 산출<br><span class="sub">상·중·하와 근거 리뷰 저장</span></p></div>
+  </div>
+  <div class="cols c2">
+    <div class="block">
+      <div class="num">관광지 난이도 DB</div>
+      <table>
+        <tr><th>필드</th><th>내용</th></tr>
+        <tr><td>등급</td><td class="sub">상 / 중 / 하</td></tr>
+        <tr><td>근거</td><td class="sub">리뷰 요약, 계단·대기 등 부담 요소</td></tr>
+        <tr><td>상태</td><td class="sub">초안 / 확정</td></tr>
+        <tr><td>이력</td><td class="sub">수정자, 수정일</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <div class="num">Human-in-the-Loop</div>
+      <ul>
+        <li>현지 가이드·상품 MD가 승인, 등급 변경, 메모 입력</li>
+        <li>확정된 등급은 자동 산정 결과로 덮어쓰지 않음</li>
+        <li>신규 관광지는 초안 생성 후 검수 대기 목록에 등록</li>
+        <li>여행 후 체감 난이도 피드백 누적 시 재검토 요청</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="head"><b>03 AI 활용 방식 — 입력과 결과</b><span>반걸음</span></div>
+  <h2>판정은 규칙 엔진이 담당하고, 챗봇은 결과를 해석하고 수정 요청을 전달한다</h2>
+  <div class="flow">
+    <div><div class="step">입력</div><p>패키지 일정표 <span class="sub">(텍스트·캡처)</span><br>가족 프로필 <span class="sub">(생활형 문항)</span></p></div>
+    <div><div class="step">정리</div><p>LLM이 일정표를<br>방문지 목록으로 변환</p></div>
+    <div><div class="step">판정</div><p>난이도 DB 조회<br>규칙 검사 · 피로도 산정</p></div>
+    <div><div class="step">결과</div><p>일자별 피로도, 위반 구간과 사유,<br>조정 전후 비교, 부모님용 카드</p></div>
+  </div>
+  <div class="cols c2">
+    <div class="block">
+      <div class="num">정보 조회형 챗봇의 역할</div>
+      <table>
+        <tr><td style="width:28%"><b>해석</b></td><td class="sub">"2일차가 초과인 이유는?" — 위반 규칙과 근거 리뷰로 답변</td></tr>
+        <tr><td><b>비교·조회</b></td><td class="sub">상품 간 피로도 비교, 관광지별 부담 요소 조회</td></tr>
+        <tr><td><b>수정 전달</b></td><td class="sub">"3일차를 여유 있게" — 정의된 조정 명령으로 변환해 규칙 엔진에 전달</td></tr>
+        <tr><td><b>문구 작성</b></td><td class="sub">부모님용 일정 카드 문구</td></tr>
+      </table>
+    </div>
+    <div class="block lt">
+      <div class="num">챗봇이 하지 않는 일</div>
+      <ul class="sub">
+        <li>난이도 등급 산정·변경 — 산식과 담당자 검수 영역</li>
+        <li>피로도 계산 — 규칙 엔진 영역</li>
+        <li>대화형 순차 일정 생성 — 기존 방식 미채택</li>
+        <li>규칙을 거치지 않은 일정 수정</li>
+      </ul>
+      <p class="sub" style="margin-top:12px">LLM 개입을 해석과 변환으로 제한해 결과 재현성을 확보하고 호출 비용을 줄인다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="head"><b>03 AI 활용 방식 — 전체 파이프라인</b><span>반걸음</span></div>
+  <h2>데이터 구축, 검수, 판정, 조정, 전달의 5단계로 구성한다</h2>
+  <div class="legend"><span><span class="tagx r">규칙</span> 규칙·산식</span><span><span class="tagx l">LLM</span> 언어모델</span><span><span class="tagx h">사람</span> 담당자 개입</span><span><span class="tagx">DB</span> 저장소</span></div>
+  <div class="pipe">
+    <div class="lane"><h3>1. 데이터 구축</h3><p>관광지 속성 수집<br>Google 리뷰 크롤링</p><p><span class="tagx r">키워드 분석</span><span class="tagx l">sLLM 추출</span><span class="tagx r">난이도 산식</span></p></div>
+    <div class="lane"><h3>2. 검수</h3><p>초안 등급을 가이드·MD가 확정<br>확정 등급은 고정</p><p><span class="tagx h">HITL</span><span class="tagx">난이도 DB</span></p></div>
+    <div class="lane"><h3>3. 판정</h3><p>일정표 → 방문지 목록<br>규칙 검사, 일일 피로도</p><p><span class="tagx l">일정 정리</span><span class="tagx r">규칙 엔진</span></p></div>
+    <div class="lane"><h3>4. 조정</h3><p>순서 변경, 휴식 삽입, 저강도 대체<br>조정 후 재판정</p><p><span class="tagx r">조정안</span><span class="tagx l">챗봇 요청 변환</span></p></div>
+    <div class="lane"><h3>5. 전달</h3><p>조정 전후 비교<br>부모님용 일정 카드</p><p><span class="tagx l">문구 생성</span></p></div>
+  </div>
+  <div class="cols c2">
+    <div class="block lt">
+      <div class="num">판정 예시 — 패키지 2일차 원안</div>
+      <div class="tl"><div class="M">09 시장</div><div class="H x">11 언덕 사원</div><div class="H x">13 성곽 유적</div><div class="M">15 구시가지</div><div class="H">17 전망대</div></div>
+      <p class="sub">상 3회 · 상 연속 배치 1건 · 휴식 없음 → <b style="color:var(--warn)">피로도 초과</b></p>
+    </div>
+    <div class="block lt">
+      <div class="num">조정안</div>
+      <div class="tl"><div class="H">09 언덕 사원</div><div class="L">11 카페 휴식</div><div class="M">12 시장·점심</div><div class="H">14 성곽 유적</div><div class="L">16 온천</div></div>
+      <p class="sub">희망 방문지 유지 · 전망대를 다음 날 오전으로 이동 → <b>적정</b></p>
+    </div>
+  </div>
+  <p class="src">장소명은 설명용 예시</p>
+</section>
+
+<section class="slide">
+  <div class="head"><b>03 완성 화면 예시</b><span>반걸음</span></div>
+  <h2>자녀는 일정 진단 화면에서, 담당자는 검수 화면에서 같은 난이도 DB를 사용한다</h2>
+  <div class="cols c2" style="grid-template-columns:1.5fr 1fr">
+    <div class="mock">
+      <div class="bar0"><i></i><i></i><i></i><span>반걸음 · 일정 진단 — 후쿠오카 3박 4일 패키지</span></div>
+      <div class="body">
+        <div class="main">
+          <h4>일자별 피로도 <span class="sub" style="font-weight:400">허용치 대비</span></h4>
+          <div class="bars" style="height:80px">
+            <div style="height:40%"><span>적정</span></div><div class="over" style="height:95%"><span>초과</span></div><div style="height:60%"><span>주의</span></div><div style="height:35%"><span>적정</span></div>
+          </div>
+          <div class="bl"><span>Day 1</span><span>Day 2</span><span>Day 3</span><span>Day 4</span></div>
+          <div class="warn"><b>Day 2 · 규칙 위반 2건</b><br>언덕 사원 → 성곽 유적 상 연속 배치 / 상 이후 휴식 없음<br><span class="sub">근거: "정상까지 계단이 끝이 없다" 외 리뷰 38건</span></div>
+          <span class="btn p">조정안 적용</span><span class="btn">조정 전후 비교</span><span class="btn">부모님 카드 만들기</span>
+        </div>
+        <div class="side">
+          <h4>일정 도우미</h4>
+          <div class="msg u">2일차가 왜 초과야?</div>
+          <div class="msg">난이도 상인 언덕 사원과 성곽 유적이 연달아 있고, 사이에 휴식이 없습니다. 사원 뒤에 카페 휴식을 넣고 전망대를 3일차 오전으로 옮기면 적정 범위가 됩니다.</div>
+          <div class="msg u">그렇게 바꿔줘</div>
+          <div class="msg">조정안을 적용했습니다. 2일차 피로도: 초과 → 적정</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2vh">
+      <div class="mock">
+        <div class="bar0"><i></i><i></i><i></i><span>관리자 · 난이도 검수 대기</span></div>
+        <table>
+          <tr><th>관광지</th><th>초안</th><th>근거</th><th></th></tr>
+          <tr><td>언덕 사원</td><td>상</td><td class="sub">계단 62%</td><td><span class="btn p">확정</span></td></tr>
+          <tr><td>야타이 거리</td><td>중</td><td class="sub">대기 41%</td><td><span class="btn">변경</span></td></tr>
+          <tr><td>해변 공원</td><td>하</td><td class="sub">평지</td><td><span class="btn p">확정</span></td></tr>
+        </table>
+      </div>
+      <div class="card5">
+        <div class="d">부모님용 카드 · 2일차</div>
+        <b>오전엔 절, 오후엔 온천</b><br>
+        계단이 있는 곳은 오전에 한 번만 가요.<br>중간에 카페에서 쉬어 가요.
+        <div class="d" style="margin-top:6px">출발 9:00 · 숙소 복귀 18:00</div>
+      </div>
+    </div>
+  </div>
+  <p class="src" style="margin-top:2vh">화면 구성 예시 (수치·장소 가상)</p>
+</section>
+
+<section class="slide">
+  <div class="head"><b>04 구현 계획</b><span>반걸음</span></div>
+  <h2>데모 도시 1곳을 대상으로 등급 산정부터 검수, 피로도 판정까지 전 과정을 시연한다</h2>
+  <div class="cols c2">
+    <div class="block">
+      <div class="num">핵심 기능 (우선순위)</div>
+      <ol>
+        <li>관광지 난이도 DB 및 검수 화면 <span class="sub">— 관광지 30~50곳</span></li>
+        <li>규칙 엔진 <span class="sub">— 배치 검사, 피로도 산정, 조정안</span></li>
+        <li>일정 입력 <span class="sub">— 패키지 일정표 → 방문지 목록</span></li>
+        <li>결과 화면 <span class="sub">— 피로도 그래프, 전후 비교, 부모님 카드</span></li>
+        <li>정보 조회형 챗봇</li>
+      </ol>
+    </div>
+    <div class="block">
+      <div class="num">역할 분담</div>
+      <table>
+        <tr><td style="width:22%"><b>남재은</b></td><td class="sub">챗봇, 일정표 정리, sLLM 추출, HITL 흐름</td></tr>
+        <tr><td><b>김천지</b></td><td class="sub">난이도 DB·검수 화면, 결과 화면, 시스템 통합</td></tr>
+        <tr><td><b>이지원</b></td><td class="sub">규칙 엔진, 피로도 산식, 조정안·전후 비교</td></tr>
+        <tr><td><b>노희윤</b></td><td class="sub">관광지 속성 수집, 리뷰 크롤링, 키워드 사전·난이도 산식</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="statement">
+    계단·경사·대기 정보는 지역별 편차가 크다. 해커톤 기간에는 리뷰 분석으로 초안을 구축하고, 이후 현지 가이드·MD 검수 체계를 하나투어와 함께 운영하는 단계적 확장을 제안한다.
+  </div>
+</section>
+
+<section class="slide">
+  <div class="head"><b>피드백 요청</b><span>반걸음</span></div>
+  <h2>현장 관점에서 검토를 부탁드립니다</h2>
+  <div class="cols c2">
+    <div class="block">
+      <div class="num">01</div>
+      <h3>난이도 3단계의 실무 적합성</h3>
+      <p class="sub">상·중·하 구분이 상품 운영에 활용 가능한 수준인지, 검수 주체로 현지 가이드와 상품 MD 중 어느 쪽이 현실적인지</p>
+    </div>
+    <div class="block">
+      <div class="num">02</div>
+      <h3>현장의 일정 배치 기준</h3>
+      <p class="sub">고강도 연속 금지, 고강도 후 휴식 외에 실제 상품 구성 시 적용하는 배치 원칙</p>
+    </div>
+  </div>
+  <p class="src" style="margin-top:4vh">출처 — 경기연구원 고령자 여행 실태조사(2024), 한국관광공사 시니어 여행 분석(2022), 오픈서베이 해외여행 트렌드 리포트(2025), 아고다 2025 해외여행 결산, UK DfT Inclusive Mobility, 주최측·멘토 설명(2026.11.02)</p>
+</section>
+
+<div class="nav"><span id="pg"></span><button onclick="go(-1)">이전</button><button onclick="go(1)">다음</button></div>
+<script>
+const s=[...document.querySelectorAll('.slide')];let i=0;
+function show(){s.forEach((e,k)=>e.classList.toggle('on',k===i));document.getElementById('pg').textContent=(i+1)+' / '+s.length;}
+function go(d){i=Math.max(0,Math.min(s.length-1,i+d));show();}
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))go(1);if(['ArrowLeft','PageUp'].includes(e.key))go(-1);});
+show();
+</script>
+</body>
+</html>
