@@ -1,0 +1,41 @@
+/* tokens.json에서 생성. 색상 외 간격·크기·반응형 값은 반걸음 제안입니다. */
+:root {
+  --bg-color-brand: #5e2bb8;
+  --bg-color-brand-hover: #4b2293;
+  --bg-color-brand-soft: #f3edfc;
+  --bg-color-ink: #111111;
+  --bg-color-text: #333333;
+  --bg-color-muted: #666666;
+  --bg-color-surface: #ffffff;
+  --bg-color-canvas: #faf9fc;
+  --bg-color-border: #dedbe5;
+  --bg-color-success: #23654b;
+  --bg-color-success-soft: #edf7f0;
+  --bg-color-warning: #855011;
+  --bg-color-warning-soft: #fff5e5;
+  --bg-color-danger: #b42336;
+  --bg-color-border-strong: #8e8799;
+  --bg-space-1: 4px;
+  --bg-space-2: 8px;
+  --bg-space-3: 12px;
+  --bg-space-4: 16px;
+  --bg-space-5: 20px;
+  --bg-space-6: 24px;
+  --bg-space-8: 32px;
+  --bg-space-10: 40px;
+  --bg-space-12: 48px;
+  --bg-space-16: 64px;
+  --bg-radius-control: 12px;
+  --bg-radius-card: 20px;
+  --bg-radius-pill: 999px;
+  --bg-font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bg-font-caption: 13px;
+  --bg-font-small: 14px;
+  --bg-font-body: 16px;
+  --bg-font-lead: 20px;
+  --bg-font-heading: 28px;
+  --bg-font-display: 44px;
+  --bg-layout-max: 1200px;
+  --bg-layout-control-min: 48px;
+  --bg-layout-breakpoint-mobile: 768px;
+}
