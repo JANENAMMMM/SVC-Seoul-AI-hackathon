@@ -1,0 +1,54 @@
+/* 반걸음 화면 스타일 */
+:root {
+ --bg-color-canvas:#fff;
+ --bg-color-border:#ddd;
+ --bg-color-border-strong:#aaa;
+ --bg-radius-control:4px;
+ --bg-radius-card:8px;
+}
+.bg-ui { letter-spacing:-.3px; }
+.bg-header { padding-block:24px; }
+.intro { gap:48px; padding-block:48px; align-items:start; }
+h1 { font-size:clamp(28px,3vw,40px); letter-spacing:-1px; line-height:1.35; }
+h2 { font-size:26px; letter-spacing:-.7px; }
+.eyebrow { letter-spacing:0; margin-bottom:12px; font-size:14px; }
+.lead { margin-top:20px; }
+.planner { padding:28px; border-radius:8px; gap:20px; }
+.bg-button { font-weight:600; }
+.bg-button--secondary { border-color:#ccc; color:var(--bg-color-text); }
+.bg-button--secondary:hover { border-color:var(--bg-color-brand); color:var(--bg-color-brand); background:white; }
+.bg-input { border-color:#ccc; }
+.bg-input[aria-invalid="true"] { border-color:var(--bg-color-danger); }
+.bg-choice span { border-radius:4px; padding:8px 18px; border-color:#ccc; }
+.bg-tab[aria-selected="true"] { color:var(--bg-color-ink); border-bottom-color:var(--bg-color-ink); }
+.bg-card { border:0; border-radius:0; }
+.bg-card-body { padding:20px 0; gap:10px; }
+.bg-card h3 { font-size:18px; font-weight:600; }
+.bg-card .landscape { border-radius:8px; }
+.bg-badge { border-radius:2px; padding:2px 6px; font-weight:500; }
+.bg-price { font-size:24px; font-weight:700; margin-block:4px; }
+.stats { gap:0; border-block:1px solid #eee; }
+.bg-stat { border:0; border-radius:0; padding:16px 12px; }
+.bg-stat + .bg-stat { border-left:1px solid #eee; }
+.bg-stat dd { font-size:20px; }
+.bg-notice { border-radius:4px; }
+.swatch { border-radius:4px; }
+@media(max-width:767px) {
+ .bg-shell { width:calc(100% - 40px); }
+ .bg-header { padding-block:16px; }
+ .intro { padding-block:28px; gap:28px; }
+ h1 { font-size:30px; }
+ .planner { border:0; border-top:8px solid #f5f5f5; border-radius:0; padding:24px 0 0; }
+ .bg-input,.bg-button,.bg-choice span { border-radius:8px; }
+ .bg-card { display:grid; grid-template-columns:112px minmax(0,1fr); gap:16px; padding-block:20px; border-bottom:1px solid #eee; }
+ .bg-card .landscape { height:120px; border-radius:8px; }
+ .bg-card-body { padding:0; gap:8px; }
+ .bg-card h3 { font-size:17px; }
+ .bg-card .bg-button { padding:8px 12px; }
+ .bg-price { font-size:22px; }
+ .bg-price small { font-size:12px; }
+ .grid { gap:0; }
+ .bg-stat { padding:12px 8px; }
+ .bg-stat dt { font-size:12px; }
+ .bg-bottom-nav a { font-size:13px; }
+}
