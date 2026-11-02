@@ -1,0 +1,7 @@
+{
+  "local_food": "familiar",
+  "korean_need": "daily",
+  "avoid_ingredients": ["seafood"],
+  "avoid_other": [],
+  "venues": ["restaurant"]
+}
