@@ -36,7 +36,8 @@ if D2 == 상 and D3 == 없음:  grade = 상  (강제)
 else:
     if D3 == 있음 and D3가 주요 오르막 구간을 대신함:  D2 -= 1 후 base 재계산
     grade = base
-    if D4 == 상:  grade += 1      # 더위 보정 (최대 상)
+    if D4 == 상 and D2 >= 중:  grade += 1   # 더위 보정: 더운 실외에서 오르막(고 MET)일 때만 (v1.0.1)
+    elif D4 == 상:  flag "heat_flag_low_exertion"  # 평지 보행은 표시만
     if D5 == 상 and grade < 상:  grade += 1 ... 단 D5는 C 근거뿐이므로 'flag_only' 옵션으로 끌 수 있음
 grade = clamp(grade, 하, 상)
 ```
