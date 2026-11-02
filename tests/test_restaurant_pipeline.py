@@ -6,7 +6,6 @@ from src.restaurants import google_reviews
 from src.restaurants.collect import Attraction, collect, review_info
 from src.restaurants.google_places import OpeningPeriod, Restaurant
 from src.restaurants.google_reviews import PlaceReviews, Review, parse_details
-from src.restaurants.keywords import analyze
 from src.restaurants.preferences import FoodPreference
 from src.restaurants.ranking import (
     bayesian_rating,
@@ -186,42 +185,44 @@ def test_fetch_reviews_request(monkeypatch):
     assert len(google_reviews.fetch_reviews("place-1", client=client).reviews) == 2
 
 
-def test_review_info_uses_korean_reviews_and_summary():
-    pref = FoodPreference(avoid_ingredients=["seafood"])
-    info = review_info(parse_details(DETAILS), pref)
-    assert info.returned_count == 2 and len(info.korean_reviews) == 1
-    assert info.signals.text_count == 2  # 한국어 리뷰 1 + 요약 1 (영어 원문 리뷰는 제외)
-    assert "parents" in info.signals.tags and "familiar_taste" in info.signals.tags
-    assert any("해산물" in w for w in info.signals.warnings)
+def test_review_info_keeps_korean_originals_unmodified():
+    info = review_info(parse_details(DETAILS))
+    assert info.returned_count == 2 and len(info.korean_reviews) == 1  # 영어 원문 리뷰는 빠짐
+    assert info.korean_reviews[0].original_text == "부모님도 잘 드셨어요. 새우가 많아요"  # 가공 없음
+    assert info.korean_reviews[0].author == "김"  # 작성자 표시용
+    assert info.summary.startswith("현지 음식이")
+    assert not hasattr(info, "signals")  # 태그·경고 없음
 
 
-# ── 5단계: 키워드 ────────────────────────────────────────────
+def test_fetch_place_for_display(monkeypatch):
+    monkeypatch.setattr(google_reviews, "_api_key", lambda: "test-key")
+    masks = []
 
-def test_keywords_warn_on_avoided_ingredient():
-    texts = ["새우 요리가 맛있어요", "땅콩 빼달라고 했어요", "부모님도 잘 드셨어요"]
-    pref = FoodPreference(avoid_ingredients=["seafood", "nuts"], local_food="familiar")
-    signals = analyze(texts, pref)
-    assert signals.tags["seafood"].count == 1
-    assert signals.tags["parents"].count == 1
-    assert any("해산물" in w for w in signals.warnings)
-    assert any("견과류" in w and "요청 가능" in w for w in signals.warnings)
+    def handler(request: httpx.Request) -> httpx.Response:
+        masks.append(request.headers["X-Goog-FieldMask"])
+        body = {
+            "displayName": {"text": "마담 란"},
+            "location": {"latitude": 16.07, "longitude": 108.22},
+            "rating": 4.4,
+            "googleMapsUri": "https://maps.google.com/?cid=1",
+            **DETAILS,
+        }
+        return httpx.Response(200, json=body)
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    plain = google_reviews.fetch_place_for_display("place-1", client=client)
+    assert plain.restaurant.place_id == "place-1" and plain.restaurant.name == "마담 란"
+    assert plain.maps_url == "https://maps.google.com/?cid=1"
+    assert plain.reviews is None and "reviews" not in masks[0]  # 리뷰 없이 = Enterprise 등급
+
+    full = google_reviews.fetch_place_for_display("place-1", with_reviews=True, client=client)
+    assert "reviews" in masks[1] and len(full.reviews.korean_reviews) == 1
 
 
-def test_keywords_other_and_street():
-    texts = ["고수가 많이 들어가요", "노점 분위기 플라스틱 의자"]
-    pref = FoodPreference(avoid_other=["고수"], venues=["restaurant"])
-    warnings = analyze(texts, pref).warnings
-    assert any("고수" in w for w in warnings)
-    assert any("노점" in w for w in warnings)
+# ── 1~6단계 전체 (가짜 API, 저장 없음) ───────────────────────
 
-
-def test_spicy_does_not_match_google_map():
-    assert "spicy" not in analyze(["구글맵 보고 찾아감"], FoodPreference()).tags
-
-
-# ── 1~6단계 전체 (가짜 API + 캐시) ───────────────────────────
-
-def test_collect_end_to_end_with_cache(tmp_path):
+def test_collect_end_to_end_without_storage(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)  # 혹시 파일을 쓰면 여기에 남아 테스트로 잡힘
     calls = {"google": [], "reviews": []}
 
     def fake_google(lat, lng, radius_m, included_types):
@@ -239,19 +240,27 @@ def test_collect_end_to_end_with_cache(tmp_path):
 
     attractions = [Attraction(id="han", name="한 시장", lat=16.0684, lng=108.2241)]
     pref = FoodPreference(korean_need="daily", local_food="familiar")
-    run = lambda: collect(  # noqa: E731
-        attractions, pref, city="다낭", country="VN", cache_dir=tmp_path,
+    run = lambda atts: collect(  # noqa: E731
+        atts, pref, city="다낭", country="VN",
         google_search=fake_google, review_fetch=fake_reviews,
     )
 
-    result = run()
+    result = run(attractions)
     restaurants = result.attractions[0].restaurants
     assert len(restaurants) == 5
     assert restaurants[-1].name == "서울식당"  # 한식이 없어서 한식당 1회 추가 검색 후 포함
     assert calls["google"] == [("restaurant",), ("korean_restaurant",)]
     assert len(calls["reviews"]) == 5
-    assert restaurants[0].reviews.signals.tags["parents"].count == 2  # 리뷰 1 + 요약 1
+    assert restaurants[0].reviews.korean_reviews[0].original_text == "부모님이 좋아하셨어요"
     assert restaurants[0].distance_m is not None
 
-    run()  # 두 번째 실행은 캐시만 사용
-    assert len(calls["google"]) == 2 and len(calls["reviews"]) == 5
+    run(attractions)  # 캐시가 없으므로 다시 실행하면 다시 호출
+    assert len(calls["google"]) == 4 and len(calls["reviews"]) == 10
+
+    # 한 실행 안에서 같은 식당이 두 관광지에 나오면 리뷰는 1회만 조회
+    calls["reviews"].clear()
+    twin = [attractions[0], Attraction(id="bridge", name="용다리", lat=16.0612, lng=108.2272)]
+    run(twin)
+    assert len(calls["reviews"]) == 5
+
+    assert list(tmp_path.iterdir()) == []  # 아무 파일도 쓰지 않음

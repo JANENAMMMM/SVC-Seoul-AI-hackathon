@@ -13,10 +13,16 @@ from typing import Any, Optional
 import httpx
 from pydantic import BaseModel
 
-from .google_places import _api_key
+from .google_places import Restaurant, _api_key, parse_place
 
 ENDPOINT = "https://places.googleapis.com/v1/places/{place_id}"
 FIELD_MASK = "reviews,reviewSummary"
+
+# 저장된 place_id로 화면 표시용 정보를 다시 받을 때 쓰는 필드 (리뷰 제외 = Enterprise 등급)
+DISPLAY_FIELDS = (
+    "id,displayName,location,primaryType,rating,userRatingCount,priceLevel,"
+    "regularOpeningHours,googleMapsUri"
+)
 
 
 class Review(BaseModel):
@@ -81,11 +87,10 @@ def parse_details(raw: dict[str, Any]) -> PlaceReviews:
     )
 
 
-def fetch_reviews(
-    place_id: str, language: str = "ko", client: Optional[httpx.Client] = None
-) -> PlaceReviews:
-    """장소 상세 1회 = Enterprise + Atmosphere 등급 1회."""
-    headers = {"X-Goog-Api-Key": _api_key(), "X-Goog-FieldMask": FIELD_MASK}
+def _get_details(
+    place_id: str, field_mask: str, language: str, client: Optional[httpx.Client]
+) -> dict[str, Any]:
+    headers = {"X-Goog-Api-Key": _api_key(), "X-Goog-FieldMask": field_mask}
     owns_client = client is None
     http = client or httpx.Client(timeout=30)
     try:
@@ -96,4 +101,37 @@ def fetch_reviews(
     finally:
         if owns_client:
             http.close()
-    return parse_details(response.json())
+    return response.json()
+
+
+def fetch_reviews(
+    place_id: str, language: str = "ko", client: Optional[httpx.Client] = None
+) -> PlaceReviews:
+    """장소 상세 1회 = Enterprise + Atmosphere 등급 1회."""
+    return parse_details(_get_details(place_id, FIELD_MASK, language, client))
+
+
+class PlaceDisplay(BaseModel):
+    restaurant: Restaurant
+    maps_url: Optional[str] = None
+    reviews: Optional[PlaceReviews] = None
+
+
+def fetch_place_for_display(
+    place_id: str,
+    with_reviews: bool = False,
+    language: str = "ko",
+    client: Optional[httpx.Client] = None,
+) -> PlaceDisplay:
+    """저장된 place_id로 화면 표시용 정보를 다시 받는다 (저장된 일정 보기 등).
+
+    호출 1회. with_reviews=False면 Enterprise, True면 리뷰까지 받아 Enterprise + Atmosphere 등급.
+    받은 값은 화면에 보여주고 저장하지 않는다.
+    """
+    mask = DISPLAY_FIELDS + ("," + FIELD_MASK if with_reviews else "")
+    raw = _get_details(place_id, mask, language, client)
+    return PlaceDisplay(
+        restaurant=parse_place({"id": place_id, **raw}),
+        maps_url=raw.get("googleMapsUri"),
+        reviews=parse_details(raw) if with_reviews else None,
+    )

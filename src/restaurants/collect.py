@@ -1,29 +1,27 @@
-"""1~6단계 전체 흐름. 관광지 목록을 받아 관광지마다 추천 식당 5곳과 리뷰 신호를 만든다.
+"""전체 흐름. 관광지 목록을 받아 관광지마다 추천 식당 5곳과 한국어 리뷰 원문을 돌려준다.
 
 1. Google Nearby Search로 관광지 주변 식당 20개
 2~3. 규칙으로 거르고 점수로 상위 5개 (ranking.py)
-4. 상위 5곳마다 Google Place Details로 리뷰(최대 5개) + AI 리뷰 요약
-5. 한국어 원문 리뷰 + 요약에서 키워드 태그·경고 (keywords.py)
-6. 결과 저장
+4. 상위 5곳마다 Google Place Details로 리뷰(최대 5개) + AI 리뷰 요약, 한국어 원문 리뷰만 골라 그대로 담음
+5. 결과를 돌려줌
 
-외부 호출 결과는 data/restaurants/ 아래에 캐시해서 다시 돌릴 때 API를 부르지 않는다.
-(data/는 .gitignore 대상. Google 데이터는 로컬 개발·시연용으로만 보관한다.
- Google Maps Platform 약관의 캐싱·AI 활용 조건은 별도 확인 필요.)
+리뷰는 가공하지 않는다 (키워드 태그·경고 없음). 리뷰로 콘텐츠를 만드는 건
+Google 약관 3.2.3(c)에 걸릴 수 있어서, 리뷰 판단은 LLM 단계에서 원문으로 한다.
+
+저장하지 않는다 (Google Maps Platform 약관 3.2.3(a)(b): place_id 외 콘텐츠는 캐시·저장 불가).
+- 결과는 호출한 쪽(그래프 state 등)에 돌려주기만 하고 파일·DB에 쓰지 않는다.
+- 한 번 실행하는 동안만 메모리에서 같은 식당의 리뷰 중복 조회를 막는다.
+- 실행이 끝난 뒤 남겨야 하는 건 place_id뿐. 다시 보여줄 때는 google_reviews.fetch_place_for_display로 재조회.
 """
 
-import json
-from pathlib import Path
 from typing import Callable, Optional
 
 from pydantic import BaseModel
 
 from .google_places import Restaurant, search_nearby_restaurants
 from .google_reviews import PlaceReviews, Review, fetch_reviews
-from .keywords import Signals, analyze
 from .preferences import FoodPreference
 from .ranking import ALL_DAYS, DEFAULT_MEAL_TIMES, build_candidates, select_top
-
-DEFAULT_CACHE_DIR = Path(__file__).resolve().parents[2] / "data" / "restaurants"
 
 GoogleSearch = Callable[..., list[Restaurant]]
 ReviewFetch = Callable[[str], PlaceReviews]
@@ -41,8 +39,7 @@ class ReviewInfo(BaseModel):
     summary_disclosure: Optional[str]
     reviews_uri: Optional[str]
     returned_count: int  # Google이 준 리뷰 수 (최대 5)
-    korean_reviews: list[Review]  # 그중 한국어 원문 리뷰
-    signals: Signals  # 한국어 리뷰 + 요약에서 뽑은 태그·경고
+    korean_reviews: list[Review]  # 그중 원문이 한국어인 리뷰 (원문 그대로, 작성자 포함)
 
 
 class RecommendedRestaurant(BaseModel):
@@ -78,55 +75,13 @@ class CollectResult(BaseModel):
     attractions: list[AttractionResult]
 
 
-def _read_json(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, data) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
-def _cached_google(
-    attraction: Attraction,
-    radius_m: float,
-    included_types: tuple[str, ...],
-    cache_dir: Path,
-    refresh: bool,
-    google_search: GoogleSearch,
-) -> list[Restaurant]:
-    suffix = "" if included_types == ("restaurant",) else "_" + "-".join(included_types)
-    path = cache_dir / "google" / f"{attraction.id}{suffix}.json"
-    if path.exists() and not refresh:
-        return [Restaurant.model_validate(r) for r in _read_json(path)]
-    found = google_search(
-        attraction.lat, attraction.lng, radius_m=radius_m, included_types=included_types
-    )
-    _write_json(path, [r.model_dump() for r in found])
-    return found
-
-
-def _cached_reviews(
-    place_id: str, cache_dir: Path, refresh: bool, review_fetch: ReviewFetch
-) -> PlaceReviews:
-    path = cache_dir / "google_reviews" / f"{place_id}.json"
-    if path.exists() and not refresh:
-        return PlaceReviews.model_validate(_read_json(path))
-    reviews = review_fetch(place_id)
-    _write_json(path, reviews.model_dump())
-    return reviews
-
-
-def review_info(place: PlaceReviews, pref: FoodPreference) -> ReviewInfo:
-    korean = place.korean_reviews
-    texts = [r.original_text for r in korean] + ([place.summary] if place.summary else [])
+def review_info(place: PlaceReviews) -> ReviewInfo:
     return ReviewInfo(
         summary=place.summary,
         summary_disclosure=place.summary_disclosure,
         reviews_uri=place.reviews_uri,
         returned_count=len(place.reviews),
-        korean_reviews=korean,
-        signals=analyze(texts, pref),
+        korean_reviews=place.korean_reviews,
     )
 
 
@@ -139,17 +94,21 @@ def collect(
     days: frozenset[int] = ALL_DAYS,
     meal_times: tuple[str, ...] = DEFAULT_MEAL_TIMES,
     with_reviews: bool = True,
-    cache_dir: Path = DEFAULT_CACHE_DIR,
-    refresh: bool = False,
     google_search: GoogleSearch = search_nearby_restaurants,
     review_fetch: ReviewFetch = fetch_reviews,
 ) -> CollectResult:
+    # 이번 실행 동안만 쓰는 메모리 (함수가 끝나면 사라짐). 여러 관광지에 같은 식당이 나오면 리뷰는 1회만 조회.
+    reviews_seen: dict[str, PlaceReviews] = {}
+
+    def search(attraction: Attraction, included_types: tuple[str, ...]) -> list[Restaurant]:
+        return google_search(
+            attraction.lat, attraction.lng, radius_m=radius_m, included_types=included_types
+        )
+
     results = []
     for attraction in attractions:
-        # 1단계: 반경 검색 1회 (캐시 있으면 호출 안 함)
-        found = _cached_google(
-            attraction, radius_m, ("restaurant",), cache_dir, refresh, google_search
-        )
+        # 1단계: 반경 검색 1회
+        found = search(attraction, ("restaurant",))
         origin = (attraction.lat, attraction.lng)
 
         # 2~3단계: 거르기 + 점수
@@ -158,9 +117,7 @@ def collect(
         if pref.needs_korean and not any(
             c.cuisine.is_korean and c.excluded_reason is None for c in candidates
         ):
-            korean = _cached_google(
-                attraction, radius_m, ("korean_restaurant",), cache_dir, refresh, google_search
-            )
+            korean = search(attraction, ("korean_restaurant",))
             candidates = build_candidates(found + korean, pref, origin, country, days, meal_times)
         top = select_top(candidates, pref)
 
@@ -170,7 +127,9 @@ def collect(
             r = c.restaurant
             info = None
             if with_reviews:
-                info = review_info(_cached_reviews(r.place_id, cache_dir, refresh, review_fetch), pref)
+                if r.place_id not in reviews_seen:
+                    reviews_seen[r.place_id] = review_fetch(r.place_id)
+                info = review_info(reviews_seen[r.place_id])
             recommended.append(
                 RecommendedRestaurant(
                     place_id=r.place_id,
@@ -203,8 +162,3 @@ def collect(
             )
         )
     return CollectResult(city=city, country=country, preference=pref, attractions=results)
-
-
-def save_result(result: CollectResult, path: Path) -> None:
-    """6단계: 결과를 JSON으로 저장."""
-    _write_json(path, result.model_dump())
