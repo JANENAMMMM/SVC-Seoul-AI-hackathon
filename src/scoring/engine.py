@@ -61,6 +61,11 @@ def grade_site(site, climate=None, visit_month=7, flag_only=True, scale=1):
                 reasons.append(f"{dim}_evidence_disagreement")
         dimensions[dim] = record
     d = {k: v["level"] for k, v in dimensions.items()}
+    if d["D1"] is None and d["D2"] is None:  # no walking/climb evidence: withhold instead of defaulting to 하
+        return {"id": site["id"], "name_ko": site["name_ko"], "grade": "보류", "grade_score": None,
+                "dimensions": dimensions, "rules_fired": ["withheld_no_core_evidence"],
+                "status": "needs_review", "review_reasons": sorted(set(reasons)),
+                "rubric_version": "1.0", "visit_month": visit_month}
     base = max(d["D1"] or 0, d["D2"] or 0)
     rules = ["base_max_D1_D2"]
     relief = dimensions["D3"]

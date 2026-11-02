@@ -44,7 +44,7 @@ def build_features(write=True):
                 add("D2", "B", "walk_only_climb_m", climb, "m", "osm_features", o["elevation"].get("walk_only_method", ""))
             if o.get("step_count_sum") is not None:
                 add("D2", "B", "step_count_sum", o["step_count_sum"], "steps", "osm_features", "mapped steps only")
-        if f.get("internal_route_km") is not None and "GPS trace 1개" not in f.get("internal_route_note", ""):
+        if f.get("internal_route_km") is not None and not any(k in f.get("internal_route_note", "") for k in ("trace 1개", "표본 1개")):  # single-trace estimates are not evidence
             add("D1", "B", "internal_route_km", f["internal_route_km"], "km", "site_facts", f.get("internal_route_note", ""))
         if f.get("trail_gain_m") is not None:
             add("D2", "B", "trail_gain_m", f["trail_gain_m"], "m", "site_facts", f.get("trail_gain_note", ""))

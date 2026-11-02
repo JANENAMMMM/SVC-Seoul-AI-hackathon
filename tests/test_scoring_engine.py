@@ -47,3 +47,8 @@ def test_threshold_scale():
     s = site(D1=[ev("B", "internal_route_km", 2.5, "km")])
     assert grade_site(s, scale=1)["grade"] == "중"
     assert grade_site(s, scale=.8)["grade"] == "상"
+
+
+def test_withheld_without_core_evidence():
+    g = grade_site(site())
+    assert g["grade"] == "보류" and g["status"] == "needs_review"

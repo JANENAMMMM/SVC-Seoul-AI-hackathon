@@ -13,14 +13,6 @@
           "note": "buffer_300m"
         },
         {
-          "basis": "B",
-          "metric": "internal_route_km",
-          "value": 8.86,
-          "unit": "km",
-          "source": "site_facts",
-          "note": "OSM trace 1개(maximaximax/11971420): 8.86km/4h10m + 4.49km/1h06m. 표본 1개라 신뢰 낮음"
-        },
-        {
           "basis": "C",
           "metric": "walking_share",
           "value": 0.16,
@@ -364,6 +356,14 @@
     "name_ko": "영흥사(린응사, 손짜반도)",
     "dimensions": {
       "D1": [
+        {
+          "basis": "B",
+          "metric": "pedestrian_length_km",
+          "value": 0.0,
+          "unit": "km",
+          "source": "osm_features",
+          "note": "buffer_300m"
+        },
         {
           "basis": "C",
           "metric": "walking_share",
