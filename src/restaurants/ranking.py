@@ -25,7 +25,7 @@ PRIOR_COUNT = 50
 DEFAULT_PRIOR_RATING = 4.0
 
 # 질문 1(현지 음식 선호)에 따른 점수 보정. 팀 가정값.
-LOCAL_FOOD_ADJUST = {"familiar": -0.15, "mixed": 0.0, "adventurous": 0.1, "unknown": 0.0}
+LOCAL_FOOD_ADJUST = {"familiar": -0.15, "mixed": 0.0, "adventurous": 0.15, "unknown": 0.0}
 
 TOP_N = 5
 
