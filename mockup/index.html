@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#552db0" />
+    <meta name="description" content="날짜와 동행자부터, 우리 가족의 속도로 만드는 다낭 여행." />
+    <title>반걸음 — 함께 가는 사람부터 생각하는 여행</title>
+    <link rel="stylesheet" href="assets/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="assets/leaflet.js"></script>
+    <script defer src="fixtures.js"></script>
+    <script defer src="app.js"></script>
+    <script defer src="workspace.js"></script>
+    <link rel="stylesheet" href="workspace.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="반걸음 처음으로"
+        ><svg viewBox="0 0 32 32" aria-hidden="true">
+          <path
+            d="M5 24V13a6 6 0 0 1 12 0v11M17 24V9a5 5 0 0 1 10 0v15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="4"
+            stroke-linecap="round"
+          /></svg
+        >반걸음<span>함께라서, 우리 속도로.</span></a
+      >
+      <div class="header-right">
+        <nav class="role-nav" aria-label="화면 선택"><button class="role-tab active" id="customer-mode" aria-pressed="true">고객 여행</button><button class="role-tab" id="md-mode" aria-pressed="false">MD 작업실</button></nav><span class="demo-dot">시연 데이터</span
+        ><button class="quiet" id="home">여행 새로 만들기</button>
+      </div>
+    </header>
+    <main id="app"></main>
+    <div id="toast" role="status" aria-live="polite" hidden></div>
+    <dialog id="detail"><div id="detail-body"></div></dialog>
+    <dialog id="share"><div id="share-body"></div></dialog>
+    <footer class="site-footer">
+      <span class="brand-mini">반걸음</span>
+      <p>
+        인물·일정·거리·비용·장소 평가는 시연용 가정입니다. 실제 예약·항공 조회는 수행하지 않습니다.
+      </p>
+      <button class="quiet" id="sources">자료와 시연 범위</button>
+    </footer>
+  </body>
+</html>
