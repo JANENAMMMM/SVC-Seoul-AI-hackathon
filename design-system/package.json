@@ -1,0 +1,22 @@
+{
+  "name": "@bangeoreum/design-system",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./components/index.tsx",
+    "./styles.css": "./styles.css",
+    "./tokens.json": "./tokens.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "react": "19.3.1",
+    "typescript": "7.0.2"
+  }
+}
