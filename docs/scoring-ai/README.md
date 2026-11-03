@@ -38,6 +38,57 @@
 ```
 
 - 상세 명세: [judge_spec_v2.md](spec/judge_spec_v2.md) · 근거·일정 연결 규칙: [evidence_workflow.md](spec/evidence_workflow.md)
+- 전체 흐름을 그림 한 장으로 그리기 위한 설명서: [workflow_diagram.md](workflow_diagram.md)
+
+### 3-1. DB에 저장된 것 (Supabase, 2026-11-03 기준 행 수)
+
+모든 테이블 이름은 `scoring_`으로 시작한다. `src/scoring/db.py`는 이 접두어가 아닌 테이블은 읽거나 쓰지 않으며, DROP·TRUNCATE·ALTER 문도 없다. 다른 팀원 테이블(`hello_world_test` 등)은 건드리지 않는다.
+
+| 테이블 | 행 | 한 행이 뜻하는 것 | 주요 열 | 누가 쓰나 |
+|---|---|---|---|---|
+| `scoring_places` | 15 | 관광지 1곳 | `id`(dad-01~15), 한/영 이름, 좌표, `google_place_id`, `tripadvisor_url`, `meta`(Google 유형·운영시간·평점·리뷰 수·주소) | `load_evidence.py` |
+| `scoring_evidence` | 523 | 근거 1건(수치나 사실 하나) | `id`, `place_id`, `dimension`(climb·walking·heat·crowd·general), `basis`(등급 A·B·C), `metric`, `value`, `unit`, `text`(사람이 읽는 문장), `source`, `source_url`, `caveat`(한계 메모) | `load_evidence.py` |
+| `scoring_reviews` | 1,994 | 리뷰 원문 1건 | `id`, `place_id`, `source`, `lang`, `date`, `trip_type`(가족·커플 등), `rating`, `text` | `load_evidence.py` |
+| `scoring_web_cache` | 103 | judge가 웹 검색으로 찾아 **실제로 인용한** 페이지 1개 | `id`(`web:`+URL 해시), `place_id`, `query`, `url`, `title`, `excerpt`(인용 문장, 최대 2,000자) | `run_judge.py` (채점 중 자동) |
+| `scoring_judgments` | 67 | judge 실행 1회의 원본 출력 | `run_id`, `place_id`, `model`, `rubric_version`, `run_index`, `output_json`, `citations_valid`, `usage`(토큰·도구 호출 수·검증 보고서) | `run_judge.py` |
+| `scoring_scores` | 17 | 관광지 × 루브릭 버전별 최종 점수 | `dimensions`(차원별 typical·lower·upper), `composite_*`, `grade_display`, `confidence`, `status`, `conditions_json`(조건·플래그·대표 경로·설명 출처) | `run_judge.py` |
+
+- `scoring_judgments` 67회 = v2.1 65회(유효 56, 무효 9) + v2.0 시험 2회. `scoring_scores` 17행 = v2.1 15곳 + v2.0 시험 2곳.
+
+**근거 523건의 구성** (근거 ID 접두어 = 출처)
+
+| ID 접두어 | 건수 | 등급 | 출처와 만드는 방법 | 주의점(`caveat`에 기록) |
+|---|---|---|---|---|
+| `fact:<곳>:<항목>` | 86 | B | 공식 사이트·안내문을 웹으로 조사해 정리한 사실(계단 수, 엘리베이터·케이블카 유무, 내부 경로 길이, 실내외, 냉방 등). `data/scoring/derived/site_facts.json` | 출처 유형과 URL 목록 |
+| `gps:<곳>:<지표>` | 36 | B(궤적 5개 이상)·C | OSM에 공개된 GPS 궤적을 관광지 구역으로 잘라 보행 거리(중앙값·p25·p75), 소요 시간, 누적 오르막, 속도 계산. 고도는 Open-Meteo | 궤적 수 n, 5개 미만이면 "표본 부족" |
+| `osm:<곳>:<지표>` | 35 | C | OpenStreetMap Overpass로 반경 300m 안의 보행로 길이, 계단, 엘리베이터, 벤치, 화장실, 고도 범위 | 관광지 경계가 아니라 300m 반경, 태그 누락 많음 |
+| `rev:<곳>:sig_<주제>` | 104 | C | Tripadvisor 리뷰(13곳 × 약 150건)에서 정규식으로 계단·보행·더위·혼잡 등 언급 비율과 95% 신뢰구간 계산 | 정규식 정밀도(계단 약 90%, 혼잡 약 70%) |
+| `topic:<곳>:<키워드>` | 250 | C | Google 지도가 자동 추출한 리뷰 주제와 언급 수(SerpApi) | 자동 추출, 온천의 'hot' 같은 오탐 |
+| `climate:<월>` | 12 | A | Open-Meteo 과거 기상 자료로 다낭 월별 일 최고 체감온도 평균 | 다낭 시내 기준, 바나힐 같은 산지는 더 낮음 |
+
+- 차원별로는 climb 80 · walking 88 · heat 51 · crowd 18 · general 286건이다. general은 주로 Google 주제 키워드처럼 어느 차원인지 정해지지 않은 항목이다.
+- **리뷰 1,994건**: Tripadvisor 1,854건(13곳) + Google 140건(15곳, SerpApi로 장소당 최대 5건씩 영어·한국어). 원문은 저작권 때문에 git에 올리지 않고 DB에만 둔다.
+- 근거 ID 규칙: 같은 사실은 다시 넣어도 같은 ID가 되도록 `출처:관광지:항목` 형태의 고정 문자열을 쓴다. judge가 인용하는 값이 이 ID다.
+
+### 3-2. LLM이 근거를 읽고 검증받는 방식
+
+1. **채점 시작**: `run_judge.py`가 관광지 ID 하나를 주고 Claude(`claude-sonnet-5-5`)를 부른다. 시스템 프롬프트에는 차원 정의, 차원별 앵커, 절차, 근거 규칙만 있고 근거 자체는 없다.
+2. **도구로 근거 읽기** (도구 호출 최대 12회, 넘으면 제출 강제)
+   - `get_place` → `scoring_places` 기본 정보
+   - `list_evidence(place_id, dimension)` → `scoring_evidence`의 근거 목록(ID·값·caveat 포함)
+   - `search_reviews(place_id, keyword)` → `scoring_reviews` 원문 키워드 검색, 최대 8건
+   - `get_climate(month)` → `climate:<월>` 근거
+   - `web_search`(Anthropic 서버 검색, 최대 4회) · `google_web_search`(SerpApi Google 웹 결과) → DB에 없는 계단 수·경로 길이·셔틀 범위 확인
+3. **제출**: `submit_scores` 도구로만 제출한다. 대표 관람 경로, 차원별 typical·lower·upper, lower·upper 조건(조건마다 근거 ID), 근거 ID 목록, 근거로 쓴 수치(`numeric_claims`), 확신도. 형식이 틀리면(점수를 `dimensions` 밖에 두는 등) 한 번 다시 제출하게 한다.
+4. **웹 인용 저장**: 출력에 나온 URL 중 실제 검색 결과로 돌아온 URL만 `scoring_web_cache`에 `web:` ID로 저장한다. 검색 결과에 없던 URL은 저장하지 않으므로 다음 단계에서 무효가 된다.
+5. **검증** (`verify.py`, 코드로만 판정, 차원별)
+   - 점수가 1~10 정수이고 lower ≤ typical ≤ upper인지
+   - lower·upper가 typical과 다르면 조건이 있고, 조건마다 근거 ID가 있는지
+   - 인용한 ID가 전부 DB(evidence·reviews·web_cache)에 있는지. URL은 `www.`·http/https·끝 슬래시 차이를 무시하고 비교
+   - `numeric_claims`의 수치가 DB 원본 값과 5% 안에서 일치하는지
+   - 하나라도 어기면 **그 차원은 이번 실행에서 무효**
+6. **집계**: 3회 실행 중 유효한 실행만 모아 차원별 중앙값을 낸다. 실행 간 차이가 2점을 넘거나, 유효 실행이 없거나, 무효 실행이 있으면 `needs_review`(검수 대기)로 표시한다. 종합 점수는 코드가 가중평균으로 계산하고, 확신도는 3회 중 가장 낮은 값을 쓴다.
+7. **저장**: 실행마다 `scoring_judgments`와 `data/scoring/judge/v2/<곳>_run<k>.json`, 최종은 `scoring_scores`와 `data/scoring/scores_v2.json`. 이 점수에서 관람 방식 카탈로그(`visit_modes_v2_1.json`)를 만들고, API와 패키지 난이도는 이 파일만 읽는다(DB·Claude 호출 없음).
 
 ## 4. 점수 체계
 

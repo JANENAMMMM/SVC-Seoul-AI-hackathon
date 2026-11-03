@@ -29,7 +29,7 @@
 
 ## v1.0 (2026-11-02 밤) — 규칙 엔진 · 2d419f7 ~ bb5febe
 
-- 근거 등급 A(GPS)·B(지도·공식)·C(리뷰), 차원 5개, 규칙 판정 → [engine_spec.md](archive/v1-rule-engine/engine_spec.md)
+- 근거 등급(v1 기준) A(GPS)·B(지도·공식)·C(리뷰), 차원 5개. ※ v2 DB에서는 A = 기후 측정, B = 공식 사실·GPS(궤적 5개 이상), C = OSM 반경·리뷰 통계·GPS 표본 부족으로 바뀜 → [README §3-1](README.md#3-1-db에-저장된-것-supabase-2026-11-03-기준-행-수), 규칙 판정 → [engine_spec.md](archive/v1-rule-engine/engine_spec.md)
 - 더위 보정이 실외 관광지 전부를 '상'으로 몰아 변별력 상실 → 오르막이 있을 때만 +1
 - 핵심 근거가 없으면 '하' 대신 '보류'
 - **LLM-as-a-judge 교차검증**(Claude·GPT 독립 채점): 엔진-judge 10/15·11/15, judge끼리 8/15 → [judge_comparison.md](archive/v1-rule-engine/judge_comparison.md)
