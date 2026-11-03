@@ -1,0 +1,17 @@
+[
+  {"id": "dad-01", "name_ko": "바나힐 썬월드", "name_en": "Sun World Ba Na Hills", "query": "Sun World Ba Na Hills Da Nang"},
+  {"id": "dad-02", "name_ko": "오행산(마블마운틴)", "name_en": "Marble Mountains", "query": "Marble Mountains Da Nang"},
+  {"id": "dad-03", "name_ko": "호이안 구시가지", "name_en": "Hoi An Ancient Town", "query": "Hoi An Ancient Town"},
+  {"id": "dad-04", "name_ko": "영흥사(린응사, 손짜반도)", "name_en": "Linh Ung Pagoda Son Tra", "query": "Linh Ung Pagoda Son Tra Da Nang"},
+  {"id": "dad-05", "name_ko": "미케 해변", "name_en": "My Khe Beach", "query": "My Khe Beach Da Nang"},
+  {"id": "dad-06", "name_ko": "용다리", "name_en": "Dragon Bridge", "query": "Dragon Bridge Da Nang"},
+  {"id": "dad-07", "name_ko": "한시장", "name_en": "Han Market", "query": "Han Market Da Nang"},
+  {"id": "dad-08", "name_ko": "다낭 대성당(핑크성당)", "name_en": "Da Nang Cathedral", "query": "Da Nang Cathedral"},
+  {"id": "dad-09", "name_ko": "참 조각 박물관", "name_en": "Museum of Cham Sculpture", "query": "Museum of Cham Sculpture Da Nang"},
+  {"id": "dad-10", "name_ko": "아시아파크(썬휠)", "name_en": "Asia Park Sun World Da Nang Wonders", "query": "Asia Park Sun World Da Nang"},
+  {"id": "dad-11", "name_ko": "누이탄타이 온천공원", "name_en": "Nui Than Tai Hot Springs Park", "query": "Nui Than Tai Hot Springs Park"},
+  {"id": "dad-12", "name_ko": "미선 유적지", "name_en": "My Son Sanctuary", "query": "My Son Sanctuary Quang Nam"},
+  {"id": "dad-13", "name_ko": "하이반 고개", "name_en": "Hai Van Pass", "query": "Hai Van Pass"},
+  {"id": "dad-14", "name_ko": "호이안 야시장", "name_en": "Hoi An Night Market", "query": "Hoi An Night Market"},
+  {"id": "dad-15", "name_ko": "껌탄 코코넛 마을(바구니배)", "name_en": "Cam Thanh Coconut Village", "query": "Bay Mau Coconut Forest Cam Thanh Hoi An"}
+]

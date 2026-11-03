@@ -1,0 +1,1721 @@
+{
+ "dad-01": {
+  "name_ko": "바나힐 썬월드",
+  "composite": {
+   "typical": 6,
+   "lower": 4,
+   "upper": 8
+  },
+  "grade_display": "중",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 3,
+    "upper": 7,
+    "typical": 5
+   },
+   "climb": {
+    "lower": 3,
+    "upper": 7,
+    "typical": 5
+   },
+   "crowd": {
+    "lower": 5,
+    "upper": 9,
+    "typical": 7
+   },
+   "walking": {
+    "lower": 4,
+    "upper": 8,
+    "typical": 6
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "케이블카(약 5.8km, 상승 약 1,368m)로 정상부 진입 → 골든브릿지·르자댕 정원 → 케이블카/푸니쿨라로 프렌치빌리지 → 판타지파크 등 약 4~6시간 관람, 구간 간 계단·경사 보행 포함",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "겨울철 방문(다낭 1월 체감 약 25℃, 산정은 더 낮음)이거나 안개·비가 잦은 날, 판타지파크 등 실내 위주로 관람",
+       "evidence_ids": [
+        "climate:1",
+        "fact:dad-01:heat_note",
+        "fact:dad-01:exposure"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 맑은 날(다낭 시내 체감 약 40℃, 산정은 더 낮지만 실외 대기줄·그늘 부족)",
+       "evidence_ids": [
+        "climate:7",
+        "rev:dad-01:sig_heat_sun"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "푸니쿨라·에스컬레이터·엘리베이터를 적극 이용하고 린응사(계단 구간)는 생략. 케이블카·푸니쿨라는 사실상 무단차",
+       "evidence_ids": [
+        "https://breezevietnam.com/ba-na-hills-golden-bridge-guide/",
+        "https://hoiandaytrip.com/ba-na-hills-wheelchair/",
+        "fact:dad-01:cable_car"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "린응사·불상·정원 등 언덕 구간을 계단으로 오르내리는 전체 관람(리뷰: 한 구역에만 약 200계단, 일부는 계단으로만 접근)",
+       "evidence_ids": [
+        "rev:dad-01:4",
+        "https://goldenhandsbridgetour.com/ba-na-hills-funicular/",
+        "rev:dad-01:sig_stairs_climb"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "개장 직후(약 7~8시) 도착 또는 WOW 패스 등 우선입장 이용",
+       "evidence_ids": [
+        "rev:dad-01:145",
+        "rev:dad-01:36"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "오전 10시 전후 골든브릿지, 오후 3시 전후 하산 케이블카·푸니쿨라(긴 대기줄, 새치기 갈등 후기)",
+       "evidence_ids": [
+        "rev:dad-01:61",
+        "rev:dad-01:128",
+        "rev:dad-01:51"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "골든브릿지와 프렌치빌리지 위주로 짧게 보고, 푸니쿨라와 연결 케이블카로 구간 이동을 줄임(OSM trace 중 짧은 쪽 4.49km/1h06m)",
+       "evidence_ids": [
+        "fact:dad-01:internal_route_note",
+        "https://hoiandaytrip.com/how-to-visit-golden-bridge-ba-na-hills/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "전 구역 도보 완주(OSM trace 8.86km/4h10m), 길 찾기 혼란과 구역 간 이동 증가",
+       "evidence_ids": [
+        "fact:dad-01:internal_route_km",
+        "fact:dad-01:internal_route_note",
+        "rev:dad-01:142"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-02": {
+  "name_ko": "오행산(마블마운틴)",
+  "composite": {
+   "typical": 7,
+   "lower": 4,
+   "upper": 8
+  },
+  "grade_display": "상",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 5,
+    "upper": 8,
+    "typical": 7
+   },
+   "climb": {
+    "lower": 5,
+    "upper": 9,
+    "typical": 8
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 5
+   },
+   "walking": {
+    "lower": 4,
+    "upper": 7,
+    "typical": 6
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "입구 → (도보 또는 엘리베이터) → 투이선 봉 영응사·탐타이 사원 → 후옌콩 동굴 → 전망대 → 하산, 약 1.7km·약 90분 (실측 GPS 중앙값)",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "서늘한 시기(1월 체감 최고 약 25.5℃)나 이른 오전에 방문하고 동굴 그늘을 이용",
+       "evidence_ids": [
+        "climate:1",
+        "fact:dad-02:exposure"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문(체감 최고 평균 약 40℃) 중 계단 오르막과 실외 노출",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-02:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "유료 엘리베이터(편도 15,000 VND) 이용 시 지상~영응사/탐타이 구간 100~156계단 생략 (동굴·정상 계단은 남음)",
+       "evidence_ids": [
+        "fact:dad-02:elevator",
+        "fact:dad-02:elevator_note"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "전체 관람 시 약 400계단 추정, GPS 중앙값 누적 상승 약 177m, 계단 불가피",
+       "evidence_ids": [
+        "fact:dad-02:steps_note",
+        "gps:dad-02:median_ascent_m",
+        "fact:dad-02:steps_unavoidable"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "개장 직후 오전 방문(7시 개장)으로 혼잡과 엘리베이터 대기를 피함",
+       "evidence_ids": [
+        "rev:dad-02:sig_queue_crowd"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "단체 관광객이 몰리는 낮 시간대와 성수기, 엘리베이터·동굴 구간 대기",
+       "evidence_ids": [
+        "rev:dad-02:sig_queue_crowd",
+        "topic:dad-02:marble_mountains_elevator"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "엘리베이터 이용 및 동굴·부속 사원 일부만 관람해 시간을 줄이는 경우",
+       "evidence_ids": [
+        "fact:dad-02:elevator_note",
+        "gps:dad-02:p25_km"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "여러 사원·동굴을 모두 도는 긴 경로(p75 약 2.86km), 미끄러운 동굴과 울퉁불퉁한 돌계단 노면",
+       "evidence_ids": [
+        "gps:dad-02:p75_km",
+        "fact:dad-02:surface"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-03": {
+  "name_ko": "호이안 구시가지",
+  "composite": {
+   "typical": 4,
+   "lower": 3,
+   "upper": 5
+  },
+  "grade_display": "중",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 4,
+    "upper": 8,
+    "typical": 7
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 2,
+    "typical": 1
+   },
+   "crowd": {
+    "lower": 4,
+    "upper": 7,
+    "typical": 5
+   },
+   "walking": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 5
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "구시가지 티켓 구역(차량 제한 보행자 구간) 내 일본교·고택·회관·시장 등을 도는 약 2.8km, 1시간 10분 내외 도보 관람",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "해가 진 뒤 저녁 방문 또는 겨울철(1월) 방문",
+       "evidence_ids": [
+        "fact:dad-03:heat_note",
+        "climate:1"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문. 실외 위주에 그늘이 적습니다.",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-03:exposure",
+        "fact:dad-03:heat_note"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "일본교 등 아치형 다리·고택 문턱 몇 곳을 오르내리는 경우(OSM 계단 1개 way, 6m)",
+       "evidence_ids": [
+        "osm:dad-03:steps_length_m",
+        "gps:dad-03:median_ascent_m"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "차량 제한 시간 전인 이른 아침이나 평일 낮 방문",
+       "evidence_ids": [
+        "fact:dad-03:vehicle_free_hours",
+        "rev:dad-03:sig_queue_crowd"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "저녁 야시장·등불 시간대와 성수기·주말 방문",
+       "evidence_ids": [
+        "fact:dad-03:heat_note",
+        "rev:dad-03:sig_queue_crowd"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "핵심 구간만 짧게 보고(GPS p25 약 1.3km) 시클로·보트를 타거나 벤치에서 쉬는 경우",
+       "evidence_ids": [
+        "gps:dad-03:p25_km",
+        "fact:dad-03:alternatives",
+        "osm:dad-03:bench_count"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "골목과 시장까지 넓게 도는 경우(GPS p75 약 5km)",
+       "evidence_ids": [
+        "gps:dad-03:p75_km",
+        "fact:dad-03:area_note"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-04": {
+  "name_ko": "영흥사(린응사, 손짜반도)",
+  "composite": {
+   "typical": 4,
+   "lower": 3,
+   "upper": 5
+  },
+  "grade_display": "중",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 4,
+    "upper": 7,
+    "typical": 6
+   },
+   "climb": {
+    "lower": 2,
+    "upper": 4,
+    "typical": 3
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 4,
+    "typical": 3
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "차량/투어버스로 경내 주차장 도착 → 삼문·계단(20여 단) → 경내 정원(분재·나한상)·본당 → 관음상(레이디 부처) 하부 및 전망 관람 → 주차장 복귀 (약 1km, 45~60분). 관음상 내부 17층 계단 등반은 대표 경로에서 제외.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "선선한 달(예: 1월, 체감 약 25℃)의 이른 아침이나 늦은 오후에 방문",
+       "evidence_ids": [
+        "climate:1"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문(체감 최고 약 40℃, 그늘이 적은 실외 광장)",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-04:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "계단이 없는 상단(경내 높이) 주차장을 이용해 하부 계단을 생략",
+       "evidence_ids": [
+        "https://www.originvietnam.com/destinations/linh-ung-pagoda/",
+        "fact:dad-04:alternatives"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "하부 주차장에서 긴 계단으로 올라가고 경내·불상 주변 단차를 모두 도는 경우",
+       "evidence_ids": [
+        "https://ahoyvietnam.com/lady-buddha-da-nang/",
+        "fact:dad-04:steps_note"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "개장 직후 이른 아침 방문(투어 단체 이전)",
+       "evidence_ids": [
+        "rev:dad-04:sig_queue_crowd"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "투어 단체가 몰리는 시간대와 성수기·휴일 방문",
+       "evidence_ids": [
+        "rev:dad-04:sig_queue_crowd",
+        "rev:dad-04:16"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "상단 주차장에서 본당과 불상 전망만 보고 돌아오는 짧은 관람",
+       "evidence_ids": [
+        "https://www.originvietnam.com/destinations/linh-ung-pagoda/",
+        "gps:dad-04:median_km"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "넓은 부지(약 20ha)의 정원, 석탑, 불상 구역을 모두 걷고 하부에서 올라가는 경우",
+       "evidence_ids": [
+        "fact:dad-04:site_area_ha",
+        "https://hoiandaytrip.com/linh-ung-pagoda-son-tra-peninsula/"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-05": {
+  "name_ko": "미케 해변",
+  "composite": {
+   "typical": 3,
+   "lower": 2,
+   "upper": 5
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 4,
+    "upper": 9,
+    "typical": 7
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 2,
+    "typical": 1
+   },
+   "crowd": {
+    "lower": 2,
+    "upper": 5,
+    "typical": 3
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 5,
+    "typical": 3
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "미케 해변 도착 후 해변 산책로·모래사장을 따라 약 1~2km 왕복 산책(30~60분), 사진·해변 휴식 위주. 수영·서핑 등 물놀이는 제외.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "이른 아침 또는 늦은 오후 방문(가이드 권장, 일출 명소)",
+       "evidence_ids": [
+        "fact:dad-05:heat_note",
+        "topic:dad-05:watching_the_sunrise"
+       ]
+      },
+      {
+       "condition": "1월 등 서늘한 시기 방문(체감 최고 약 25℃)",
+       "evidence_ids": [
+        "climate:1"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문(체감 최고 평균 약 40℃, 그늘 적음)",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-05:exposure",
+        "fact:dad-05:heat_note"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "해변 진입 시 도로·방파제 연결부의 소규모 계단/단차가 있는 지점을 이용하는 경우 (리뷰 계단 언급 매우 적음)",
+       "evidence_ids": [
+        "rev:dad-05:sig_stairs_climb"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "이른 아침 방문 또는 해변이 길어 한적한 구간 선택",
+       "evidence_ids": [
+        "https://jetsetandforget.com/da-nang-beach-in-vietnam/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "성수기·주말 저녁 등 붐비는 시간대의 중심 구간(일부 리뷰에서 혼잡 언급)",
+       "evidence_ids": [
+        "rev:dad-05:sig_queue_crowd"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "모래 위 대신 포장된 해변 산책로(보드워크)만 짧게 이용",
+       "evidence_ids": [
+        "https://jetsetandforget.com/da-nang-beach-in-vietnam/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "부드러운 모래 위를 따라 수 km 장거리 걷기(해변 길이 수 km~10km, 산책로 약 6km)",
+       "evidence_ids": [
+        "fact:dad-05:surface",
+        "https://greatruns.com/da-nang-my-khe-beach/"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-06": {
+  "name_ko": "용다리",
+  "composite": {
+   "typical": 2,
+   "lower": 1,
+   "upper": 4
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 2,
+    "upper": 5,
+    "typical": 3
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 2,
+    "typical": 1
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 8,
+    "typical": 6
+   },
+   "walking": {
+    "lower": 1,
+    "upper": 3,
+    "typical": 2
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "용다리 인도 주변에서 야간(특히 금·토·일 21:00 불·물 쇼) 20~40분 정도 서서 관람하고 다리 인도를 짧게 걷는 경로. 계단 없음, 무료, 공식 좌석 없음.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "야간(쇼 시간 21:00) 방문, 1월 등 선선한 시기",
+       "evidence_ids": [
+        "fact:dad-06:exposure",
+        "climate:1"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 등 한여름에 낮 시간대 또는 해가 지기 직후 대기하는 경우(한낮 체감 최고 평균 약 40℃, 그늘 적음)",
+       "evidence_ids": [
+        "climate:7",
+        "rev:dad-06:sig_heat_sun"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "강변 쪽 보행로·인도 연결부의 소규모 단차를 이용하는 경우(리뷰 계단 언급 극소)",
+       "evidence_ids": [
+        "rev:dad-06:sig_stairs_climb"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "쇼가 없는 평일 저녁이나 낮에 방문",
+       "evidence_ids": [
+        "fact:dad-06:night_show"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "금·토·일 21:00 불·물 쇼 때 인파 속 입석 관람(공식 좌석 없음)",
+       "evidence_ids": [
+        "fact:dad-06:night_show",
+        "fact:dad-06:seating",
+        "topic:dad-06:crowded"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "다리 가까이 차량 하차 후 쇼 관람 지점에서 거의 이동하지 않음",
+       "evidence_ids": [
+        "fact:dad-06:surface",
+        "fact:dad-06:seating"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "주말 야시장·강변을 함께 걷고 인파 속에서 좋은 자리를 찾아 이동",
+       "evidence_ids": [
+        "topic:dad-06:night_market",
+        "rev:dad-06:sig_walking"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-07": {
+  "name_ko": "한시장",
+  "composite": {
+   "typical": 4,
+   "lower": 2,
+   "upper": 5
+  },
+  "grade_display": "중",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 3,
+    "upper": 7,
+    "typical": 5
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 4,
+    "typical": 3
+   },
+   "crowd": {
+    "lower": 4,
+    "upper": 7,
+    "typical": 5
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 4,
+    "typical": 3
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "Tran Phu 정문 진입 → 1층 식품·기념품 구역 → 중앙 계단으로 2층 의류·직물 구역 → 퇴장 (약 40~60분, 평탄 실내, 비냉방)",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "서늘한 계절(예: 1월 체감 최고 약 25도)에 방문",
+       "evidence_ids": [
+        "climate:1"
+       ]
+      },
+      {
+       "condition": "이른 아침 방문 또는 1층 위주 짧은 관람",
+       "evidence_ids": [
+        "fact:dad-07:exposure"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문 (체감 최고 약 40도, 비냉방 실내)",
+       "evidence_ids": [
+        "climate:7",
+        "rev:dad-07:1"
+       ]
+      },
+      {
+       "condition": "Tran Phu 거리 도보 접근 포함",
+       "evidence_ids": [
+        "rev:dad-07:12"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "2층(의류)을 생략하고 1층만 관람 (엘리베이터·에스컬레이터 없음, 계단 회피가 유일한 방법)",
+       "evidence_ids": [
+        "fact:dad-07:floor_note",
+        "https://hoiandaytrip.com/han-market-da-nang-vietnam/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "2층 의류·맞춤 아오자이 구역을 여러 번 오르내리거나 계단이 불편한 경우",
+       "evidence_ids": [
+        "fact:dad-07:floors",
+        "https://vietnamlife.asia/han-market-da-nang/"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "이른 오전(식품 구역이 열려 있는 11시 이전) 방문. 2층 의류는 9시 이후 붐빈다는 정보가 있어 감소폭은 제한적",
+       "evidence_ids": [
+        "https://www.originvietnam.com/destinations/han-market/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "낮 시간(9~17시) 2층 의류 구역과 좁은 통로에서 단체 관광객이 겹치는 경우",
+       "evidence_ids": [
+        "https://www.originvietnam.com/destinations/han-market/",
+        "fact:dad-07:surface"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "1층만 짧게 둘러보거나 목표 품목만 사고 나오는 경우",
+       "evidence_ids": [
+        "fact:dad-07:floor_note"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "1·2층 전체 통로를 흥정하며 천천히 도는 경우, 혼잡한 좁은 통로를 지날 때",
+       "evidence_ids": [
+        "fact:dad-07:surface",
+        "rev:dad-07:sig_walking"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-08": {
+  "name_ko": "다낭 대성당(핑크성당)",
+  "composite": {
+   "typical": 2,
+   "lower": 2,
+   "upper": 4
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 3,
+    "upper": 7,
+    "typical": 5
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 2,
+    "typical": 1
+   },
+   "crowd": {
+    "lower": 2,
+    "upper": 5,
+    "typical": 3
+   },
+   "walking": {
+    "lower": 1,
+    "upper": 3,
+    "typical": 2
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "버스/차량 하차 → 성당 정문·앞마당에서 외관 사진 → (개방 시) 내부·뒤편 성모 동굴 → 약 15~30분 체류 후 한시장 방향 도보 이동",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "오전 일찍이나 늦은 오후에 방문하거나 내부·앞마당 그늘에서 쉬는 경우",
+       "evidence_ids": [
+        "https://www.shinyvisa.com/da-nang-cathedral-pink-church/",
+        "https://couplestravelstories.ca/da-nang-cathedral/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문 시 체감온도 약 40℃에 외관 중심의 실외 체류",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-08:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "성당 입구 몇 단 계단 및 내부 진입 시 소수 계단(리뷰 1/150건 언급, 정밀도 약 90%)",
+       "evidence_ids": [
+        "rev:dad-08:sig_stairs_climb"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "비수기이거나 개방 시간 중 한산한 평일 방문",
+       "evidence_ids": [
+        "rev:dad-08:49",
+        "topic:dad-08:평일"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "성수기나 단체 관광버스가 몰리는 시간대, 미사 시간대",
+       "evidence_ids": [
+        "rev:dad-08:82",
+        "rev:dad-08:97"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "입구 근처에서 하차해 외관만 보고 이동하는 경우(체류 약 15~30분)",
+       "evidence_ids": [
+        "https://localvietnam.com/da-nang/da-nang-cathedral/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "버스가 좁은 도로 때문에 멀리 하차해 걷거나, 용다리·한시장까지 도보로 연계하는 경우(용다리에서 약 15분)",
+       "evidence_ids": [
+        "rev:dad-08:gen3",
+        "https://worldmatetravel.com/travel-guide/da-nang-cathedral-a-famous-cultural-attraction-with-impressive-pink-color"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-09": {
+  "name_ko": "참 조각 박물관",
+  "composite": {
+   "typical": 2,
+   "lower": 1,
+   "upper": 3
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "needs_review",
+  "dimensions": {
+   "heat": {
+    "lower": 1,
+    "upper": 4,
+    "typical": 2
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 2,
+    "typical": 1
+   },
+   "crowd": {
+    "lower": 1,
+    "upper": 4,
+    "typical": 2
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 3,
+    "typical": 2
+   }
+  },
+  "conditions": {
+   "flags": [
+    "walking: 1 invalid run(s)"
+   ],
+   "route": "입구→12개 지역 전시관·4개 주제관(실내/반개방 회랑)→정원 마당 순환, 약 1~1.5시간 평탄 관람",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "냉방되는 갤러리 위주로 관람하거나 비·폭염일에 실내 중심 방문(Google 토픽에 에어컨 언급 214회)",
+       "evidence_ids": [
+        "topic:dad-09:에어컨",
+        "https://www.excursionmania.com/ttd/1508/da-nang-museum-of-cham-sculpture-blg-1508"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문, 일부 갤러리가 냉방되지 않고 반개방이며 마당·주차장 이동 시",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-09:air_conditioned",
+        "fact:dad-09:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "2층 신관(전시·도서관 등)까지 모두 둘러보는 경우 소수 계단 가능(계단 수 미확인)",
+       "evidence_ids": [
+        "https://www.vietnambynomadays.com/guide/attraction/cham-museum"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "개관 직후 오전이나 늦은 오후 방문",
+       "evidence_ids": [
+        "https://www.excursionmania.com/ttd/1508/da-nang-museum-of-cham-sculpture-blg-1508"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "단체 패키지 투어객이 몰리는 시간대(리뷰 표본이 작아 가능성만 반영)",
+       "evidence_ids": [
+        "rev:dad-09:sig_queue_crowd"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "핵심 갤러리(미선·짜끼에우 등)만 약 30~45분 관람",
+       "evidence_ids": [
+        "https://goodmorning-hoian.com/en/cham-museum-da-nang/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "오디오가이드로 전 갤러리와 마당까지 1.5~2시간 이상 천천히 관람",
+       "evidence_ids": [
+        "https://goodmorning-hoian.com/en/cham-museum-da-nang/",
+        "https://www.vietnambynomadays.com/guide/attraction/cham-museum"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-10": {
+  "name_ko": "아시아파크(썬휠)",
+  "composite": {
+   "typical": 3,
+   "lower": 2,
+   "upper": 5
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 3,
+    "typical": 2
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 7,
+    "typical": 5
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 5,
+    "typical": 4
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "저녁(해질 무렵~야간) 방문. 포장된 공원 내부를 걸어 에스컬레이터로 썬휠 승강장에 올라 약 15분간 관람차를 타고, 일부 놀이기구나 야경 산책을 곁들입니다. 입장은 무료이고 놀이기구는 별도 결제입니다.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "해가 진 뒤(저녁 6시 이후) 방문하고, 관람차는 에어컨 객실로 탑승",
+       "evidence_ids": [
+        "fact:dad-10:exposure",
+        "https://vietnamstory.in/asia-park/",
+        "climate:12"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "여름(7월)에 오후 3~4시 개장 직후 방문해 햇볕 아래 야외 구역에 머무는 경우",
+       "evidence_ids": [
+        "climate:7",
+        "rev:dad-10:sig_heat_sun",
+        "https://www.nomadotravel.app/en/attractions/asia-park-sun-wheel"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "에스컬레이터 대신 계단을 쓰거나 여러 구역을 오르내리는 경우(리뷰상 계단 언급은 없어 가능성은 낮음)",
+       "evidence_ids": [
+        "rev:dad-10:sig_stairs_climb"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "평일 또는 개장 직후 시간대 방문(일부 후기에서 놀이기구 대기 없음, 공원이 한산)",
+       "evidence_ids": [
+        "https://betweenenglandandiowa.com/asia-park-da-nang/",
+        "https://www.tripadvisor.in/Attraction_Review-g298085-d7043562-Reviews-Sun_Wheel-Da_Nang.html"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "주말·공휴일의 일몰~야간 피크 시간대 썬휠 대기",
+       "evidence_ids": [
+        "https://centralvietnamguide.com/asia-park-da-nang/",
+        "https://evendo.com/locations/vietnam/da-nang/ngu-hanh-son-district/attraction/sun-wheel"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "썬휠 탑승과 주변 산책만 하고 다른 놀이기구는 타지 않는 경우",
+       "evidence_ids": [
+        "https://www.nomadotravel.app/en/attractions/asia-park-sun-wheel",
+        "fact:dad-10:alternatives"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "공원 10개 테마존을 모두 돌고 야간 산책까지 하는 경우",
+       "evidence_ids": [
+        "https://centralvietnamguide.com/asia-park-da-nang/",
+        "https://www.nomadotravel.app/en/attractions/asia-park-sun-wheel"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-11": {
+  "name_ko": "누이탄타이 온천공원",
+  "composite": {
+   "typical": 5,
+   "lower": 3,
+   "upper": 6
+  },
+  "grade_display": "중",
+  "confidence": "low",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 4,
+    "upper": 8,
+    "typical": 6
+   },
+   "climb": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "walking": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 5
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "입장 → 단지 내 전동 셔틀/도보로 온천풀·온센 → 머드탕 → 점심 뷔페 → 공룡/정원 구역 일부 산책 후 퇴장. 약 3~4시간 체류, 대부분 수영복 차림으로 실외 풀 사이를 이동하는 일정 기준.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "선선한 달(1월 체감 약 25℃)에 방문하거나 오전·오후 늦게 방문하고, 실내 온센·사우나를 많이 쓰는 경우",
+       "evidence_ids": [
+        "climate:1",
+        "fact:dad-11:exposure"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "한여름(7월 체감 약 40℃) 한낮에 그늘이 적은 실외 풀·야외 구역에 머무는 경우",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-11:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "단지 내 전동 셔틀을 이용해 구역 간을 이동하면 오르막·계단을 줄일 수 있음",
+       "evidence_ids": [
+        "fact:dad-11:alternatives",
+        "https://sunparadiseland.com/en/SunParadiseLandDaNang/tin-tuc/experience-the-super-chill-hot-spring-park-of-than-tai-mountain-13361"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "셔틀 없이 경사지·계단 구간을 걸어 사찰, 공룡 구역, 숲 위 산책로까지 모두 도는 경우",
+       "evidence_ids": [
+        "fact:dad-11:surface",
+        "https://www.tripadvisor.com/Attraction_Review-g298085-d13384709-Reviews-Hot_spring_Park-Da_Nang.html"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "평일이나 개장 직후에 방문하는 경우",
+       "evidence_ids": [
+        "rev:dad-11:sig_queue_crowd"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "주말·성수기 또는 워터슬라이드·머드탕·뷔페 대기가 몰리는 시간대",
+       "evidence_ids": [
+        "rev:dad-11:sig_queue_crowd",
+        "https://www.tripadvisor.com/Attraction_Review-g298085-d13384709-Reviews-Hot_spring_Park-Da_Nang.html"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "전동 셔틀을 이용하고 온천·머드탕 위주로 한두 구역만 머무는 경우",
+       "evidence_ids": [
+        "fact:dad-11:alternatives"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "넓은 부지(60ha, 일부 자료는 165ha)를 걸어서 돌며 워터파크, 공룡 구역, 사찰, 정원까지 보는 경우",
+       "evidence_ids": [
+        "fact:dad-11:site_area_ha",
+        "fact:dad-11:area_note",
+        "fact:dad-11:surface"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-12": {
+  "name_ko": "미선 유적지",
+  "composite": {
+   "typical": 5,
+   "lower": 3,
+   "upper": 6
+  },
+  "grade_display": "중",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 5,
+    "upper": 8,
+    "typical": 7
+   },
+   "climb": {
+    "lower": 2,
+    "upper": 4,
+    "typical": 3
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "walking": {
+    "lower": 4,
+    "upper": 7,
+    "typical": 5
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "매표소·박물관 → 전동차(약 2km, 티켓 포함) → 유적 순환 보행로(약 1.5~4km, 그룹 K·E/F·G·A·B/C/D·H) → 전동차 복귀. 약 2~3시간.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "개장 직후 오전(6~7시대) 방문, 또는 선선한 1월 방문(체감 최고 약 25℃)",
+       "evidence_ids": [
+        "fact:dad-12:heat_note",
+        "climate:1"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "한여름(7월 체감 최고 약 40℃) 한낮 방문, 숲 그늘이 적은 유적 구간",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-12:exposure",
+        "rev:dad-12:sig_heat_sun"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "전동차로 매표소~유적 약 2km 오르막 구간을 생략하고, 계단이 있는 그룹 G 등 일부 유적은 멀리서 관람",
+       "evidence_ids": [
+        "fact:dad-12:alternatives",
+        "https://localvietnam.com/quang-nam/hoi-an/my-son-sanctuary/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "전동차 없이 2km 오르막을 걷고, 계단이 있는 지선 유적을 모두 올라가는 경우 (GPS 중앙 누적상승 120m, n=3 표본 부족)",
+       "evidence_ids": [
+        "gps:dad-12:median_ascent_m",
+        "https://localvietnam.com/quang-nam/hoi-an/my-son-sanctuary/",
+        "https://ahoyvietnam.com/my-son-sanctuary/"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "개장 직후나 단체 투어가 몰리지 않는 시간대 방문, 단체와 반대 방향(시계 반대)으로 순환",
+       "evidence_ids": [
+        "https://localvietnam.com/quang-nam/hoi-an/my-son-sanctuary/",
+        "fact:dad-12:heat_note"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "투어 단체가 몰리는 오전 시간대의 전동차 대기·공연 시간",
+       "evidence_ids": [
+        "rev:dad-12:sig_queue_crowd",
+        "https://hoiandaytrip.com/my-son-sanctuary-travel-guide/"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "전동차를 이용하고 외곽 그룹(G·H·K, 약 1.2km 추가)을 생략한 주요 유적군(B/C/D) 중심 관람",
+       "evidence_ids": [
+        "https://vietnamtour.in/my-son-sanctuary/",
+        "https://hoiandaytrip.com/my-son-sanctuary-travel-guide/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "전동차 없이 왕복 걷고 전체 순환로까지 도는 경우 (GPS 중앙 3.85km·약 89분은 표본 n=3)",
+       "evidence_ids": [
+        "gps:dad-12:median_km",
+        "gps:dad-12:median_duration_min",
+        "https://localvietnam.com/quang-nam/hoi-an/my-son-sanctuary/"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-13": {
+  "name_ko": "하이반 고개",
+  "composite": {
+   "typical": 3,
+   "lower": 2,
+   "upper": 5
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "climb": {
+    "lower": 2,
+    "upper": 5,
+    "typical": 3
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 4,
+    "typical": 3
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "다낭/호이안→하이반 고개를 차량(승용차·투어차)으로 넘어 정상 주차장에 정차 → 하이반관(Hai Van Quan) 일대를 20~30분 도보 관람(관문 계단·돌길 포함) → 차량으로 하산. 20km 전체 도로 구간은 차량 이동이며 도보로 걷지 않음.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "겨울~건기 초반이나 오전에 방문하고 에어컨 차량으로 이동. 산 정상은 도시보다 서늘하다",
+       "evidence_ids": [
+        "climate:1",
+        "fact:dad-13:exposure"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮에 방문. 다낭 체감온도 평균은 약 40℃이고 정상은 그늘이 적은 야외다",
+       "evidence_ids": [
+        "climate:7",
+        "https://hoiandaytrip.com/hai-van-gate/"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [
+      {
+       "condition": "차 안/주차장 인근 전망 포인트에서만 머물고 관문 위 계단은 오르지 않음 (정상까지 차량 이동)",
+       "evidence_ids": [
+        "fact:dad-13:exposure",
+        "https://hoiandaytrip.com/hai-van-gate/"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "주차장에서 도로 건너 계단을 올라 다낭 관문과 두 번째 관문 위까지 모두 오르는 경우",
+       "evidence_ids": [
+        "https://hoiandaytrip.com/hai-van-gate/",
+        "fact:dad-13:surface"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "투어버스가 몰리는 시간을 피해 이른 아침이나 늦은 오후에 방문",
+       "evidence_ids": [
+        "https://hiddenhoian.com/travel/guide-hai-van-pass/",
+        "rev:dad-13:sig_queue_crowd"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "투어버스와 오토바이 투어가 같은 시간대에 정차하는 한낮 성수기. 정상 주차장과 관문이 가장 붐빈다",
+       "evidence_ids": [
+        "https://goodmorning-hoian.com/en/hai-van-pass-danang/",
+        "https://jayexiomo.com/2026/05/31/riding-the-hai-van-pass-an-easy-rider-tour-from-da-nang/"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "주차장 주변 카페·전망대만 짧게 이용하고 관문 안쪽까지 들어가지 않음",
+       "evidence_ids": [
+        "https://hoiandaytrip.com/hai-van-gate/",
+        "fact:dad-13:surface"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "정상 체류를 30분 이상으로 늘려 두 관문과 벙커 유적, 주변 전망점을 모두 돌아봄",
+       "evidence_ids": [
+        "https://www.huesmiletravel.com/tours/hstcar4-private-car-hoi-an-to-hue/",
+        "fact:dad-13:surface"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-14": {
+  "name_ko": "호이안 야시장",
+  "composite": {
+   "typical": 3,
+   "lower": 3,
+   "upper": 5
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "ok",
+  "dimensions": {
+   "heat": {
+    "lower": 3,
+    "upper": 6,
+    "typical": 4
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 2,
+    "typical": 1
+   },
+   "crowd": {
+    "lower": 5,
+    "upper": 8,
+    "typical": 7
+   },
+   "walking": {
+    "lower": 3,
+    "upper": 5,
+    "typical": 4
+   }
+  },
+  "conditions": {
+   "flags": [],
+   "route": "응우옌호앙 거리 야시장 입구에서 투본강변 노점·등불 거리를 따라 걷고 다리 부근까지 왕복하는 저녁 산책 (약 1.1km, 40분 내외, 평지)",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "해가 진 뒤 늦은 저녁에 방문하고 선선한 달(11월 체감 최고 약 30℃)을 고른 경우",
+       "evidence_ids": [
+        "fact:dad-14:night",
+        "climate:11"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월처럼 체감 최고 약 40℃인 달의 초저녁 방문 (일몰 직후에도 열기와 습도가 남음)",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-14:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": []
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "평일 또는 이른 저녁, 혹은 비수기에 방문하는 경우 (추정이며 직접 근거는 약함)",
+       "evidence_ids": [
+        "fact:dad-14:surface"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "성수기·주말 저녁 등불이 켜지는 시간대에는 보행이 정체됩니다",
+       "evidence_ids": [
+        "fact:dad-14:surface",
+        "rev:dad-14:gen4"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [
+      {
+       "condition": "입구 주변 구간만 둘러보는 짧은 방문 (하위 25% 궤적 약 0.5km)",
+       "evidence_ids": [
+        "gps:dad-14:p25_km"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "구시가지와 연계해 강변을 길게 도는 경우 (상위 25% 궤적 약 2.1km)",
+       "evidence_ids": [
+        "gps:dad-14:p75_km"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "dad-15": {
+  "name_ko": "껌탄 코코넛 마을(바구니배)",
+  "composite": {
+   "typical": 3,
+   "lower": 2,
+   "upper": 5
+  },
+  "grade_display": "하",
+  "confidence": "medium",
+  "status": "needs_review",
+  "dimensions": {
+   "heat": {
+    "lower": 4,
+    "upper": 8,
+    "typical": 6
+   },
+   "climb": {
+    "lower": 1,
+    "upper": 3,
+    "typical": 2
+   },
+   "crowd": {
+    "lower": 3,
+    "upper": 7,
+    "typical": 5
+   },
+   "walking": {
+    "lower": 2,
+    "upper": 3,
+    "typical": 2
+   }
+  },
+  "conditions": {
+   "flags": [
+    "crowd: 1 invalid run(s)"
+   ],
+   "route": "주차장/선착장 → 바구니배 탑승(약 40~45분 수로 순환, 게 잡기·공연 포함) → 하선 후 코코넛 음료. 도보는 선착장 주변 수십~100m 수준.",
+   "conditions": {
+    "heat": {
+     "lower_conditions": [
+      {
+       "condition": "오전 7시경 또는 오후 4:30 이후 방문, 비수기(1월 체감 최고 약 25.5℃)",
+       "evidence_ids": [
+        "https://vietnamoriginal-travel.com/news/cam-thanh-hoi-an",
+        "climate:1"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "7월 한낮 방문(다낭 체감 최고 평균 약 40℃), 그늘 적은 수상 구간",
+       "evidence_ids": [
+        "climate:7",
+        "fact:dad-15:exposure"
+       ]
+      }
+     ]
+    },
+    "climb": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "낮은 선착장에서 흔들리는 바구니배 승·하선 시 약간의 높낮이 이동(GPS 상승 3m 수준, 표본 n=1)",
+       "evidence_ids": [
+        "gps:dad-15:median_ascent_m",
+        "fact:dad-15:surface"
+       ]
+      }
+     ]
+    },
+    "crowd": {
+     "lower_conditions": [
+      {
+       "condition": "오전 7시 전후 또는 늦은 오후 방문",
+       "evidence_ids": [
+        "https://vietnamoriginal-travel.com/news/cam-thanh-hoi-an"
+       ]
+      }
+     ],
+     "upper_conditions": [
+      {
+       "condition": "오전 9~11시 피크 및 성수기·주말, 승선 대기·수로 혼잡",
+       "evidence_ids": [
+        "https://hoianitinerary.com/cam-thanh-guide",
+        "https://www.klook.com/en-SG/destination/p50191811-cam-thanh-coconut-village/"
+       ]
+      }
+     ]
+    },
+    "walking": {
+     "lower_conditions": [],
+     "upper_conditions": [
+      {
+       "condition": "자전거 투어·쿠킹클래스 결합 패키지이거나 승선 시 흔들림으로 균형 부담이 큰 경우",
+       "evidence_ids": [
+        "fact:dad-15:surface",
+        "https://www.getyourguide.com/cam-thanh-eco-coconut-village-l186534/"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ }
+}

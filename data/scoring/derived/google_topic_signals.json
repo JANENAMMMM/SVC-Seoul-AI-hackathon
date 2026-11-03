@@ -1,0 +1,139 @@
+{
+ "dad-01": {
+  "total_reviews": 73075,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {
+   "crowd": {
+    "matched": [
+     "crowded"
+    ],
+    "lang": "en",
+    "mentions": 733,
+    "ratio": 0.01003
+   }
+  },
+  "relief": {}
+ },
+ "dad-02": {
+  "total_reviews": 43435,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {
+   "stairs": {
+    "matched": [
+     "steep stairs",
+     "slippery stairs",
+     "climbing"
+    ],
+    "lang": "en",
+    "mentions": 966,
+    "ratio": 0.02224
+   }
+  },
+  "relief": {
+   "transport": {
+    "matched": [
+     "Marble Mountains Elevator"
+    ],
+    "lang": "en",
+    "mentions": 3650,
+    "ratio": 0.08403
+   }
+  }
+ },
+ "dad-03": {
+  "total_reviews": 0,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-04": {
+  "total_reviews": 16334,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-05": {
+  "total_reviews": 4748,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-06": {
+  "total_reviews": 9899,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {
+   "crowd": {
+    "matched": [
+     "crowded"
+    ],
+    "lang": "en",
+    "mentions": 269,
+    "ratio": 0.02717
+   }
+  },
+  "relief": {}
+ },
+ "dad-07": {
+  "total_reviews": 46120,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-08": {
+  "total_reviews": 2756,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-09": {
+  "total_reviews": 8297,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-10": {
+  "total_reviews": 11912,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {
+   "transport": {
+    "matched": [
+     "Monorail"
+    ],
+    "lang": "en",
+    "mentions": 81,
+    "ratio": 0.0068
+   }
+  }
+ },
+ "dad-11": {
+  "total_reviews": 4866,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-12": {
+  "total_reviews": 13098,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-13": {
+  "total_reviews": 2436,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-14": {
+  "total_reviews": 50315,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ },
+ "dad-15": {
+  "total_reviews": 1995,
+  "note": "ratio = matched topic mentions / total Google reviews",
+  "burden": {},
+  "relief": {}
+ }
+}

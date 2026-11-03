@@ -1,0 +1,1080 @@
+[
+  {
+    "id": "dad-01",
+    "name_ko": "바나힐 썬월드",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "B",
+          "metric": "pedestrian_length_km",
+          "value": 0.987,
+          "unit": "km",
+          "source": "osm_features",
+          "note": "buffer_300m"
+        },
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.16,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.11, 0.227]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "B",
+          "metric": "walk_only_climb_m",
+          "value": 45.0,
+          "unit": "m",
+          "source": "osm_features",
+          "note": "max elevation range within 800m clusters around aerialway terminals (+unserved cluster)"
+        },
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.053,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.027, 0.102]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "B",
+          "metric": "transport_available",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "major_climb_replaced"
+        },
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.387,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.312, 0.467]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "mixed (산정 고원, 일부 실내 fantasy park)"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.127,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.083, 0.189]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.38,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.306, 0.46]"
+        },
+        {
+          "basis": "C",
+          "metric": "google_crowd_ratio",
+          "value": 0.01003,
+          "unit": "ratio",
+          "source": "google_topic_signals",
+          "note": "topic mentions / all Google reviews; sparse topic index"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-02",
+    "name_ko": "오행산(마블마운틴)",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "A",
+          "metric": "median_km",
+          "value": 1.7,
+          "unit": "km",
+          "source": "gps_traces",
+          "note": "n=5; usable"
+        },
+        {
+          "basis": "B",
+          "metric": "pedestrian_length_km",
+          "value": 1.714,
+          "unit": "km",
+          "source": "osm_features",
+          "note": "buffer_300m"
+        },
+        {
+          "basis": "B",
+          "metric": "internal_route_km",
+          "value": 1.75,
+          "unit": "km",
+          "source": "site_facts",
+          "note": "OSM 공개 GPS trace 13개(타임스탬프) 구간 거리 중앙값 약 1.75km (alt_probe.py)"
+        },
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.28,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.214, 0.357]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "A",
+          "metric": "median_ascent_m",
+          "value": 177.0,
+          "unit": "m",
+          "source": "gps_traces",
+          "note": "n=5; usable"
+        },
+        {
+          "basis": "B",
+          "metric": "walk_only_climb_m",
+          "value": 73.0,
+          "unit": "m",
+          "source": "osm_features",
+          "note": "no aerialway: equals walkway elevation range"
+        },
+        {
+          "basis": "B",
+          "metric": "step_count_sum",
+          "value": 113,
+          "unit": "steps",
+          "source": "osm_features",
+          "note": "mapped steps only"
+        },
+        {
+          "basis": "B",
+          "metric": "steps_count",
+          "value": 156,
+          "unit": "steps",
+          "source": "site_facts",
+          "note": "Thuy Son 정상까지 약 156계단; 전체 관람 시 약 400계단 추정(가이드별 상이)"
+        },
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.607,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.527, 0.681]"
+        },
+        {
+          "basis": "C",
+          "metric": "google_stairs_ratio",
+          "value": 0.02224,
+          "unit": "ratio",
+          "source": "google_topic_signals",
+          "note": "topic mentions / all Google reviews; sparse topic index"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "B",
+          "metric": "transport_available",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "partial_or_no_relief"
+        },
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.447,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.369, 0.527]"
+        },
+        {
+          "basis": "C",
+          "metric": "google_transport_ratio",
+          "value": 0.08403,
+          "unit": "ratio",
+          "source": "google_topic_signals",
+          "note": "topic mentions / all Google reviews; sparse topic index"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "mixed"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.287,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.22, 0.364]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.2,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.144, 0.271]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-03",
+    "name_ko": "호이안 구시가지",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "A",
+          "metric": "median_km",
+          "value": 2.775,
+          "unit": "km",
+          "source": "gps_traces",
+          "note": "n=18; usable"
+        },
+        {
+          "basis": "B",
+          "metric": "pedestrian_length_km",
+          "value": 2.512,
+          "unit": "km",
+          "source": "osm_features",
+          "note": "buffer_300m"
+        },
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.2,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.144, 0.271]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "A",
+          "metric": "median_ascent_m",
+          "value": 12.0,
+          "unit": "m",
+          "source": "gps_traces",
+          "note": "n=18; usable"
+        },
+        {
+          "basis": "B",
+          "metric": "walk_only_climb_m",
+          "value": 7.0,
+          "unit": "m",
+          "source": "osm_features",
+          "note": "no aerialway: equals walkway elevation range"
+        },
+        {
+          "basis": "B",
+          "metric": "steps_count",
+          "value": 0,
+          "unit": "steps",
+          "source": "site_facts",
+          "note": ""
+        },
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "B",
+          "metric": "transport_available",
+          "value": false,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "partial_or_no_relief"
+        },
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.02,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.007, 0.057]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor (고택 실내 일부)"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.067,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.037, 0.118]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.213,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.155, 0.286]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-04",
+    "name_ko": "영흥사(린응사, 손짜반도)",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "B",
+          "metric": "pedestrian_length_km",
+          "value": 0.0,
+          "unit": "km",
+          "source": "osm_features",
+          "note": "buffer_300m"
+        },
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.067,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.037, 0.118]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.047,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.023, 0.093]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "B",
+          "metric": "transport_available",
+          "value": false,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "partial_or_no_relief"
+        },
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.047,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.023, 0.093]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.08,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.046, 0.135]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-05",
+    "name_ko": "미케 해변",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.247,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.185, 0.321]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "B",
+          "metric": "steps_count",
+          "value": 0,
+          "unit": "steps",
+          "source": "site_facts",
+          "note": ""
+        },
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.013,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.004, 0.047]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.013,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.004, 0.047]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor, 그늘 적음"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.14,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.093, 0.205]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.133,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.088, 0.197]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-06",
+    "name_ko": "용다리",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.1,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.062, 0.158]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "B",
+          "metric": "steps_count",
+          "value": 0,
+          "unit": "steps",
+          "source": "site_facts",
+          "note": ""
+        },
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor, night"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.047,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.023, 0.093]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.24,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.179, 0.314]"
+        },
+        {
+          "basis": "C",
+          "metric": "google_crowd_ratio",
+          "value": 0.02717,
+          "unit": "ratio",
+          "source": "google_topic_signals",
+          "note": "topic mentions / all Google reviews; sparse topic index"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-07",
+    "name_ko": "한시장",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.133,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.088, 0.197]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": false,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "indoor (비냉방 추정, 미확인)"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.113,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.072, 0.174]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.24,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.179, 0.314]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-08",
+    "name_ko": "다낭 대성당(핑크성당)",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.04,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.018, 0.085]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor 외관 위주(내부는 미사 시간 외 제한)"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.013,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.004, 0.047]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.04,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.018, 0.085]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-09",
+    "name_ko": "참 조각 박물관",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.033,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.014, 0.076]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": false,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "indoor/semi-open galleries"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.04,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.018, 0.085]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-10",
+    "name_ko": "아시아파크(썬휠)",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.02,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.007, 0.057]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.033,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.014, 0.076]"
+        },
+        {
+          "basis": "C",
+          "metric": "google_transport_ratio",
+          "value": 0.0068,
+          "unit": "ratio",
+          "source": "google_topic_signals",
+          "note": "topic mentions / all Google reviews; sparse topic index"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor, 주로 야간 운영"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.187,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.132, 0.257]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.233,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.173, 0.307]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-11",
+    "name_ko": "누이탄타이 온천공원",
+    "dimensions": {
+      "D1": [],
+      "D2": [],
+      "D3": [],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor (온천풀)"
+        }
+      ],
+      "D5": []
+    }
+  },
+  {
+    "id": "dad-12",
+    "name_ko": "미선 유적지",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "B",
+          "metric": "median_km",
+          "value": 3.851,
+          "unit": "km",
+          "source": "gps_traces",
+          "note": "n=3; weak"
+        },
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.287,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.22, 0.364]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "B",
+          "metric": "median_ascent_m",
+          "value": 120.0,
+          "unit": "m",
+          "source": "gps_traces",
+          "note": "n=3; weak"
+        },
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.0,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.0, 0.025]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.167,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.116, 0.234]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor, 그늘 일부(숲)"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.227,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.167, 0.3]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.153,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.104, 0.22]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-13",
+    "name_ko": "하이반 고개",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "C",
+          "metric": "walking_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "C",
+          "metric": "stairs_climb_share",
+          "value": 0.033,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.014, 0.076]"
+        }
+      ],
+      "D3": [
+        {
+          "basis": "C",
+          "metric": "relief_share",
+          "value": 0.007,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.001, 0.037]"
+        }
+      ],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "차량 이동 위주, 정상 관문 짧은 도보"
+        },
+        {
+          "basis": "C",
+          "metric": "heat_sun_share",
+          "value": 0.053,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.027, 0.102]"
+        }
+      ],
+      "D5": [
+        {
+          "basis": "C",
+          "metric": "queue_crowd_share",
+          "value": 0.067,
+          "unit": "ratio",
+          "source": "review_signals_tripadvisor",
+          "note": "n=150; Wilson CI=[0.037, 0.118]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dad-14",
+    "name_ko": "호이안 야시장",
+    "dimensions": {
+      "D1": [
+        {
+          "basis": "A",
+          "metric": "median_km",
+          "value": 1.143,
+          "unit": "km",
+          "source": "gps_traces",
+          "note": "n=14; usable"
+        }
+      ],
+      "D2": [
+        {
+          "basis": "A",
+          "metric": "median_ascent_m",
+          "value": 6.0,
+          "unit": "m",
+          "source": "gps_traces",
+          "note": "n=14; usable"
+        },
+        {
+          "basis": "B",
+          "metric": "steps_count",
+          "value": 0,
+          "unit": "steps",
+          "source": "site_facts",
+          "note": ""
+        }
+      ],
+      "D3": [],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor, night"
+        }
+      ],
+      "D5": []
+    }
+  },
+  {
+    "id": "dad-15",
+    "name_ko": "껌탄 코코넛 마을(바구니배)",
+    "dimensions": {
+      "D1": [],
+      "D2": [],
+      "D3": [],
+      "D4": [
+        {
+          "basis": "B",
+          "metric": "outdoor",
+          "value": true,
+          "unit": "bool",
+          "source": "site_facts",
+          "note": "outdoor, 그늘 적음"
+        }
+      ],
+      "D5": []
+    }
+  }
+]

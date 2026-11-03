@@ -1,0 +1,1176 @@
+[
+ {
+  "id": "dad-01",
+  "name_ko": "바나힐 썬월드",
+  "name_en": "Sun World Ba Na Hills",
+  "query": "Sun World Ba Na Hills Da Nang",
+  "google": {
+   "title": "Ba Na Hills SunWorld",
+   "data_id": "0x3141f60e6b3844c9:0x5c53b85f61797909",
+   "place_id": "ChIJyUQ4aw72QTERCXl5YV-4U1w",
+   "gps_coordinates": {
+    "latitude": 16.0265625,
+    "longitude": 108.03281249999999
+   },
+   "rating": 4.5,
+   "reviews": 73075,
+   "type": [
+    "Amusement park",
+    "Theme park"
+   ],
+   "address": "Ba Na, Da Nang, Vietnam",
+   "hours": [
+    {
+     "monday": "8 AM–10 PM"
+    },
+    {
+     "tuesday": "8 AM–10 PM"
+    },
+    {
+     "wednesday": "8 AM–10 PM"
+    },
+    {
+     "thursday": "8 AM–10 PM"
+    },
+    {
+     "friday": "8 AM–10 PM"
+    },
+    {
+     "saturday": "8 AM–10 PM"
+    },
+    {
+     "sunday": "8 AM–10 PM"
+    }
+   ],
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible restroom",
+      "Wheelchair accessible seating"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.0265625,
+  "lng": 108.03281249999999
+ },
+ {
+  "id": "dad-02",
+  "name_ko": "오행산(마블마운틴)",
+  "name_en": "Marble Mountains",
+  "query": "Marble Mountains Da Nang",
+  "google": {
+   "title": "The Marble Mountains",
+   "data_id": "0x31420dd4e14b2edb:0xbc6e1faf738be4c5",
+   "place_id": "ChIJ2y5L4dQNQjERxeSLc68fbrw",
+   "gps_coordinates": {
+    "latitude": 16.0037104,
+    "longitude": 108.2631605
+   },
+   "rating": 4.4,
+   "reviews": 43435,
+   "type": [
+    "Scenic spot",
+    "Tourist attraction"
+   ],
+   "address": "81 Huyền Trân Công Chúa, Hoà Hải, Ngũ Hành Sơn, Đà Nẵng 550000, Vietnam",
+   "hours": [
+    {
+     "monday": "7 AM–5:30 PM"
+    },
+    {
+     "tuesday": "7 AM–5:30 PM"
+    },
+    {
+     "wednesday": "7 AM–5:30 PM"
+    },
+    {
+     "thursday": "7 AM–5:30 PM"
+    },
+    {
+     "friday": "7 AM–5:30 PM"
+    },
+    {
+     "saturday": "7 AM–5:30 PM"
+    },
+    {
+     "sunday": "7 AM–5:30 PM"
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.0037104,
+  "lng": 108.2631605
+ },
+ {
+  "id": "dad-03",
+  "name_ko": "호이안 구시가지",
+  "name_en": "Hoi An Ancient Town",
+  "query": "Hoi An Ancient Town",
+  "google": {
+   "title": "Old Town",
+   "data_id": "0x31420e7efc19667d:0x2f53b38bfba265bc",
+   "place_id": "ChIJfWYZ_H4OQjERvGWi-4uzUy8",
+   "gps_coordinates": {
+    "latitude": 15.8771477,
+    "longitude": 108.3286201
+   },
+   "address": "Minh An, Hoi An, Da Nang, Vietnam",
+   "resolved_from": "local_results[0]"
+  },
+  "lat": 15.8771477,
+  "lng": 108.3286201
+ },
+ {
+  "id": "dad-04",
+  "name_ko": "영흥사(린응사, 손짜반도)",
+  "name_en": "Linh Ung Pagoda Son Tra",
+  "query": "Linh Ung Pagoda Son Tra Da Nang",
+  "google": {
+   "title": "Linh Ung Temple",
+   "data_id": "0x314219af35a4961d:0x1e787acda053d158",
+   "place_id": "ChIJHZakNa8ZQjERWNFToM16eB4",
+   "gps_coordinates": {
+    "latitude": 16.100205499999998,
+    "longitude": 108.2778816
+   },
+   "rating": 4.5,
+   "reviews": 16334,
+   "type": "Buddhist temple",
+   "address": "472H+34F, Bán đảo, Sơn Trà, Đà Nẵng, Vietnam",
+   "hours": "Open · Closes 9 PM",
+   "extensions": [
+    {
+     "service_options": [
+      "Onsite services"
+     ]
+    },
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance"
+     ]
+    },
+    {
+     "amenities": [
+      "Gender-neutral restroom",
+      "Restroom"
+     ]
+    },
+    {
+     "crowd": [
+      "LGBTQ+ friendly",
+      "Transgender safespace"
+     ]
+    },
+    {
+     "parking": [
+      "Free parking garage",
+      "Free parking lot",
+      "Free street parking",
+      "On-site parking"
+     ]
+    }
+   ],
+   "resolved_from": "local_results[0]"
+  },
+  "lat": 16.100205499999998,
+  "lng": 108.2778816
+ },
+ {
+  "id": "dad-05",
+  "name_ko": "미케 해변",
+  "name_en": "My Khe Beach",
+  "query": "My Khe Beach Da Nang",
+  "google": {
+   "title": "My Khe Beach",
+   "data_id": "0x31421782f7fa0ee3:0xeafb8ba272ee55ac",
+   "place_id": "ChIJ4w7694IXQjERrFXucqKL--o",
+   "gps_coordinates": {
+    "latitude": 16.0616944,
+    "longitude": 108.24693459999999
+   },
+   "rating": 4.7,
+   "reviews": 4748,
+   "type": [
+    "Beach"
+   ],
+   "address": "Da Nang 550000, Vietnam",
+   "resolved_from": "place_results"
+  },
+  "lat": 16.0616944,
+  "lng": 108.24693459999999
+ },
+ {
+  "id": "dad-06",
+  "name_ko": "용다리",
+  "name_en": "Dragon Bridge",
+  "query": "Dragon Bridge Da Nang",
+  "google": {
+   "title": "Dragon Bridge",
+   "data_id": "0x31421996588a512f:0x493b652aa06b12e",
+   "place_id": "ChIJL1GKWJYZQjERLrEGqlK2kwQ",
+   "gps_coordinates": {
+    "latitude": 16.0611042,
+    "longitude": 108.2276926
+   },
+   "rating": 4.5,
+   "reviews": 9899,
+   "type": [
+    "Bridge",
+    "Tourist attraction"
+   ],
+   "address": "Cầu Rồng, An Hải, Đà Nẵng 550000, Vietnam",
+   "hours": [
+    {
+     "monday": "Open 24 hours"
+    },
+    {
+     "tuesday": "Open 24 hours"
+    },
+    {
+     "wednesday": "Open 24 hours"
+    },
+    {
+     "thursday": "Open 24 hours"
+    },
+    {
+     "friday": "Open 24 hours"
+    },
+    {
+     "saturday": "Open 24 hours"
+    },
+    {
+     "sunday": "Open 24 hours"
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.0611042,
+  "lng": 108.2276926
+ },
+ {
+  "id": "dad-07",
+  "name_ko": "한시장",
+  "name_en": "Han Market",
+  "query": "Han Market Da Nang",
+  "google": {
+   "title": "Han Market",
+   "data_id": "0x31421832397ecc0d:0x90b24f8b8cb2873f",
+   "place_id": "ChIJDcx-OTIYQjERP4eyjItPspA",
+   "gps_coordinates": {
+    "latitude": 16.068083599999998,
+    "longitude": 108.224069
+   },
+   "rating": 3.9,
+   "reviews": 46120,
+   "type": [
+    "Traditional market",
+    "Market",
+    "Tourist attraction"
+   ],
+   "address": "119 Trần Phú, Hải Châu, Đà Nẵng 550000, Vietnam",
+   "hours": [
+    {
+     "monday": "6 AM–7 PM"
+    },
+    {
+     "tuesday": "6 AM–7 PM"
+    },
+    {
+     "wednesday": "6 AM–7 PM"
+    },
+    {
+     "thursday": "6 AM–7 PM"
+    },
+    {
+     "friday": "6 AM–7 PM"
+    },
+    {
+     "saturday": "6 AM–7 PM"
+    },
+    {
+     "sunday": "6 AM–7 PM"
+    }
+   ],
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible restroom"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.068083599999998,
+  "lng": 108.224069
+ },
+ {
+  "id": "dad-08",
+  "name_ko": "다낭 대성당(핑크성당)",
+  "name_en": "Da Nang Cathedral",
+  "query": "Da Nang Cathedral",
+  "google": {
+   "title": "Da Nang Cathedral",
+   "data_id": "0x3142198f38589aef:0x9409e1a4c30cbf79",
+   "place_id": "ChIJ75pYOI8ZQjEReb8Mw6ThCZQ",
+   "gps_coordinates": {
+    "latitude": 16.066667199999998,
+    "longitude": 108.22318729999999
+   },
+   "rating": 4.3,
+   "reviews": 2756,
+   "type": [
+    "Catholic cathedral",
+    "Catholic church",
+    "Church",
+    "Church of Christ"
+   ],
+   "address": "156 Trần Phú, Hải Châu, Đà Nẵng 550000, Vietnam",
+   "popular_times": {
+    "current_day": "monday",
+    "graph_results": {
+     "monday": [
+      {
+       "time": "6 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 39
+      },
+      {
+       "time": "9 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 55
+      },
+      {
+       "time": "10 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 54
+      },
+      {
+       "time": "11 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 49
+      },
+      {
+       "time": "12 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "1 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 72
+      },
+      {
+       "time": "2 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 86
+      },
+      {
+       "time": "3 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 75
+      },
+      {
+       "time": "4 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 53
+      },
+      {
+       "time": "5 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "6 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 PM",
+       "busyness_score": 0,
+       "current": true
+      },
+      {
+       "time": "8 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "9 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "10 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "11 PM",
+       "busyness_score": 0
+      }
+     ],
+     "tuesday": [
+      {
+       "time": "6 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 33
+      },
+      {
+       "time": "9 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 47
+      },
+      {
+       "time": "10 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 46
+      },
+      {
+       "time": "11 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 43
+      },
+      {
+       "time": "12 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "1 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 80
+      },
+      {
+       "time": "2 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 100
+      },
+      {
+       "time": "3 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 88
+      },
+      {
+       "time": "4 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 61
+      },
+      {
+       "time": "5 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "6 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "9 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "10 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "11 PM",
+       "busyness_score": 0
+      }
+     ],
+     "wednesday": [
+      {
+       "time": "6 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 41
+      },
+      {
+       "time": "9 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 53
+      },
+      {
+       "time": "10 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 52
+      },
+      {
+       "time": "11 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 45
+      },
+      {
+       "time": "12 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "1 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 68
+      },
+      {
+       "time": "2 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 83
+      },
+      {
+       "time": "3 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 75
+      },
+      {
+       "time": "4 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 55
+      },
+      {
+       "time": "5 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "6 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "9 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "10 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "11 PM",
+       "busyness_score": 0
+      }
+     ],
+     "thursday": [
+      {
+       "time": "6 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 45
+      },
+      {
+       "time": "9 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 61
+      },
+      {
+       "time": "10 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 58
+      },
+      {
+       "time": "11 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 42
+      },
+      {
+       "time": "12 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "1 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 31
+      },
+      {
+       "time": "2 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 36
+      },
+      {
+       "time": "3 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 38
+      },
+      {
+       "time": "4 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 35
+      },
+      {
+       "time": "5 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "6 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "9 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "10 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "11 PM",
+       "busyness_score": 0
+      }
+     ],
+     "friday": [
+      {
+       "time": "6 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 43
+      },
+      {
+       "time": "9 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 56
+      },
+      {
+       "time": "10 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 55
+      },
+      {
+       "time": "11 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 48
+      },
+      {
+       "time": "12 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "1 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 76
+      },
+      {
+       "time": "2 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 92
+      },
+      {
+       "time": "3 PM",
+       "info": "Usually as busy as it gets",
+       "busyness_score": 81
+      },
+      {
+       "time": "4 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 58
+      },
+      {
+       "time": "5 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "6 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "9 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "10 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "11 PM",
+       "busyness_score": 0
+      }
+     ],
+     "saturday": [
+      {
+       "time": "6 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 AM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 44
+      },
+      {
+       "time": "9 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 58
+      },
+      {
+       "time": "10 AM",
+       "info": "Usually a little busy",
+       "busyness_score": 55
+      },
+      {
+       "time": "11 AM",
+       "info": "Usually not too busy",
+       "busyness_score": 38
+      },
+      {
+       "time": "12 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "1 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 26
+      },
+      {
+       "time": "2 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 32
+      },
+      {
+       "time": "3 PM",
+       "info": "Usually not too busy",
+       "busyness_score": 39
+      },
+      {
+       "time": "4 PM",
+       "info": "Usually a little busy",
+       "busyness_score": 52
+      },
+      {
+       "time": "5 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "6 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "7 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "8 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "9 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "10 PM",
+       "busyness_score": 0
+      },
+      {
+       "time": "11 PM",
+       "busyness_score": 0
+      }
+     ]
+    }
+   },
+   "hours": [
+    {
+     "monday": "8–11:30 AM, 1:30–4:30 PM"
+    },
+    {
+     "tuesday": "8–11:30 AM, 1:30–4:30 PM"
+    },
+    {
+     "wednesday": "8–11:30 AM, 1:30–4:30 PM"
+    },
+    {
+     "thursday": "8–11:30 AM, 1:30–4:30 PM"
+    },
+    {
+     "friday": "8–11:30 AM, 1:30–4:30 PM"
+    },
+    {
+     "saturday": "8–11:30 AM, 1:30–4:30 PM"
+    },
+    {
+     "sunday": "Closed"
+    }
+   ],
+   "extensions": [
+    {
+     "service_options": [
+      "Onsite services"
+     ]
+    },
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot",
+      "Wheelchair accessible restroom",
+      "Wheelchair accessible seating"
+     ]
+    },
+    {
+     "amenities": [
+      "Restroom"
+     ]
+    },
+    {
+     "crowd": [
+      "LGBTQ+ friendly",
+      "Transgender safespace"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.066667199999998,
+  "lng": 108.22318729999999
+ },
+ {
+  "id": "dad-09",
+  "name_ko": "참 조각 박물관",
+  "name_en": "Museum of Cham Sculpture",
+  "query": "Museum of Cham Sculpture Da Nang",
+  "google": {
+   "title": "Da Nang Museum of Cham Sculpture",
+   "data_id": "0x314219cdb3006a2d:0x62ca993f60c3a12c",
+   "place_id": "ChIJLWoAs80ZQjERLKHDYD-ZymI",
+   "gps_coordinates": {
+    "latitude": 16.0603007,
+    "longitude": 108.2232677
+   },
+   "rating": 4.2,
+   "reviews": 8297,
+   "type": [
+    "Sculpture museum",
+    "Heritage museum",
+    "Tourist attraction"
+   ],
+   "address": "02 Đ. 2 Tháng 9, Phường, Hải Châu, Đà Nẵng 550000, Vietnam",
+   "hours": [
+    {
+     "monday": "7 AM–5 PM"
+    },
+    {
+     "tuesday": "7 AM–5 PM"
+    },
+    {
+     "wednesday": "7 AM–5 PM"
+    },
+    {
+     "thursday": "7 AM–5 PM"
+    },
+    {
+     "friday": "7 AM–5 PM"
+    },
+    {
+     "saturday": "7 AM–5 PM"
+    },
+    {
+     "sunday": "7 AM–5 PM"
+    }
+   ],
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot",
+      "Wheelchair accessible restroom",
+      "Wheelchair accessible seating"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.0603007,
+  "lng": 108.2232677
+ },
+ {
+  "id": "dad-10",
+  "name_ko": "아시아파크(썬휠)",
+  "name_en": "Asia Park Sun World Da Nang Wonders",
+  "query": "Asia Park Sun World Da Nang",
+  "google": {
+   "title": "Da Nang DownTown",
+   "data_id": "0x314219e7a191cc17:0xe60f91d4055e3074",
+   "place_id": "ChIJF8yRoecZQjERdDBeBdSRD-Y",
+   "gps_coordinates": {
+    "latitude": 16.0412139,
+    "longitude": 108.22563319999999
+   },
+   "rating": 4.4,
+   "reviews": 11912,
+   "type": [
+    "Tourist attraction"
+   ],
+   "address": "Đ. 2 Tháng 9, Hòa Cường, Đà Nẵng 550000, Vietnam",
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot",
+      "Wheelchair accessible restroom"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 16.0412139,
+  "lng": 108.22563319999999
+ },
+ {
+  "id": "dad-11",
+  "name_ko": "누이탄타이 온천공원",
+  "name_en": "Nui Than Tai Hot Springs Park",
+  "query": "Nui Than Tai Hot Springs Park",
+  "google": {
+   "title": "Hot Springs Park",
+   "data_id": "0x3141f79575cfb7c1:0xf0646efeed30cb8f",
+   "place_id": "ChIJwbfPdZX3QTERj8sw7f5uZPA",
+   "gps_coordinates": {
+    "latitude": 15.9678512,
+    "longitude": 108.0198053
+   },
+   "rating": 4.3,
+   "reviews": 4866,
+   "type": [
+    "Onsen",
+    "Day-use onsen",
+    "Tourist attraction",
+    "Water park"
+   ],
+   "address": "Thôn Phú Túc, Hoa Vang, Da Nang 550000, Vietnam",
+   "hours": [
+    {
+     "monday": "8:30 AM–5:30 PM"
+    },
+    {
+     "tuesday": "8:30 AM–5:30 PM"
+    },
+    {
+     "wednesday": "8:30 AM–5:30 PM"
+    },
+    {
+     "thursday": "8:30 AM–5:30 PM"
+    },
+    {
+     "friday": "8:30 AM–5:30 PM"
+    },
+    {
+     "saturday": "8:30 AM–5:30 PM"
+    },
+    {
+     "sunday": "8:30 AM–5:30 PM"
+    }
+   ],
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot",
+      "Wheelchair accessible restroom"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 15.9678512,
+  "lng": 108.0198053
+ },
+ {
+  "id": "dad-12",
+  "name_ko": "미선 유적지",
+  "name_en": "My Son Sanctuary",
+  "query": "My Son Sanctuary Quang Nam",
+  "google": {
+   "title": "My Son",
+   "data_id": "0x314200815555551f:0x8baa2869b9f687b",
+   "place_id": "ChIJH1VVVYEAQjERe2ifm4aiugg",
+   "gps_coordinates": {
+    "latitude": 15.7687821,
+    "longitude": 108.11931539999999
+   },
+   "rating": 4.5,
+   "reviews": 13098,
+   "type": "Historical landmark",
+   "address": "Thánh địa Mỹ Sơn, Duy Xuyên, Quảng Nam, Vietnam",
+   "hours": "Closed · Opens 6 AM Tue",
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot"
+     ]
+    }
+   ],
+   "resolved_from": "local_results[0]"
+  },
+  "lat": 15.7687821,
+  "lng": 108.11931539999999
+ },
+ {
+  "id": "dad-13",
+  "name_ko": "하이반 고개",
+  "name_en": "Hai Van Pass",
+  "query": "Hai Van Pass",
+  "google": {
+   "title": "Hải Vân Pass",
+   "data_id": "0x31422151a4984555:0x9a66217b26b3f759",
+   "place_id": "ChIJVUWYpFEhQjERWfezJnshZpo",
+   "gps_coordinates": {
+    "latitude": 16.2,
+    "longitude": 108.133333
+   },
+   "rating": 4.7,
+   "reviews": 2436,
+   "type": [
+    "Mountain pass"
+   ],
+   "address": "Chan May - Lang Co, Huế, Hue, Vietnam",
+   "resolved_from": "place_results"
+  },
+  "lat": 16.2,
+  "lng": 108.133333
+ },
+ {
+  "id": "dad-14",
+  "name_ko": "호이안 야시장",
+  "name_en": "Hoi An Night Market",
+  "query": "Hoi An Night Market",
+  "google": {
+   "title": "Hoi An Night Market",
+   "data_id": "0x31420e7dc35f492d:0xa44b01b91d668df",
+   "place_id": "ChIJLUlfw30OQjER32jWkRuwRAo",
+   "gps_coordinates": {
+    "latitude": 15.875503,
+    "longitude": 108.3262087
+   },
+   "rating": 4.4,
+   "reviews": 50315,
+   "type": "Tour operator",
+   "address": "3 Nguyễn Hoàng, An Hội, Hội An, Đà Nẵng, Vietnam",
+   "hours": "Open · Closes 10 PM",
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot"
+     ]
+    }
+   ],
+   "resolved_from": "local_results[0]"
+  },
+  "lat": 15.875503,
+  "lng": 108.3262087
+ },
+ {
+  "id": "dad-15",
+  "name_ko": "껌탄 코코넛 마을(바구니배)",
+  "name_en": "Cam Thanh Coconut Village",
+  "query": "Bay Mau Coconut Forest Cam Thanh Hoi An",
+  "google": {
+   "title": "Bay Mau Coconut Forest Tour",
+   "data_id": "0x31420f89d3fb9f4d:0xc99a24c3587510c5",
+   "place_id": "ChIJTZ_704kPQjERxRB1WMMkmsk",
+   "gps_coordinates": {
+    "latitude": 15.888699599999999,
+    "longitude": 108.3570829
+   },
+   "rating": 4.7,
+   "reviews": 1995,
+   "type": [
+    "Tourist attraction",
+    "Boat tour agency"
+   ],
+   "address": "Võ Chí Công, Hội An Đông, Đà Nẵng 51300, Vietnam",
+   "hours": [
+    {
+     "monday": "9 AM–5 PM"
+    },
+    {
+     "tuesday": "9 AM–5 PM"
+    },
+    {
+     "wednesday": "9 AM–5 PM"
+    },
+    {
+     "thursday": "9 AM–5 PM"
+    },
+    {
+     "friday": "9 AM–5 PM"
+    },
+    {
+     "saturday": "9 AM–5 PM"
+    },
+    {
+     "sunday": "9 AM–5 PM"
+    }
+   ],
+   "extensions": [
+    {
+     "accessibility": [
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible parking lot",
+      "Wheelchair accessible seating"
+     ]
+    }
+   ],
+   "resolved_from": "place_results"
+  },
+  "lat": 15.888699599999999,
+  "lng": 108.3570829
+ }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "id": "dad-01",
+    "walking": 2,
+    "climb": 1,
+    "heat": 1,
+    "crowding": 2,
+    "overall": "high",
+    "confidence": "medium",
+    "evidence_used": [
+      "measurements.internal_route_km",
+      "official_facts.cable_car",
+      "official_facts.exposure",
+      "measurements.queue_crowd_share"
+    ],
+    "reason": "A long visit can involve extensive walking and crowds, while the cable car replaces the major ascent. Mixed indoor and outdoor areas moderate sun exposure."
+  },
+  {
+    "id": "dad-02",
+    "walking": 1,
+    "climb": 1,
+    "heat": 1,
+    "crowding": 1,
+    "overall": "high",
+    "confidence": "high",
+    "evidence_used": [
+      "measurements.median_km",
+      "official_facts.elevator_note",
+      "official_facts.steps_unavoidable",
+      "official_facts.surface",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "The route is about 1.7 km, and the elevator bypasses only the initial climb; caves and summit still require uneven, slippery steps. Exposure and crowds vary."
+  },
+  {
+    "id": "dad-03",
+    "walking": 1,
+    "climb": 0,
+    "heat": 2,
+    "crowding": 1,
+    "overall": "medium",
+    "confidence": "high",
+    "evidence_used": [
+      "measurements.median_km",
+      "official_facts.steps_count",
+      "official_facts.heat_note",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "A typical route is about 2.8 km on flat streets with little daytime shade. Crowds occur, especially in the evening."
+  },
+  {
+    "id": "dad-04",
+    "walking": 0,
+    "climb": 0,
+    "heat": 2,
+    "crowding": 1,
+    "overall": "medium",
+    "confidence": "medium",
+    "evidence_used": [
+      "official_facts.alternatives",
+      "official_facts.steps_unavoidable",
+      "official_facts.exposure",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "Vehicles reach the grounds, and the few steps are avoidable, keeping walking and climbing low. The core visit is outdoors with occasional bus crowds."
+  },
+  {
+    "id": "dad-05",
+    "walking": "unknown",
+    "climb": 0,
+    "heat": 2,
+    "crowding": 0,
+    "overall": "medium",
+    "confidence": "medium",
+    "evidence_used": [
+      "official_facts.steps_count",
+      "official_facts.exposure",
+      "official_facts.heat_note",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "Walking distance depends on how much beach a visitor chooses, with no typical distance given. The open sand has little shade, though crowd reports are generally light."
+  },
+  {
+    "id": "dad-06",
+    "walking": 0,
+    "climb": 0,
+    "heat": 1,
+    "crowding": 2,
+    "overall": "medium",
+    "confidence": "high",
+    "evidence_used": [
+      "official_facts.night_show",
+      "official_facts.steps_count",
+      "official_facts.seating",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "The short night show requires little walking or climbing, but spectators stand outdoors in a crowded viewing area."
+  },
+  {
+    "id": "dad-07",
+    "walking": 0,
+    "climb": 1,
+    "heat": 0,
+    "crowding": 2,
+    "overall": "medium",
+    "confidence": "medium",
+    "evidence_used": [
+      "official_facts.floors",
+      "official_facts.surface",
+      "official_facts.exposure",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "The compact indoor market limits walking and sun exposure, but visiting both floors involves stairs and narrow aisles are crowded."
+  },
+  {
+    "id": "dad-08",
+    "walking": 0,
+    "climb": 0,
+    "heat": 2,
+    "crowding": 0,
+    "overall": "low",
+    "confidence": "medium",
+    "evidence_used": [
+      "official_facts.exposure",
+      "official_facts.surface",
+      "measurements.walking_share",
+      "review_quotes.heat_sun"
+    ],
+    "reason": "The usual exterior visit is brief and flat, but it takes place outdoors with reported heat. Crowds are rarely reported."
+  },
+  {
+    "id": "dad-09",
+    "walking": 0,
+    "climb": 0,
+    "heat": 0,
+    "crowding": 0,
+    "overall": "low",
+    "confidence": "high",
+    "evidence_used": [
+      "official_facts.exposure",
+      "official_facts.surface",
+      "review_quotes.walking",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "A slow museum visit takes about an hour on mostly flat indoor or semi-open galleries, with little crowding reported."
+  },
+  {
+    "id": "dad-10",
+    "walking": "unknown",
+    "climb": 0,
+    "heat": 1,
+    "crowding": 0,
+    "overall": "low",
+    "confidence": "low",
+    "evidence_used": [
+      "official_facts.alternatives",
+      "official_facts.exposure",
+      "measurements.stairs_climb_share",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "The seated wheel and lack of reported stairs reduce effort, and reviews describe very light crowds. No reliable typical walking distance is provided; outdoor exposure is moderated by evening operation."
+  },
+  {
+    "id": "dad-11",
+    "walking": "unknown",
+    "climb": "unknown",
+    "heat": 1,
+    "crowding": 0,
+    "overall": "medium",
+    "confidence": "low",
+    "evidence_used": [
+      "official_facts.alternatives",
+      "official_facts.surface",
+      "official_facts.exposure",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "A shuttle is available, but the packet does not establish typical walking distance or unavoidable climbing on the sloped grounds. Outdoor pools and reports of light crowds suggest moderate overall effort."
+  },
+  {
+    "id": "dad-12",
+    "walking": 2,
+    "climb": "unknown",
+    "heat": 1,
+    "crowding": 1,
+    "overall": "high",
+    "confidence": "low",
+    "evidence_used": [
+      "measurements.median_km",
+      "official_facts.alternatives",
+      "official_facts.exposure",
+      "review_quotes.queue_crowd"
+    ],
+    "reason": "A small GPS sample suggests nearly 3.9 km of walking, though a shuttle serves the entrance route. The packet does not establish unavoidable climbing; outdoor exposure and peak-hour crowds add burden."
+  },
+  {
+    "id": "dad-13",
+    "walking": 0,
+    "climb": 0,
+    "heat": 1,
+    "crowding": 0,
+    "overall": "low",
+    "confidence": "medium",
+    "evidence_used": [
+      "official_facts.exposure",
+      "official_facts.surface",
+      "measurements.walking_share",
+      "measurements.queue_crowd_share"
+    ],
+    "reason": "Travel is mainly by vehicle with only a short stop on foot. The gate area has some optional steps, brief outdoor exposure, and little evidence of standing crowds."
+  },
+  {
+    "id": "dad-14",
+    "walking": 1,
+    "climb": 0,
+    "heat": 1,
+    "crowding": 2,
+    "overall": "medium",
+    "confidence": "medium",
+    "evidence_used": [
+      "measurements.median_km",
+      "measurements.median_ascent_m",
+      "official_facts.surface",
+      "official_facts.night"
+    ],
+    "reason": "The market walk is about 1.1 km on flat ground, and night operation limits sun exposure. The packet explicitly describes the area as very crowded."
+  },
+  {
+    "id": "dad-15",
+    "walking": 0,
+    "climb": 0,
+    "heat": 2,
+    "crowding": "unknown",
+    "overall": "medium",
+    "confidence": "medium",
+    "evidence_used": [
+      "official_facts.alternatives",
+      "official_facts.boat_duration_min",
+      "official_facts.exposure"
+    ],
+    "reason": "The core 45-minute experience is seated in a boat, with little walking or climbing. It is outdoors with little shade, and the packet gives no crowd evidence."
+  }
+]
