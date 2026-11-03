@@ -161,6 +161,7 @@ def judge(place_id, conn, run_index=1, client=None):
     messages = [{"role": "user", "content":
                  f"place_id={place_id} 관광지를 평가하세요. 도구로 근거를 확인한 뒤 submit_scores로 제출하세요."}]
     n_calls, usage, web_seen, web_cites = 0, {"input_tokens": 0, "output_tokens": 0, "web_search_requests": 0}, {}, {}
+    retried = False
     output = None
     for _turn in range(20):
         force = n_calls >= MAX_TOOL_CALLS
@@ -184,7 +185,21 @@ def judge(place_id, conn, run_index=1, client=None):
             if b.type != "tool_use":
                 continue
             if b.name == "submit_scores":
-                output = b.input
+                cand = b.input if isinstance(b.input, dict) else {}
+                dims = cand.get("dimensions")
+                if isinstance(dims, str):
+                    try:
+                        dims = json.loads(dims)
+                        cand["dimensions"] = dims
+                    except ValueError:
+                        dims = {}
+                missing = [d for d in ("climb", "walking", "heat", "crowd") if not isinstance(dims, dict) or d not in dims]
+                if missing and not retried:  # schema drift (e.g. scores at top level): ask once to resubmit
+                    retried = True
+                    results.append({"type": "tool_result", "tool_use_id": b.id, "is_error": True,
+                                    "content": f"dimensions에 {missing} 가 없습니다. climb/walking/heat/crowd 각각 typical/lower/upper/조건/evidence_ids를 dimensions 안에 넣어 submit_scores를 다시 호출하세요."})
+                    continue
+                output = cand
                 break
             n_calls += 1
             res = tools.call(b.name, b.input)

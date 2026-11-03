@@ -1,4 +1,5 @@
 """Verification + aggregation for v2 judge outputs (pure functions, no I/O)."""
+import json
 import hashlib
 import math
 import statistics
@@ -49,8 +50,21 @@ def resolve(cid, known_ids, web_urls):
     if cid.startswith("web:http"):
         cid = cid[4:]
     if cid.startswith("http"):
-        return cid in web_urls or web_id(cid) in known_ids
+        if cid in web_urls or web_id(cid) in known_ids:
+            return True
+        norm = _norm_url(cid)  # tolerate www./scheme/trailing-slash differences
+        return any(_norm_url(u) == norm for u in web_urls)
     return False
+
+
+def _norm_url(u):
+    u = u.strip().lower().split("#")[0]
+    for p in ("https://", "http://"):
+        if u.startswith(p):
+            u = u[len(p):]
+    if u.startswith("www."):
+        u = u[4:]
+    return u.rstrip("/")
 
 
 def check_numeric(claims, values, rel_tol=0.05):
@@ -70,7 +84,25 @@ def verify_run(output, known_ids, values, web_urls=None):
     """Returns {dim: {valid, invalid_ids, numeric_fail, reason}} and overall flag."""
     web_urls = web_urls or {}
     report = {}
+    if isinstance(output, str):  # model occasionally returns the JSON as a string
+        try:
+            output = json.loads(output)
+        except ValueError:
+            output = {}
+    if not isinstance(output, dict):
+        output = {}
+    dims_out = output.get("dimensions")
+    if isinstance(dims_out, str):
+        try:
+            output["dimensions"] = json.loads(dims_out)
+        except ValueError:
+            output["dimensions"] = {}
     claims = output.get("numeric_claims") or []
+    if isinstance(claims, str):
+        try:
+            claims = json.loads(claims)
+        except ValueError:
+            claims = []
     for d in DIMS:
         dout = (output.get("dimensions") or {}).get(d)
         if not dout:

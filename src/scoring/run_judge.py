@@ -40,6 +40,11 @@ def main(argv=None):
             runs = []
             for k in range(1, a.runs + 1):
                 res = judge(site, conn, run_index=k)
+                if isinstance(res.get("output"), str):  # normalize stringified JSON output
+                    try:
+                        res["output"] = json.loads(res["output"])
+                    except ValueError:
+                        res["output"] = {}
                 cache_web(conn, res)
                 ids, values, web_urls = known(conn)
                 report, ok = verify_run(res["output"], ids, values, web_urls)
@@ -67,7 +72,11 @@ def main(argv=None):
                 updated_at=datetime.now(timezone.utc))], key=("place_id", "rubric_version"))
             all_scores[site] = agg
             print(site, "composite", c, agg["grade_display"], agg["status"], agg["flags"])
-    SCORES.write_text(db.dumps(all_scores), encoding="utf-8")
+    merged = json.loads(SCORES.read_text(encoding="utf-8")) if SCORES.exists() else {}
+    if not isinstance(merged, dict):
+        merged = {}
+    merged.update(json.loads(db.dumps(all_scores)))  # keep sites from earlier batches
+    SCORES.write_text(db.dumps(merged), encoding="utf-8")
 
 
 if __name__ == "__main__":
