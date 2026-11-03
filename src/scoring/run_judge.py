@@ -6,6 +6,7 @@ from pathlib import Path
 
 from . import db
 from .judge import RUBRIC_VERSION, cache_web, judge
+from .provenance import explanations
 from .verify import aggregate, verify_run
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,21 +23,23 @@ def known(conn):
     return ids, values, {r["url"]: r["id"] for r in web}
 
 
-def conditions(output):
-    return {d: {k: v.get(k) for k in ("lower_conditions", "upper_conditions")}
-            for d, v in (output.get("dimensions") or {}).items()}
-
-
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--sites", required=True)
     ap.add_argument("--runs", type=int, default=1)
+    ap.add_argument("--replace", action="store_true", help="explicitly replace an existing site's published score")
     a = ap.parse_args(argv)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    sites = [s.strip() for s in a.sites.split(",") if s.strip()]
+    if a.runs < 1 or not sites:
+        ap.error("provide sites and --runs >= 1")
     all_scores = json.loads(SCORES.read_text(encoding="utf-8")) if SCORES.exists() else {}
+    existing = [site for site in sites if site in all_scores]
+    if existing and not a.replace:
+        ap.error(f"published scores exist for {', '.join(existing)}; --replace required")
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
     with db.connect() as conn:
         db.ensure_schema(conn)
-        for site in [s.strip() for s in a.sites.split(",") if s.strip()]:
+        for site in sites:
             runs = []
             for k in range(1, a.runs + 1):
                 res = judge(site, conn, run_index=k)
@@ -57,18 +60,23 @@ def main(argv=None):
                     run_index=k, output_json=res["output"], citations_valid=ok,
                     usage={**res["usage"], "tool_calls": res["tool_calls"], "verify": report})], key=("run_id",))
                 (OUT_DIR / f"{site}_run{k}.json").write_text(db.dumps(res), encoding="utf-8")
-                runs.append({"output": res["output"], "report": report})
+                runs.append({"run_index": k, "run_id": run_id,
+                             "output": res["output"], "report": report})
                 print(site, f"run{k}", "tool_calls", res["tool_calls"], "usage", res["usage"], "valid", ok)
             agg = aggregate(runs)
-            agg["conditions"] = conditions(runs[0]["output"]) if runs else {}
-            agg["representative_route"] = runs[0]["output"].get("representative_route") if runs else None
+            source = explanations(agg, runs)
+            agg["conditions"] = {d: {k: source[d][k] for k in ("lower_conditions", "upper_conditions")}
+                                 for d in source}
+            agg["explanation_sources"] = source
+            agg["representative_route"] = source["climb"]["route"]
             c = agg["composite"]
             db.upsert(conn, "scoring_scores", [dict(
                 place_id=site, rubric_version=RUBRIC_VERSION, dimensions=agg["dimensions"],
                 composite_typical=c["typical"], composite_lower=c["lower"], composite_upper=c["upper"],
                 grade_display=agg["grade_display"]["typical"], confidence=agg["confidence"],
                 status=agg["status"], conditions_json={"conditions": agg["conditions"], "flags": agg["flags"],
-                                                       "route": agg["representative_route"]},
+                                                       "route": agg["representative_route"],
+                                                       "explanation_sources": source},
                 updated_at=datetime.now(timezone.utc))], key=("place_id", "rubric_version"))
             all_scores[site] = agg
             print(site, "composite", c, agg["grade_display"], agg["status"], agg["flags"])

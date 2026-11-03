@@ -1,4 +1,6 @@
 # ScoringAI v2 시범 실행 메모
+> **참고: 이 문서는 v2.0 시험 실행(2곳×1회) 기록이다.** 최신은 v2.1(차원별 앵커, 15곳×3회) → `SUMMARY.md`, `judge_spec_v2.md`, `orchestration_log.md` 참조.
+
 
 ## 만든 것
 - `src/scoring/db.py`: psycopg로 Supabase에 연결(`.env`의 `SUPABASE_DB_URL`). `scoring_*` 테이블 6개는 `CREATE TABLE IF NOT EXISTS`로만 만든다. 접두사가 다른 테이블은 코드에서 거부한다. DROP·TRUNCATE·ALTER는 쓰지 않았다. 실행 전 public 스키마에는 `hello_world_test` 하나만 있었고, 이 테이블은 건드리지 않았다.

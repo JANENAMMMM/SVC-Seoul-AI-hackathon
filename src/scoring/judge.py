@@ -3,7 +3,7 @@ import json
 import os
 import re
 
-from . import db
+from . import db, google_web_search
 from .verify import web_id
 
 MODEL = "claude-sonnet-5-5"
@@ -56,6 +56,9 @@ DIM_SCHEMA = {"type": "object", "properties": {
     "required": ["typical", "lower", "upper", "lower_conditions", "upper_conditions", "evidence_ids", "rationale"]}
 
 TOOLS = [
+    {"name": "google_web_search", "description": "Search Google web results for attraction route, stairs, walking, heat, or crowd evidence. Returns title, URL, and snippet; cite the returned URL. This is web search, not Google Maps review retrieval.",
+     "input_schema": {"type": "object", "properties": {"query": {"type": "string"},
+                      "limit": {"type": "integer"}}, "required": ["query"]}},
     {"name": "get_place", "description": "관광지 기본 정보(이름, 좌표, Google 유형·운영시간 등).",
      "input_schema": {"type": "object", "properties": {"place_id": {"type": "string"}}, "required": ["place_id"]}},
     {"name": "list_evidence", "description": "근거 DB 항목 목록(id, dimension, basis, metric, value, unit, text, caveat). dimension: climb/walking/heat/crowd/general.",
@@ -88,6 +91,9 @@ class Tools:
     def get_place(self, place_id):
         r = db.query(self.conn, "select * from scoring_places where id=%s", (place_id,))
         return r[0] if r else {"error": "not found"}
+
+    def google_web_search(self, query, limit=5):
+        return google_web_search.search(query, limit=limit)
 
     def list_evidence(self, place_id, dimension=None):
         sql = ("select id, dimension, basis, metric, value, unit, text, caveat from scoring_evidence "
@@ -203,6 +209,12 @@ def judge(place_id, conn, run_index=1, client=None):
                 break
             n_calls += 1
             res = tools.call(b.name, b.input)
+            if b.name == "google_web_search" and isinstance(res, list):
+                web_seen.setdefault("__queries__", []).append(b.input.get("query", ""))
+                for item in res:
+                    web_seen[item["url"]] = {"title": item.get("title"),
+                                             "excerpt": item.get("snippet"),
+                                             "query": b.input.get("query")}
             results.append({"type": "tool_result", "tool_use_id": b.id,
                             "content": json.dumps(res, ensure_ascii=False, default=str)})
         if output is not None:
@@ -242,6 +254,7 @@ def cache_web(conn, result):
         mapping[url] = wid
         rows.append(dict(id=wid, place_id=result["place_id"], query=q, url=url,
                          title=(seen.get(url) or {}).get("title"),
-                         excerpt=(result.get("web_citations", {}).get(url) or "")[:2000] or None))
+                         excerpt=(result.get("web_citations", {}).get(url)
+                                  or (seen.get(url) or {}).get("excerpt") or "")[:2000] or None))
     db.upsert(conn, "scoring_web_cache", rows)
     return mapping

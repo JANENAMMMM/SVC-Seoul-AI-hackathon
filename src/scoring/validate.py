@@ -51,6 +51,6 @@ def validate(features, grades, path=None):
                 evidence.append(f"{dim} {d['basis']} {d['value']}{d['unit']}→{d['level']}")
         lines.append(f"| {g['id']} | {g['name_ko']} | {g['grade']} | {', '.join(evidence) or '근거 없음'} | {g['status']} |")
     lines += ["", "결측 차원과 근거 간 2단계 이상 차이는 `needs_review`로 남겼습니다. OSM 자료가 추가되면 다시 실행해야 합니다."]
-    path = Path(path) if path else ROOT / "docs/scoring-ai/validation_report.md"
+    path = Path(path) if path else ROOT / "docs/scoring-ai/archive/v1-rule-engine/validation_report.md"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return lines
