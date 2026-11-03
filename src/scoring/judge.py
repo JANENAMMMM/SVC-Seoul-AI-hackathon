@@ -166,18 +166,25 @@ def judge(place_id, conn, run_index=1, client=None):
     tools = Tools(conn)
     messages = [{"role": "user", "content":
                  f"place_id={place_id} 관광지를 평가하세요. 도구로 근거를 확인한 뒤 submit_scores로 제출하세요."}]
-    n_calls, usage, web_seen, web_cites = 0, {"input_tokens": 0, "output_tokens": 0, "web_search_requests": 0}, {}, {}
+    n_calls, web_seen, web_cites = 0, {}, {}
+    usage = {"input_tokens": 0, "output_tokens": 0, "cache_creation_input_tokens": 0,
+             "cache_read_input_tokens": 0, "web_search_requests": 0}
     retried = False
     output = None
     for _turn in range(20):
-        force = n_calls >= MAX_TOOL_CALLS
         resp = client.messages.create(
             model=MODEL, max_tokens=8000, system=SYSTEM, messages=messages,
+            # prompt caching: tools+system+history are resent every turn of the tool loop;
+            # top-level breakpoint caches up to the last block so later turns read it at cache price
+            cache_control={"type": "ephemeral"},
             tools=TOOLS + [WEB_SEARCH_TOOL],
-            tool_choice={"type": "tool", "name": "submit_scores"} if force else {"type": "auto"})
+            # Sonnet 5.5 rejects forced tool_choice (400); the over-limit case is steered by a text instruction
+            tool_choice={"type": "auto"})
         u = resp.usage
         usage["input_tokens"] += u.input_tokens
         usage["output_tokens"] += u.output_tokens
+        usage["cache_creation_input_tokens"] += getattr(u, "cache_creation_input_tokens", 0) or 0
+        usage["cache_read_input_tokens"] += getattr(u, "cache_read_input_tokens", 0) or 0
         stu = getattr(u, "server_tool_use", None)
         if stu is not None:
             usage["web_search_requests"] += getattr(stu, "web_search_requests", 0) or 0
