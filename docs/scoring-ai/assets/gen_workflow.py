@@ -76,9 +76,6 @@ def fig1(p):
     f = Fig()
     f.title('근거는 어디서 와서 DB에 어떻게 쌓이나')
     R = [
-        (['**공식 사실**'], ['공식 사이트·안내문을', '웹에서 조사'],
-         ['항목별로 1건씩 쪼갬', '(계단 수, 엘리베이터, 실내외…)', '· 출처 URL 기록'],
-         ['`scoring_evidence` `fact` **86**']),
         (['**GPS 궤적**'], ['OpenStreetMap 공개 GPS 궤적', '+ Open-Meteo 고도'],
          ['관광지 구역만 잘라 거리·시간·오르막 중앙값', '· 궤적 5개 미만은 C등급'],
          ['`scoring_evidence` `gps` **36** (3곳)']),
@@ -99,7 +96,7 @@ def fig1(p):
     HD = ['출처', '어떻게 수집', '어떻게 정제', '저장 (테이블 · 건수)']
     for (x, w, _), t in zip(X, HD):
         f.text(x + w / 2, 162, [f'**{t}**'], size=24, anchor='middle', color=SUB)
-    y0, h, gap, lh = 182, 104, 11, 28
+    y0, h, gap, lh = 182, 126, 12, 28
     for i, row in enumerate(R):
         y = y0 + i * (h + gap)
         for j, ((x, w, col), lines) in enumerate(zip(X, row)):
@@ -115,7 +112,7 @@ def fig1(p):
                 nx = X[j + 1][0]
                 f.arrow(f'M{x + w + 4},{y + h / 2} H{nx - 6}', 'dark', sw=2.5)
     # 공통 정제 band
-    by = y0 + 6 * (h + gap) + 6
+    by = y0 + 5 * (h + gap) + 6
     f.box(60, by, 1800, 82, 'green', rx=14, sw=2)
     f.text(84, by + 50, ['**공통 정제** (`load_evidence.py`)'], size=22)
     chips = ['고정 ID (`출처:관광지:항목`)', '차원 배정 (`climb·walking·heat·crowd·general`)', '근거 등급 **A/B/C**', '한계 메모(`caveat`) 첨부']
@@ -126,8 +123,8 @@ def fig1(p):
         f.text(cx + w / 2, by + 49, [c], size=20, anchor='middle')
         cx += w + 18
     f.a('<rect x="0" y="980" width="1920" height="100" fill="#F1F3F5"/>')
-    f.text(960, 1022, ['합계  `scoring_places` **15** · `scoring_evidence` **523** · `scoring_reviews` **1,994**'], size=26, anchor='middle')
-    f.text(960, 1060, ['“출처·한계 메모를 함께 저장해 LLM이 신뢰도를 판단”'], size=22, anchor='middle', color=SUB)
+    f.text(960, 1022, ['합계  `scoring_places` **15** · `scoring_evidence` **523** (초기 조사 사실 86 포함) · `scoring_reviews` **1,994**'], size=26, anchor='middle')
+    f.text(960, 1060, ['관광지별 사실(계단 수·엘리베이터 운행 등)은 시기마다 달라 DB에 고정하지 않고, 채점 때 Claude가 웹 검색으로 확인'], size=22, anchor='middle', color=SUB)
     f.save(p)
 
 
@@ -138,14 +135,17 @@ def fig2(p):
     # 1 재료
     f.text(185, jy - 30, ['**1** 재료'], size=28, anchor='middle')
     f.cyl(60, jy + 10, 250, 140)
-    f.text(185, jy + 95, ['**근거 DB**'], size=28, anchor='middle')
+    f.text(185, jy + 80, ['**근거 DB**'], size=28, anchor='middle')
+    f.text(185, jy + 115, ['GPS·지도·리뷰·기후'], size=20, anchor='middle', color=SUB)
     f.cloud(80, jy + 190, 210, 110)
     f.text(185, jy + 280, ['**웹**'], size=28, anchor='middle')
+    f.text(185, jy + 345, ['계단 수·엘리베이터 운행 등', '시기마다 바뀌는 사실'], size=20, anchor='middle', color=SUB, lh=26)
+    f.text(185, jy + 415, ['인용한 페이지는 DB에 기록', '(`scoring_web_cache` 103개)'], size=19, anchor='middle', color=COLS['purple'], lh=26)
     # 2 Claude
     jx, jw = 400, 360
     f.box(jx, jy, jw, jh, 'purple')
     f.text(jx + 30, jy + 60, ['**2** Claude 채점'], size=30)
-    f.text(jx + 30, jy + 125, ['도구로 근거를', '직접 찾아 읽음'], size=23)
+    f.text(jx + 30, jy + 125, ['DB는 도구로 조회,', '없는 사실은 웹 검색'], size=23)
     f.text(jx + 30, jy + 220, ['차원 4개를 1~10점', '+ 하한·상한, 근거 ID 첨부'], size=23)
     f.arrow(f'M316,{jy + 80} H{jx - 6}', 'purple', dash='8 6', both=True)
     f.arrow(f'M300,{jy + 250} C350,{jy + 250} 350,{jy + 220} {jx - 6},{jy + 220}', 'purple', dash='8 6', both=True)
@@ -154,7 +154,7 @@ def fig2(p):
     vx, vw = 830, 310
     f.box(vx, jy, vw, jh, 'green')
     f.text(vx + 30, jy + 60, ['**3** 검증 (코드)'], size=30)
-    f.text(vx + 30, jy + 125, ['인용한 근거가', 'DB에 실제로 있나', '· 수치가 맞나'], size=23)
+    f.text(vx + 30, jy + 125, ['인용한 근거·웹 페이지가', '기록에 실제로 있나', '· 수치가 맞나'], size=23)
     f.arrow(f'M{jx + jw},{jy + jh / 2} H{vx - 6}', 'dark')
     f.box(vx, 760, vw, 90, 'red', dash='8 6')
     f.text(vx + vw / 2, 815, ['틀리면 그 점수 무효'], size=24, anchor='middle', color=COLS['red'], weight=700)
@@ -184,7 +184,27 @@ def fig2(p):
     f.save(p)
 
 
+EDGE = [r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
+        r'C:\Program Files\Microsoft\Edge\Application\msedge.exe']
+
+
+def render(svg):
+    """SVG -> PNG (1920x1080) via Edge headless. Paths with Korean/spaces go through a file URI."""
+    import pathlib
+    import subprocess
+    svg = pathlib.Path(svg).resolve()
+    exe = next((e for e in EDGE if os.path.exists(e)), None)
+    if not exe:
+        print('Edge not found; PNG skipped')
+        return
+    subprocess.run([exe, '--headless', '--disable-gpu', '--hide-scrollbars',
+                    f'--screenshot={svg.with_suffix(".png")}', '--window-size=1920,1080', svg.as_uri()],
+                   timeout=60, check=False)
+
+
 if __name__ == '__main__':
     d = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.abspath(__file__))
     fig1(os.path.join(d, 'workflow_1_evidence.svg'))
     fig2(os.path.join(d, 'workflow_2_judging.svg'))
+    for n in ('workflow_1_evidence.svg', 'workflow_2_judging.svg'):
+        render(os.path.join(d, n))

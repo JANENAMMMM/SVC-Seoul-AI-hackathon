@@ -14,7 +14,7 @@
 
 | 원칙 | 내용 | 이유 |
 |---|---|---|
-| 근거는 DB에 | 지도·GPS·공식 사실·리뷰·기후를 출처와 한계 메모까지 저장 | 멘토 지적: "그 정보를 어디서 구하나" |
+| 근거는 DB에 | 지도·GPS·리뷰·기후를 출처와 한계 메모까지 저장 | 멘토 지적: "그 정보를 어디서 구하나" |
 | 해석은 LLM judge, 합산은 코드 | Claude가 도구로 근거를 조회·웹 검색해 차원 점수를 내고, 종합 점수는 코드가 가중평균 | 관광지 범위·실제 관람 경로(정상까지 안 갈 수 있음, 케이블카가 대신함)는 규칙으로 판단 불가 |
 | 인용 없으면 무효 | 인용한 근거 ID가 DB에 없거나 수치가 다르면 그 차원은 무효, 3회 실행 중앙값 | LLM끼리도 등급이 8/15만 일치 → 흔들림 억제 장치 필요 |
 
@@ -29,7 +29,7 @@
 ```
 수집(src/scoring/collect)  ─▶  근거 DB  Supabase scoring_* 6개 테이블
   Google 식별·주제, Tripadvisor 리뷰,      places 15 · evidence 523 · reviews 1,994
-  GPS 궤적, 공식 사실, 기후, OSM(부분)      web_cache · judgments · scores
+  GPS 궤적, 기후, OSM(부분), 초기 조사 사실  web_cache · judgments · scores
                                   │ 도구 호출
                                   ▼
                  LLM judge (Claude Sonnet, rubric v2.1)
@@ -67,7 +67,7 @@
 
 | ID 접두어 | 건수 | 등급 | 출처와 만드는 방법 | 주의점(`caveat`에 기록) |
 |---|---|---|---|---|
-| `fact:<곳>:<항목>` | 86 | B | 공식 사이트·안내문을 웹으로 조사해 정리한 사실(계단 수, 엘리베이터·케이블카 유무, 내부 경로 길이, 실내외, 냉방 등). `data/scoring/derived/site_facts.json` | 출처 유형과 URL 목록 |
+| `fact:<곳>:<항목>` | 86 | B | **초기 참고용.** 1일차에 AI가 관광청·UNESCO·백과·블로그를 웹 조사해 정리한 사실(실외 노출, 노면, 대체 이동수단 등). 계단 수는 오행산 1곳(블로그 추정)뿐이고 공식 수치는 드묾. 시기마다 바뀌는 사실이라 새 출처로는 쓰지 않고, 채점 때 judge가 웹 검색으로 확인한다. `data/scoring/derived/site_facts.json` | 출처 유형·신뢰도와 URL 목록 |
 | `gps:<곳>:<지표>` | 36 | B(궤적 5개 이상)·C | OSM에 공개된 GPS 궤적을 관광지 구역으로 잘라 보행 거리(중앙값·p25·p75), 소요 시간, 누적 오르막, 속도 계산. 고도는 Open-Meteo | 궤적 수 n, 5개 미만이면 "표본 부족" |
 | `osm:<곳>:<지표>` | 35 | C | OpenStreetMap Overpass로 반경 300m 안의 보행로 길이, 계단, 엘리베이터, 벤치, 화장실, 고도 범위 | 관광지 경계가 아니라 300m 반경, 태그 누락 많음 |
 | `rev:<곳>:sig_<주제>` | 104 | C | Tripadvisor 리뷰(13곳 × 약 150건)에서 정규식으로 계단·보행·더위·혼잡 등 언급 비율과 95% 신뢰구간 계산 | 정규식 정밀도(계단 약 90%, 혼잡 약 70%) |
@@ -168,7 +168,8 @@ uv run python -m src.scoring.run_review_validation docs/scoring-ai/validation/he
 | SerpApi | 식별·주제, Google 웹 검색 도구 | △ | X (비공식) |
 | Tripadvisor (Apify) | 13곳 × 150건 | △ 시연용 | X |
 | OSM 공개 GPS 궤적 | 실보행 3곳 | O | O |
-| 공식 사실·기후 | 15곳 대체수단·실내외, 다낭 월별 체감온도 | O | O |
+| 기후 | 다낭 월별 체감온도 | O | O |
+| 관광지별 사실 | 채점 때 judge가 웹 검색(31회, 인용 103개). 초기 조사 86건은 참고용 | O | O |
 | 하나투어 자체 후기·가이드 | — | — | **최우선** |
 
 - 법적 검토·출처별 판단: [design_b_serpapi.md §1-6](archive/v0-design/design_b_serpapi.md) · 데이터 조사 보고서: [research/report_data_sources.md](research/report_data_sources.md)
