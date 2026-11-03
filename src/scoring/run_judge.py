@@ -15,11 +15,12 @@ SCORES = ROOT / "data/scoring/scores_v2.json"
 
 
 def known(conn):
-    ids = {r["id"] for r in db.query(conn, "select id from scoring_evidence")}
+    # v2.2: fact:* (initial site facts) are hidden from the judge, so citing them is invalid
+    ids = {r["id"] for r in db.query(conn, "select id from scoring_evidence where id not like 'fact:%%'")}
     ids |= {r["id"] for r in db.query(conn, "select id from scoring_reviews")}
     web = db.query(conn, "select id, url from scoring_web_cache")
     ids |= {r["id"] for r in web}
-    values = {r["id"]: r["value"] for r in db.query(conn, "select id, value from scoring_evidence")}
+    values = {r["id"]: r["value"] for r in db.query(conn, "select id, value from scoring_evidence where id not like 'fact:%%'")}
     return ids, values, {r["url"]: r["id"] for r in web}
 
 
