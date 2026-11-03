@@ -20,6 +20,12 @@
 
 ## 3. 구조
 
+![근거 수집과 DB 저장](assets/workflow_1_evidence.png)
+
+![LLM 채점과 코드 검증](assets/workflow_2_judging.png)
+
+<details><summary>텍스트 구조도</summary>
+
 ```
 수집(src/scoring/collect)  ─▶  근거 DB  Supabase scoring_* 6개 테이블
   Google 식별·주제, Tripadvisor 리뷰,      places 15 · evidence 523 · reviews 1,994
@@ -37,8 +43,10 @@
        점수(scores_v2.json) ─▶ 관람 방식 카탈로그(visit_modes_v2_1.json) ─▶ 패키지 난이도 · API
 ```
 
+</details>
+
 - 상세 명세: [judge_spec_v2.md](spec/judge_spec_v2.md) · 근거·일정 연결 규칙: [evidence_workflow.md](spec/evidence_workflow.md)
-- 전체 흐름을 그림 한 장으로 그리기 위한 설명서: [workflow_diagram.md](workflow_diagram.md)
+- 전체 흐름을 그림 한 장으로 그리기 위한 설명서: [workflow_diagram.md](workflow_diagram.md) · 팀원 설명 대본(+질의응답 부록): [workflow_script.md](workflow_script.md)
 
 ### 3-1. DB에 저장된 것 (Supabase, 2026-11-03 기준 행 수)
 
