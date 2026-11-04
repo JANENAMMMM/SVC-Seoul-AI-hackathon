@@ -60,7 +60,7 @@
 | `is_local`, `pinned` | 현지 취향 가점, 관광지 내 고정 식당(바나힐 뷔페) |
 | `venue_type` | `restaurant` / `street_food` / `unknown` — 프로필 `venues`로 거름 |
 | `ingredient_tags` | `pork/seafood/dairy/nuts` 중 확인된 것, **없으면 `[]`** — 피하는 재료와 겹치면 제외 |
-| `tag_confidence`, `tag_evidence` | 거르는 데는 안 쓰고 사용자 설명용으로 전달 |
+| `tag_confidence`, `tag_evidence` | 신뢰도 `high`/`medium`/`low`와 리뷰 원문 근거. 거르는 데는 안 쓰고 사용자 설명용으로 전달 |
 
 태그 필드가 없는 파일도 그대로 동작하고, 이때는 일정의 `assumptions`에 안내가 붙는다.
 파일 경로는 `data/restaurants/restaurants_danang.json` 또는 환경변수 `RESTAURANTS_JSON`.
