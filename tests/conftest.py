@@ -1,5 +1,9 @@
 import json
+import os
 from pathlib import Path
+
+# HITL 임시 점수 파일(로컬 시연용)이 테스트 결과에 섞이지 않게 한다
+os.environ.setdefault("SCORING_OVERRIDES_JSON", str(Path(__file__).resolve().parent / "_no_overrides.json"))
 
 import pytest
 

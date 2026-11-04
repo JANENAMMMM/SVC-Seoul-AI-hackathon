@@ -108,6 +108,7 @@ SYSTEM = """너는 부모님 여행 일정의 수정 요청을 정해진 수정 
 - 문장이 현재 명령으로 표현할 수 없는 요청이면 억지로 다른 명령에 끼워 맞추지 말고 unsupported에 요청 내용을 한국어로 짧게 적는다.
   (예: 특정 음식·재료를 피하고 싶다, 하루가 너무 비어 있으니 채워 달라, 식당 후보를 추천해 달라)
 - 한 문장에 여러 요청이 있으면 가능한 것은 명령으로, 불가능한 것은 unsupported로 나눈다.
+- '이전에 승인된 요청'은 사용자가 이미 원한다고 확인한 방향이다. "아까처럼", "그날도" 같은 말은 이를 기준으로 해석하고, 이전 요청을 되돌리는 명령은 사용자가 명시할 때만 만든다.
 - 일정과 상관없는 말이면 commands와 unsupported를 비우고 question에 일정 수정 요청을 다시 받는 문장을 적는다.
 - 판단이 끝나면 record_commands를 정확히 한 번 호출한다. 사용하지 않는 칸은 빈 배열 또는 null로 둔다.
 
@@ -136,6 +137,8 @@ def summarize(itinerary: Itinerary) -> str:
             elif stop.type == "meal" and stop.restaurant:
                 parts.append(f"{MEAL_LABEL.get(stop.meal, stop.meal)}: {stop.restaurant.name}")
         lines.append(f"{day.day}일차: " + (" / ".join(parts) if parts else "일정 없음"))
+    if itinerary.state.feedback_log:
+        lines.append("이전에 승인된 요청(최근순 아님, 오래된 것부터): " + " / ".join(itinerary.state.feedback_log[-5:]))
     in_plan = set(itinerary.request.place_ids)
     others = [f"{p.name}({p.id})" for p in places.values() if p.id not in in_plan]
     lines.append("일정에 없는 관광지: " + (", ".join(others) if others else "없음"))

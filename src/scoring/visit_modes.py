@@ -1,5 +1,7 @@
 """Derive named visit modes from the already verified v2.2 score snapshot."""
+import copy
 import json
+import os
 from pathlib import Path
 
 from src.scoring.provenance import explanations, snapshot_runs
@@ -64,3 +66,42 @@ def _mode(place_id, name, levels, place, source):
 def load_modes(path=None):
     path = Path(path) if path else Path(__file__).resolve().parents[2] / "data/scoring/visit_modes_v2_2.json"
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+OVERRIDES = Path(__file__).resolve().parents[2] / "data/scoring/hitl_overrides.json"
+
+
+def overrides_path():
+    return Path(os.environ.get("SCORING_OVERRIDES_JSON") or OVERRIDES)
+
+
+def apply_overrides(catalog, overrides):
+    """MD provisional scores (HITL) on top of the verified catalog; returns a new dict.
+
+    override: {feedback_id, place_id, mode (standard|short|full|None=all), dimension, score, reason}
+    The verified catalog file is never modified; mode scores are recomputed with the same weights.
+    """
+    result = copy.deepcopy(catalog)
+    for o in overrides:
+        place = result.get(o["place_id"])
+        if place is None:
+            continue
+        for mode_id, mode in place["modes"].items():
+            if o.get("mode") not in (None, "all", mode_id):
+                continue
+            dim = mode["dimensions"][o["dimension"]]
+            dim.setdefault("verified_score", dim["score"])
+            dim["score"] = int(o["score"])
+            dim["override"] = {"feedback_id": o["feedback_id"], "reason": o.get("reason")}
+            mode["score"] = round_half_up(sum(WEIGHTS[d] * mode["dimensions"][d]["score"] for d in DIMS) / 9)
+        place["hitl_pending"] = sorted(set(place.get("hitl_pending", [])) | {o["feedback_id"]})
+    return result
+
+
+def load_catalog(path=None):
+    """Catalog used at runtime (API, planner): verified scores + active MD overrides."""
+    catalog = load_modes(path)
+    op = overrides_path()
+    if not op.exists():
+        return catalog
+    return apply_overrides(catalog, json.loads(op.read_text(encoding="utf-8")))

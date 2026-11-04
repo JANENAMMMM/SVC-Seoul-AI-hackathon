@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.hitl import router as hitl_router
 from api.routes.planner import router as planner_router
 from api.routes.profile import router as profile_router
 from api.scoring import router as scoring_router
@@ -13,6 +14,7 @@ app.add_middleware(
 app.include_router(profile_router)
 app.include_router(scoring_router)
 app.include_router(planner_router)
+app.include_router(hitl_router)
 
 
 @app.get("/health")

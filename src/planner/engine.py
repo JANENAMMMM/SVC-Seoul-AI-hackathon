@@ -16,7 +16,7 @@ from src.planner.profile_merge import MergedProfile, merge_profiles
 from src.planner.schema import (DayPlan, Itinerary, PackageScore, PlanRequest, PlanState, Stop, Unscheduled)
 from src.planner.sources import Place, Restaurants, load_places, load_restaurants, load_settings
 from src.scoring.package_difficulty import calculate_package
-from src.scoring.visit_modes import load_modes
+from src.scoring.visit_modes import load_catalog
 
 WEEKDAY_KO = ["월", "화", "수", "목", "금", "토", "일"]
 MAX_PERMUTATION_PLACES = 6
@@ -526,7 +526,7 @@ def _build_ctx(request: PlanRequest, rest: Restaurants | None) -> Ctx:
     weights = {**settings["weights"], **request.state.weights}
     ctx = Ctx(settings, places, rest if rest is not None else load_restaurants(), profile, request.state,
               base_xy, base is None, w_start, w_end, request.start_date.weekday() if request.start_date else None,
-              load_modes(), weights)
+              load_catalog(), weights)
     for n in profile.notes:
         ctx.note(n)
     return ctx
@@ -565,6 +565,8 @@ def _collect_assumptions(request: PlanRequest, ctx: Ctx) -> None:
             ctx.note(f"출발일이 없어 {place.name}의 요일별 휴무를 반영하지 못했습니다.")
         if place.status != "ok":
             ctx.note(f"{place.name}의 난이도 점수는 검수 대기 상태입니다.")
+        if place.adjusted:
+            ctx.note(f"{place.name}의 난이도는 MD 조정값(재채점 대기)을 반영했습니다.")
 
 
 def _reseat_dropped(assignment: dict[int, list[str]], sims: dict[int, SimResult], modes_by_day: dict[int, dict],
