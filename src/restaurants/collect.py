@@ -16,13 +16,14 @@
 - 한 번 실행하는 동안만 메모리에서 같은 식당의 리뷰 중복 조회를 막는다.
 - 실행이 끝난 뒤 남기는 건 place_id뿐이다. 다시 보여줄 때는 google_reviews.fetch_place_for_display로 재조회한다.
 - 리뷰를 화면에 보여줄 때는 작성자를 항상 표시한다.
-- 한식 판단(korean_judge)은 기본 꺼짐이다.
+- 한식 판단(korean_judge)은 기본 꺼짐이다. 식당 태그는 기본 켜짐이고 tags=False로 끈다.
 
 결과 필드 규칙 (다음 단계 LLM·화면이 어느 값을 믿을지 알 수 있게):
 - 유지(Google 원본): name, lat, lng, primary_type, rating, rating_count, price_level, opening_text
 - 유지(우리 분류표로 원본 타입에서 계산): cuisine_tag, is_korean, is_local — Claude 판단으로 덮어쓰지 않는다
 - 붙음(우리가 계산): distance_m, score, hours_unknown
 - 붙음(Claude 판단, korean_judge를 켰을 때만): korean_check, is_korean_final
+- 붙음(규칙+Claude 판단, 기본 켜짐 / tags=False면 None): venue_type, ingredient_tags, tag_confidence, tag_evidence
 - 덮어쓰는 필드는 없다.
 """
 
@@ -34,6 +35,7 @@ from .google_places import Restaurant, search_nearby_restaurants
 from .google_reviews import PlaceReviews, Review, fetch_reviews
 from .korean_check import KoreanJudge, apply_judgments
 from .korean_judgment import KoreanCheck
+from .tags import RestaurantTags, TagInput, TagJudge
 from .ranking import ALL_DAYS, DEFAULT_MEAL_TIMES, build_candidates, select_top
 
 GoogleSearch = Callable[..., list[Restaurant]]
@@ -76,6 +78,11 @@ class RecommendedRestaurant(BaseModel):
     korean_check: Optional[KoreanCheck] = None
     # 한식 여부 최종값: korean_check가 있으면 verdict == "korean", 없으면 is_korean과 같다
     is_korean_final: bool = False
+    # 식당 태그 (기본 켜짐. tags=False면 None). 일정 엔진이 부모님 프로필로 거를 때 쓴다.
+    venue_type: Optional[str] = None  # restaurant / street_food / unknown
+    ingredient_tags: Optional[list[str]] = None  # 확인된 것만. 없으면 []
+    tag_confidence: Optional[str] = None  # high / medium / low
+    tag_evidence: Optional[list[str]] = None  # 근거가 된 리뷰 원문 발췌
 
 
 class AttractionResult(BaseModel):
@@ -112,11 +119,18 @@ def collect(
     google_search: GoogleSearch = search_nearby_restaurants,
     review_fetch: ReviewFetch = fetch_reviews,
     korean_judge: Optional[KoreanJudge] = None,
+    tags: bool = True,
+    tag_judge: Optional[TagJudge] = None,
 ) -> CollectResult:
     """korean_judge를 넘기면 Claude로 한식 여부를 판단해 korean_check로 붙인다.
 
     기본 꺼짐: 요청마다 시간·비용이 든다.
     """
+    if tags and tag_judge is None:
+        tag_judge = TagJudge()  # 리뷰가 없는 식당은 Claude 없이 규칙만 쓴다
+    if not tags:
+        tag_judge = None
+
     # 이번 실행 동안만 쓰는 메모리 (함수가 끝나면 사라짐). 여러 관광지에 같은 식당이 나오면 리뷰는 1회만 조회.
     reviews_seen: dict[str, PlaceReviews] = {}
 
@@ -148,15 +162,41 @@ def collect(
             candidates = candidates_for(found + korean, attraction, origin)
         top = select_top(candidates)
 
-        # 4~5단계: 상위 식당마다 리뷰 조회 1회 + 키워드 태그
+        # 4단계: 상위 식당마다 리뷰 조회 1회
+        infos: dict[str, Optional[ReviewInfo]] = {}
+        for c in top:
+            pid = c.restaurant.place_id
+            infos[pid] = None
+            if with_reviews:
+                if pid not in reviews_seen:
+                    reviews_seen[pid] = review_fetch(pid)
+                infos[pid] = review_info(reviews_seen[pid])
+
+        # 5단계(선택): 리뷰 원문과 이름으로 식당 태그를 붙인다. 리뷰 원문은 그대로 두고 옆에 붙는다.
+        tags: dict[str, RestaurantTags] = {}
+        if tag_judge is not None:
+            tags = tag_judge.judge(
+                [
+                    TagInput(
+                        place_id=c.restaurant.place_id,
+                        name=c.restaurant.name,
+                        primary_type=c.restaurant.primary_type,
+                        reviews=[
+                            x.original_text
+                            for x in (infos[c.restaurant.place_id].korean_reviews if infos[c.restaurant.place_id] else [])
+                            if x.original_text
+                        ],
+                    )
+                    for c in top
+                ],
+                f"{attraction.name}, {city}",
+            )
+
         recommended = []
         for c in top:
             r = c.restaurant
-            info = None
-            if with_reviews:
-                if r.place_id not in reviews_seen:
-                    reviews_seen[r.place_id] = review_fetch(r.place_id)
-                info = review_info(reviews_seen[r.place_id])
+            info = infos[r.place_id]
+            tag = tags.get(r.place_id)
             recommended.append(
                 RecommendedRestaurant(
                     place_id=r.place_id,
@@ -177,6 +217,10 @@ def collect(
                     reviews=info,
                     korean_check=c.korean_check,
                     is_korean_final=c.is_korean_final,
+                    venue_type=tag.venue_type if tag else None,
+                    ingredient_tags=tag.ingredient_tags if tag else None,
+                    tag_confidence=tag.tag_confidence if tag else None,
+                    tag_evidence=tag.tag_evidence if tag else None,
                 )
             )
 

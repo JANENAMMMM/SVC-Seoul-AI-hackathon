@@ -6,7 +6,7 @@
         --city 다낭 --country VN --limit 1
 
 필요한 환경변수: GOOGLE_API_KEY
-호출 수(관광지 1곳): 반경 검색 1~2회 + 리뷰 조회 최대 5회. 실행할 때마다 다시 호출한다.
+호출 수(관광지 1곳): 반경 검색 1~2회 + 리뷰 조회 최대 5회, Claude 태그 1회(--no-tags로 생략). 실행할 때마다 다시 호출한다.
 
 저장 규칙: 결과는 화면에만 출력하고 저장하지 않는다. 일정에 남기는 건 place_id뿐이다.
 """
@@ -32,6 +32,7 @@ def main() -> None:
     parser.add_argument(
         "--no-reviews", action="store_true", help="리뷰 단계 건너뛰기 (Atmosphere 등급 호출 안 함)"
     )
+    parser.add_argument("--no-tags", action="store_true", help="식당 태그(Claude) 건너뛰기")
     args = parser.parse_args()
 
     attractions = [
@@ -45,6 +46,7 @@ def main() -> None:
         country=args.country,
         radius_m=args.radius,
         with_reviews=not args.no_reviews,
+        tags=not args.no_tags,
     )
 
     for a in result.attractions:
