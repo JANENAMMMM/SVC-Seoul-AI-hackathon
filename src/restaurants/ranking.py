@@ -1,8 +1,10 @@
 """2~3단계: 규칙으로 거르고 점수로 정렬해 상위 5개를 고른다. LLM을 쓰지 않는다.
 
-2. 거르기: 대표 타입이 음식점이 아닌 곳(호텔 등), 이름에 쿠킹 클래스가 있는 곳, 식사 시간에 문을 닫는 곳, 부모님이 피하는 해산물 전문점 제외
-3. 정렬: 평점과 리뷰 수를 함께 반영한 베이지안 평균 + 현지 음식 선호 보정
-   한식이 필요하면 상위 5개에 한식당 1곳을 반드시 넣는다 (한식 여부는 Candidate.is_korean_final 기준).
+부모님 프로필은 여기서 쓰지 않는다. 해산물·현지 음식 선호·한식 빈도는 일정 엔진이 반영한다.
+
+2. 거르기: 대표 타입이 음식점이 아닌 곳(호텔 등), 이름에 쿠킹 클래스가 있는 곳, 식사 시간에 문을 닫는 곳 제외
+3. 정렬: 평점과 리뷰 수를 함께 반영한 베이지안 평균
+   상위 5개에 한식당이 없으면 마지막 자리를 가장 높은 한식당으로 바꾼다 (한식 여부는 Candidate.is_korean_final 기준).
 
 저장 규칙: 이름·평점·리뷰 수·영업시간 같은 데이터와 점수·제외 사유 같은 계산값은 메모리에서만 쓰고
 저장하지 않는다.
@@ -17,7 +19,6 @@ from pydantic import BaseModel
 from .cuisine import CuisineInfo, classify
 from .google_places import OpeningPeriod, Restaurant
 from .korean_judgment import KoreanCheck
-from .preferences import FoodPreference
 
 MINUTES_PER_DAY = 24 * 60
 MINUTES_PER_WEEK = 7 * MINUTES_PER_DAY
@@ -28,9 +29,6 @@ ALL_DAYS = frozenset(range(7))  # 0=일요일 ~ 6=토요일 (Google 영업시간
 # 베이지안 평균: 리뷰가 적은 고평점 식당이 위로 튀지 않게 PRIOR_COUNT개의 평균 평점을 섞는다.
 PRIOR_COUNT = 50
 DEFAULT_PRIOR_RATING = 4.0
-
-# 질문 1(현지 음식 선호)에 따른 점수 보정. 팀 가정값.
-LOCAL_FOOD_ADJUST = {"familiar": -0.15, "mixed": 0.0, "adventurous": 0.15, "unknown": 0.0}
 
 TOP_N = 5
 
@@ -135,7 +133,6 @@ def bayesian_rating(rating: Optional[float], count: Optional[int], prior: float)
 
 def build_candidates(
     restaurants: list[Restaurant],
-    pref: FoodPreference,
     origin: Optional[tuple[float, float]] = None,
     country: Optional[str] = None,
     days: frozenset[int] = ALL_DAYS,
@@ -162,25 +159,21 @@ def build_candidates(
             c.excluded_reason = f"음식점이 아님 (대표 타입: {r.primary_type})"
         elif is_cooking_class(r.name):
             c.excluded_reason = "쿠킹 클래스 (이름에 cooking class 등 포함)"
-        elif "seafood" in pref.avoid_ingredients and cuisine.has_seafood_type:
-            c.excluded_reason = "해산물 전문점 (해산물을 피하심)"
         elif r.opening_periods and not open_for_meals(r, days, meal_times):
             c.excluded_reason = "식사 시간에 문을 닫는 날이 있음"
 
         c.score = bayesian_rating(r.rating, r.rating_count, prior)
-        if cuisine.is_local:
-            c.score += LOCAL_FOOD_ADJUST[pref.local_food]
         candidates.append(c)
     return candidates
 
 
-def select_top(candidates: list[Candidate], pref: FoodPreference, n: int = TOP_N) -> list[Candidate]:
-    """점수순 상위 n개. 한식이 필요한데 없으면 마지막 자리를 가장 높은 한식당으로 바꾼다."""
+def select_top(candidates: list[Candidate], n: int = TOP_N) -> list[Candidate]:
+    """점수순 상위 n개. 한식당이 없으면 마지막 자리를 가장 높은 한식당으로 바꾼다."""
     kept = sorted(
         (c for c in candidates if c.excluded_reason is None), key=lambda c: c.score, reverse=True
     )
     top = kept[:n]
-    if pref.needs_korean and top and not any(c.is_korean_final for c in top):
+    if top and not any(c.is_korean_final for c in top):
         best_korean = next((c for c in kept[n:] if c.is_korean_final), None)
         if best_korean:
             top = top[: n - 1] + [best_korean]
