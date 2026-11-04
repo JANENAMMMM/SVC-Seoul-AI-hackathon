@@ -17,7 +17,8 @@ from pathlib import Path
 from typing import Any, Optional
 
 from . import db
-from .verify import DIMS
+from .display import cautions, mode_view
+from .verify import DIMS, grade_display
 from .visit_modes import build_modes, load_modes
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -160,6 +161,17 @@ def _mode_scores(catalog, pid):
     return {m: catalog[pid]["modes"][m]["score"] for m in MODES}
 
 
+def _mode_views(catalog, pid):
+    """사람에게 보여줄 값: 방식별 3단계 등급 + 주의 태그(1~10점은 내부용)."""
+    return {m: mode_view(catalog[pid]["modes"][m]) for m in MODES}
+
+
+def _aggregate_view(agg):
+    """재채점 결과(표준 방식 = typical)의 등급 + 주의 태그."""
+    dims = {d: {"score": agg["dimensions"][d]["typical"]} for d in DIMS}
+    return {"grade": grade_display(agg["composite"]["typical"]), "cautions": cautions(dims)}
+
+
 # ── 점수 조정: 의견 → 재채점 → 승인 ──────────────────────────────
 
 def propose_score(conn, text, actor_id=None, interpreter=interpret_score):
@@ -177,7 +189,8 @@ def propose_score(conn, text, actor_id=None, interpreter=interpret_score):
                      status="proposed", approved_by=None, decided_at=None,
                      before_json=before, after_json=None, llm_usage={"parse": parsed["usage"]}))
     return {"feedback_id": fid, "status": "proposed", "adjustments": parsed["adjustments"],
-            "question": parsed["question"], "before": before, "usage": parsed["usage"]}
+            "question": parsed["question"], "before": before,
+            "before_view": {pid: _mode_views(catalog, pid) for pid in places}, "usage": parsed["usage"]}
 
 
 def human_evidence(fid, adjustments):
@@ -231,11 +244,14 @@ def rejudge(conn, fid, max_runs=3, judge_fn=None, effort=REJUDGE_EFFORT):
         usage += [r.get("usage") for r in runs]
     after = {pid: {"composite": r["aggregate"]["composite"], "dimensions": r["aggregate"]["dimensions"],
                    "status": r["aggregate"]["status"], "human_cited": r["human_cited"],
-                   "human_review": r["human_review"]}
+                   "human_review": r["human_review"], "view": _aggregate_view(r["aggregate"])}
              for pid, r in results.items()}
     conn.execute("update scoring_feedback set status='rejudged', after_json=%s, llm_usage=%s where id=%s",
                  (_jsonb({"results": results}), _jsonb({**(fb["llm_usage"] or {}), "rejudge": usage}), fid))
-    return {"feedback_id": fid, "status": "rejudged", "before": fb["before_json"], "after": after}
+    catalog = load_modes(CATALOG)
+    before_view = {pid: mode_view(catalog[pid]["modes"]["standard"]) for pid in after if pid in catalog}
+    return {"feedback_id": fid, "status": "rejudged", "before": fb["before_json"], "before_view": before_view,
+            "after": after}
 
 
 def approve_score(conn, fid, approver=None, run_dir=RUN_DIR, scores_path=SCORES, catalog_path=CATALOG):

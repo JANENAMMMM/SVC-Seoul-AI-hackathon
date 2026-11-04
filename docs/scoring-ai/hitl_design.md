@@ -57,7 +57,7 @@
 
 ## 화면 표시
 
-사람(고객·MD)에게는 1~10점 대신 3단계 등급 + 주의 태그를 보여준다(`src/scoring/display.py`, `feat/score-display`). HITL 응답의 전후 점수는 내부 값이며, `feat/score-display`가 develop에 머지되면 응답에 `grade`·`cautions`를 붙인다(미완료).
+사람(고객·MD)에게는 1~10점 대신 3단계 등급 + 주의 태그를 보여준다(`src/scoring/display.py`, 브랜치 `JANENAMMMM/score-display`를 합침). HITL 응답은 내부 전후 점수(`before`·`after`)와 함께 화면용 `before_view`·`after[*].view`(등급·주의 태그)를 돌려준다. 프론트는 view만 쓴다.
 
 ## 비용 (조정 1회당, 실측)
 

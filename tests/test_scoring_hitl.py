@@ -83,3 +83,14 @@ def test_human_review_distinguishes_cited_and_reviewed():
     assert out["climb"]["verdict"] == "reviewed" and out["heat"]["verdict"] == "cited"
     assert "crowd" not in out
     assert out["walking"]["verdict"] == "reviewed"
+
+
+def test_views_use_grade_and_cautions_not_raw_score():
+    catalog = load_modes()
+    views = hitl._mode_views(catalog, "dad-02")
+    assert set(views) == {"standard", "short", "full"}
+    assert views["standard"]["grade"] in ("하", "중", "상") and isinstance(views["standard"]["cautions"], list)
+    agg = {"composite": {"typical": 7}, "dimensions": {d: {"typical": t} for d, t in
+                                                         zip(("climb", "walking", "heat", "crowd"), (8, 6, 7, 5))}}
+    v = hitl._aggregate_view(agg)
+    assert v["grade"] == "상" and v["cautions"] == ["계단·오르막", "더위 노출"]

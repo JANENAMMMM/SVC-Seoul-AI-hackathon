@@ -17,10 +17,16 @@ def round_half_up(x):
     return int(math.floor(x + 0.5))
 
 
+GRADE_CUTS = (3, 5)  # 하 <= 3 < 중 <= 5 < 상
+
+
 def grade_display(score):
+    """Grade of a composite score. The composite is a weighted mean of 4 dimensions, so it is
+    compressed toward the middle (v2.2: all 15 places 2-6); a mean of 6 already needs several
+    hard dimensions. Cut-offs are set on that compressed range, not on the raw 1-10 rubric."""
     if score is None:
         return None
-    return "하" if score <= 3 else "중" if score <= 6 else "상"
+    return "하" if score <= GRADE_CUTS[0] else "중" if score <= GRADE_CUTS[1] else "상"
 
 
 def composite(dims):

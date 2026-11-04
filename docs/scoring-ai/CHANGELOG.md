@@ -2,6 +2,15 @@
 
 > 최종 상태는 [README.md](README.md). 이 파일은 "무엇을 왜 바꿨는지"의 기록이다. 작업 중 상세 판단 로그는 [orchestration_log.md](archive/worklog/orchestration_log.md).
 
+
+## 표시 방식: 10점은 내부용, 화면은 3단계 등급 + 주의 태그 (2026-11-04)
+- 이유: 같은 근거로 재채점해도 점수가 ±1 흔들리고(v2.1→v2.2), 종합 점수는 15곳 모두 2~6에 몰림. 등급(하/중/상)은 11/15 유지.
+- 가중평균이라 한 차원의 큰 부담(오행산 계단 7)이 희석됨 → 차원 점수 7 이상은 `cautions`(계단·오르막/긴 보행/더위 노출/혼잡)로 따로 표시.
+- 채점·루브릭·저장 데이터는 그대로(재채점·API 비용 없음). `src/scoring/display.py` 추가, `/api/scoring/places`·`/places/{id}`의 각 mode에 `grade`, `cautions` 필드 추가(`score` 유지).
+- 등급 기준선 조정: 하 ≤3 < 중 ≤5 < 상(기존 상 ≥7). 종합은 4개 차원의 가중평균이라 가운데로 압축되므로(15곳 2~6) 기준도 압축된 범위에 맞춤. 기존 기준으로는 상이 0곳이었음. 루브릭은 그대로(바꾸면 재채점 비용 + 평균 압축은 그대로 남음).
+- `run_judge --reaggregate`로 `scores_v2.json`·DB `scoring_scores.grade_display` 갱신(API 호출 없음, 점수 불변).
+- 결과: 상 2곳(바나힐, 오행산)·중 6곳·하 7곳, 주의 태그 7곳(오행산: 계단·오르막, 더위 노출).
+
 ## HITL 피드백 루프 (2026-11-04) — 사람이 고치고 AI가 근거로 다시 판단 · feat/scoring-hitl
 
 **왜**: 일정 수정(`/api/planner/refine`)은 확인 없이 바로 적용되고 아무것도 기록하지 않았다. 관광지 점수를 사람이 조정할 경로도 없었다. 설계 → [hitl_design.md](hitl_design.md), 상용화 고도화안 → [hitl_roadmap.md](hitl_roadmap.md)

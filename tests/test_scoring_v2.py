@@ -26,7 +26,7 @@ def test_composite_weights_and_rounding():
 
 
 def test_grade_display():
-    assert [grade_display(x) for x in (1, 3, 4, 6, 7, 10)] == ["하", "하", "중", "중", "상", "상"]
+    assert [grade_display(x) for x in (1, 3, 4, 5, 6, 10)] == ["하", "하", "중", "중", "상", "상"]
 
 
 def test_valid_run():
