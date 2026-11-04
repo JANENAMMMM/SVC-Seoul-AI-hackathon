@@ -4,80 +4,77 @@
 <meta charset="utf-8">
 <title>여행지 소개 카드</title>
 <style>
-  /* 1080×1350. 여행지 1곳 = 카드 1장. 상단 사진 + 하단 시간·장소 + 전체 동선(세로) */
-  :root { --brand:#5e2bb8; --brand-dark:#3f1c82; --brand-soft:#f3edfc; --ink:#1a1a1a; --text:#2b2b2b; --muted:#6b6577; --canvas:#fbf8f2; --line:#cfc4e3; }
-  * { box-sizing: border-box; margin: 0; }
+  /* 1080×1350. 전면 사진 + 하단 시트(전체 동선). 색은 잉크·크림·테라코타 3가지. 본문 산세리프, 장소명만 세리프. */
+  :root { --ink:#16282c; --cream:#faf5ec; --accent:#c4491c; --accent-soft:#fbe3d6; --muted:#4d5c60; --line:#d8cfbf; }
+  * { box-sizing:border-box; margin:0; }
   html, body { width:1080px; height:1350px; }
-  body { font-family:"Pretendard","Noto Sans CJK KR","Noto Sans KR",sans-serif; background:var(--canvas); color:var(--text); word-break:keep-all; }
-  .card { width:1080px; height:1350px; display:flex; flex-direction:column; }
+  body { font-family:"Pretendard","Noto Sans CJK KR","Noto Sans KR",sans-serif; background:var(--ink); color:var(--ink); word-break:keep-all; }
+  .card { position:relative; width:1080px; height:1350px; overflow:hidden; }
 
-  .hero { position:relative; height:450px; flex:none; background:#222 center/cover no-repeat; }
-  .hero::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,0) 30%); }
-  .badge { position:absolute; z-index:1; left:48px; top:40px; display:flex; align-items:center; gap:14px; background:var(--brand); color:#fff; font-size:44px; font-weight:800; padding:10px 18px 10px 32px; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.3); }
-  .badge .n { display:inline-grid; place-items:center; width:58px; height:58px; border-radius:50%; background:#fff; color:var(--brand); font-size:40px; }
-  .credit { position:absolute; z-index:1; right:16px; bottom:14px; font-size:18px; color:#fff; background:rgba(0,0,0,.55); padding:4px 12px; border-radius:8px; white-space:nowrap; }
+  .photo { position:absolute; left:0; top:0; width:1080px; height:840px; background:#222 center/cover no-repeat; }
+  .photo::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(10,20,22,.45) 0%, rgba(10,20,22,0) 22%, rgba(10,20,22,0) 42%, rgba(10,20,22,.88) 100%); }
 
-  .head { flex:none; padding:28px 56px 22px; border-bottom:3px solid var(--brand); background:#fff; }
-  .when-where { display:flex; align-items:baseline; gap:22px; }
-  .time { font-size:46px; font-weight:800; color:var(--brand); white-space:nowrap; }
-  .place { font-size:62px; font-weight:800; color:var(--ink); line-height:1.15; }
-  .desc { font-size:36px; margin-top:8px; line-height:1.35; }
+  .pill { position:absolute; top:44px; z-index:2; font-size:38px; font-weight:800; color:#fff; padding:12px 30px; border-radius:999px; background:rgba(20,32,36,.55); backdrop-filter:blur(6px); border:2px solid rgba(255,255,255,.55); }
+  .pill.l { left:48px; } .pill.r { right:48px; font-weight:700; }
+  .pill b { color:#ffd2b8; }
 
-  .route { flex:1; padding:18px 56px 40px; display:flex; flex-direction:column; min-height:0; }
-  .route-title { font-size:30px; font-weight:700; color:var(--muted); margin-bottom:6px; }
-  .rows { flex:1; display:flex; flex-direction:column; min-height:0; }
-  .row { flex:1; display:grid; grid-template-columns:120px 56px 1fr auto; align-items:center; opacity:.72; position:relative; }
-  .row.cur { flex:1.5; opacity:1; }
-  .daylab { font-size:30px; font-weight:800; color:var(--brand-dark); }
-  .rail { position:relative; align-self:stretch; display:flex; justify-content:center; align-items:center; }
-  .rail::before { content:""; position:absolute; left:50%; top:0; bottom:0; width:6px; margin-left:-3px; background:var(--line); }
-  .row:first-child .rail::before { top:50%; }
-  .row:last-child .rail::before { bottom:50%; }
-  .row.past .rail::before, .row.cur .rail::before { background:var(--brand); }
-  .row.cur + .row .rail::before { background:var(--line); }
-  .dot { position:relative; width:26px; height:26px; border-radius:50%; background:var(--canvas); border:6px solid var(--line); }
-  .row.past .dot { background:var(--brand); border-color:var(--brand); }
-  .row.cur .dot { width:44px; height:44px; background:var(--brand); border:8px solid #fff; box-shadow:0 0 0 5px var(--brand); }
-  .name { font-size:36px; font-weight:600; color:var(--text); padding-left:12px; }
-  .row.cur .name { font-size:46px; font-weight:800; color:var(--ink); }
-  .here { display:inline-block; margin-left:14px; font-size:28px; font-weight:800; background:var(--brand); color:#fff; padding:2px 16px; border-radius:999px; vertical-align:middle; }
-  .t { font-size:30px; color:var(--muted); font-weight:600; }
-  .row.cur .t { font-size:36px; color:var(--brand); font-weight:800; }
-  .name { color:#4a4455 !important; }
-  .row.cur .name { color:var(--ink) !important; }
-  .gap { text-align:center; font-size:32px; color:var(--muted); line-height:.6; padding-left:120px; }
+  .title { position:absolute; z-index:2; left:56px; right:56px; top:470px; color:#fff; }
+  .time { display:inline-block; font-size:40px; font-weight:800; background:var(--cream); color:var(--accent); padding:6px 24px; border-radius:12px; }
+  .place { font-family:"Noto Serif CJK KR","Noto Serif KR",serif; font-size:104px; font-weight:900; line-height:1.12; margin-top:18px; letter-spacing:-2px; text-shadow:0 3px 18px rgba(0,0,0,.45); }
+  .desc { font-size:40px; font-weight:500; margin-top:14px; text-shadow:0 2px 10px rgba(0,0,0,.55); }
+
+  .sheet { position:absolute; z-index:3; left:0; right:0; top:800px; bottom:0; background:var(--cream); border-radius:44px 44px 0 0; padding:30px 52px 0; box-shadow:0 -10px 30px rgba(0,0,0,.25); }
+  .sheet-title { display:flex; align-items:center; gap:14px; font-size:30px; font-weight:800; color:var(--muted); letter-spacing:1px; }
+  .sheet-title::after { content:""; flex:1; height:2px; background:var(--line); }
+  .cols { display:grid; grid-template-columns:1fr 1fr; column-gap:36px; margin-top:12px; }
+  .col { position:relative; }
+  .col::before { content:""; position:absolute; left:19px; top:14px; bottom:14px; width:4px; background:var(--line); border-radius:2px; }
+  .dayh { position:relative; font-size:28px; font-weight:800; color:var(--accent); padding:8px 0 2px 52px; }
+  .stop { position:relative; display:flex; align-items:center; font-size:35px; font-weight:600; color:var(--muted); height:56px; padding-left:52px; border-radius:14px; white-space:nowrap; }
+  .stop::before { content:""; position:absolute; left:8px; top:50%; width:24px; height:24px; margin-top:-12px; border-radius:50%; background:var(--cream); border:5px solid var(--line); }
+  .stop.past { color:#6a7679; } .stop.past::before { background:var(--muted); border-color:var(--muted); }
+  .stop.cur { background:var(--ink); color:#fff; font-weight:800; margin-left:0; padding-left:52px; }
+  .stop.cur::before { background:var(--accent); border-color:#fff; left:6px; width:28px; height:28px; margin-top:-14px; }
+  .stop.cur .now { margin-left:auto; padding-right:14px; font-size:26px; color:#ffd2b8; }
+  .credit { position:absolute; z-index:2; right:20px; top:744px; font-size:19px; color:#fff; background:rgba(20,32,36,.6); padding:3px 12px; border-radius:8px; }
+  .vi { margin-left:18px; font-size:36px; font-weight:600; color:#fff; vertical-align:middle; text-shadow:0 2px 10px rgba(0,0,0,.6); }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="hero" id="hero"><div class="badge" id="badge"></div><div class="credit" id="credit"></div></div>
-  <div class="head"><div class="when-where"><span class="time" id="time"></span><span class="place" id="place"></span></div><div class="desc" id="desc"></div></div>
-  <div class="route"><div class="route-title">전체 여행 동선</div><div class="rows" id="rows"></div></div>
+  <div class="photo" id="photo"></div>
+  <div class="pill l" id="pl"></div><div class="pill r" id="pr"></div>
+  <div class="title"><span class="time" id="time"></span><span class="vi" id="vi"></span><div class="place" id="place"></div><div class="desc" id="desc"></div></div>
+  <div class="sheet"><div class="sheet-title">전체 여행 동선</div><div class="cols" id="cols"></div></div>
+  <div class="credit" id="credit"></div>
 </div>
 <script>
-  // window.CARD = { day, order, time, place, desc, photo, credit, route:[{day, name, time, state:'past'|'cur'|'next'}] }
+  // window.CARD = { day, order, time, place, place_vi, desc, photo, credit, route:[{day, name, state:'past'|'cur'|'next'}] }
   const c = window.CARD || {};
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[m]));
-  $("hero").style.backgroundImage = c.photo ? `url("${c.photo}")` : "";
-  $("badge").innerHTML = `${c.day}일차 <span class="n">${c.order}</span>`;
+  $("photo").style.backgroundImage = c.photo ? `url("${c.photo}")` : "";
+  $("pl").innerHTML = `${c.day}일차 · <b>${c.order}번째</b>`;
+  const route = c.route || [], cur = route.findIndex((r) => r.state === "cur");
+  $("pr").textContent = `${cur + 1} / ${route.length}`;
+  $("time").textContent = c.time; $("vi").textContent = c.place_vi || ""; $("place").textContent = c.place; $("desc").textContent = c.desc;
   $("credit").textContent = c.credit ? `사진: ${c.credit}` : "";
-  $("time").textContent = c.time; $("place").textContent = c.place; $("desc").textContent = c.desc;
-  const MAX = 12; // 12곳 초과 시 현재 위치 앞뒤만 보여주고 나머지는 접음
-  let route = c.route || [], head = 0, tail = 0;
-  if (route.length > MAX) {
-    const cur = route.findIndex((r) => r.state === "cur");
-    let s = Math.max(0, Math.min(cur - 4, route.length - (MAX - 2)));
-    head = s; tail = route.length - (s + MAX - 2); route = route.slice(s, s + MAX - 2);
+
+  // 일차 단위로 묶어 두 단에 균형 있게 나눕니다.
+  const days = [];
+  route.forEach((r) => { let g = days.find((d) => d.day === r.day); if (!g) days.push(g = { day: r.day, stops: [] }); g.stops.push(r); });
+  const half = route.length / 2; let acc = 0; const colsData = [[], []];
+  days.forEach((d) => { const k = acc < half && colsData[0].length < days.length - 1 ? 0 : 1; colsData[k].push(d); acc += d.stops.length; });
+  $("cols").innerHTML = colsData.map((ds) => `<div class="col">${ds.map((d) =>
+    `<div class="dayh">${d.day}일차</div>` + d.stops.map((r) =>
+      `<div class="stop ${r.state === "next" ? "" : r.state}">${esc(r.name)}${r.state === "cur" ? '<span class="now">지금</span>' : ""}</div>`).join("")).join("")}</div>`).join("");
+
+  // 동선이 길어 시트를 넘치면 글씨를 줄입니다(최소 28px).
+  const sheet = document.querySelector(".sheet");
+  let fs = 35;
+  while (fs > 28 && [...document.querySelectorAll(".col")].some((el) => el.getBoundingClientRect().bottom > 1350 - 30)) {
+    fs -= 1; document.querySelectorAll(".stop").forEach((s) => { s.style.fontSize = fs + "px"; s.style.height = fs * 1.6 + "px"; });
   }
-  let out = head ? `<div class="gap">⋮ 앞 ${head}곳</div>` : "";
-  let prevDay = null;
-  out += route.map((r) => {
-    const lab = r.day !== prevDay ? `${r.day}일차` : ""; prevDay = r.day;
-    return `<div class="row ${r.state === "next" ? "" : r.state}"><div class="daylab">${lab}</div><div class="rail"><span class="dot"></span></div><div class="name">${esc(r.name)}${r.state === "cur" ? '<span class="here">지금</span>' : ""}</div><div class="t">${esc(r.time)}</div></div>`;
-  }).join("");
-  out += tail ? `<div class="gap">⋮ 뒤 ${tail}곳</div>` : "";
-  $("rows").innerHTML = out;
 </script>
 </body>
 </html>

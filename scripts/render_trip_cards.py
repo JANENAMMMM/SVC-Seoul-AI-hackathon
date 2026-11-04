@@ -37,7 +37,7 @@ def main():
                 {"day": d, "name": x["place"], "time": x["time"], "state": "past" if k < n else "cur" if k == n else "next"}
                 for k, (d, _, x) in enumerate(flat)
             ]
-            c = {"day": day, "order": order, **{k: s[k] for k in ("time", "place", "desc")},
+            c = {"day": day, "order": order, **{k: s[k] for k in ("time", "place", "desc")}, "place_vi": s.get("place_vi", ""),
                  "credit": credit_for(s["photo"]), "photo": (PHOTOS / s["photo"]).as_uri(), "route": route}
             page = browser.new_page(viewport={"width": 1080, "height": 1350})
             page.add_init_script(f"window.CARD = {json.dumps(c, ensure_ascii=False)};")

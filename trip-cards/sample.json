@@ -1,21 +1,109 @@
 {
-  "_note": "예시 데이터입니다. 실제 일정으로 교체하세요. photo는 assets/place-photos/<슬러그>/NN.jpg 기준 경로입니다.",
-  "days": [
-    {"day": 1, "stops": [
-      {"time": "오전 10:30", "place": "미케 해변", "desc": "모래사장을 천천히 걸어요", "photo": "my-khe/03.jpg"},
-      {"time": "오후 2:00", "place": "한시장", "desc": "기념품과 과일을 구경해요", "photo": "han-market/01.jpg"},
-      {"time": "오후 7:00", "place": "용다리", "desc": "밤에는 불빛이 아름다워요", "photo": "dragon-bridge/05.jpg"}]},
-    {"day": 2, "stops": [
-      {"time": "오전 9:00", "place": "바나힐", "desc": "케이블카로 구름 위에 올라가요", "photo": "bana-hills/04.jpg"},
-      {"time": "오후 3:00", "place": "참 조각 박물관", "desc": "시원한 실내에서 쉬어가요", "photo": "cham-museum/03.jpg"},
-      {"time": "오후 6:30", "place": "아시아파크", "desc": "저녁 불빛을 구경해요", "photo": "asia-park/05.jpg"}]},
-    {"day": 3, "stops": [
-      {"time": "오전 9:00", "place": "영흥사", "desc": "바다를 보는 큰 하얀 불상", "photo": "linh-ung/09.jpg"},
-      {"time": "오전 11:30", "place": "오행산", "desc": "동굴과 사원을 천천히 걸어요", "photo": "marble-mountains/02.jpg"},
-      {"time": "오후 3:00", "place": "다낭 대성당", "desc": "분홍빛 성당에서 사진을 남겨요", "photo": "da-nang-cathedral/07.jpg"}]},
-    {"day": 4, "stops": [
-      {"time": "오전 9:30", "place": "호이안 구시가지", "desc": "노란 골목을 구경해요", "photo": "hoi-an-old-town/02.jpg"},
-      {"time": "오후 2:00", "place": "미선 유적지", "desc": "오래된 사원 터를 둘러봐요", "photo": "my-son/01.jpg"},
-      {"time": "오후 7:00", "place": "호이안 야시장", "desc": "등불 거리를 걸어요", "photo": "hoi-an-night-market/02.jpg"}]}
-  ]
+ "_note": "예시 데이터입니다. 실제 일정으로 교체하세요. photo는 assets/place-photos/<슬러그>/NN.jpg 기준 경로입니다.",
+ "days": [
+  {
+   "day": 1,
+   "stops": [
+    {
+     "time": "오전 10:30",
+     "place": "미케 해변",
+     "desc": "모래사장을 천천히 걸어요",
+     "photo": "my-khe/03.jpg",
+     "place_vi": "Bãi biển Mỹ Khê"
+    },
+    {
+     "time": "오후 2:00",
+     "place": "한시장",
+     "desc": "기념품과 과일을 구경해요",
+     "photo": "han-market/01.jpg",
+     "place_vi": "Chợ Hàn"
+    },
+    {
+     "time": "오후 7:00",
+     "place": "용다리",
+     "desc": "밤에는 불빛이 아름다워요",
+     "photo": "dragon-bridge/05.jpg",
+     "place_vi": "Cầu Rồng"
+    }
+   ]
+  },
+  {
+   "day": 2,
+   "stops": [
+    {
+     "time": "오전 9:00",
+     "place": "바나힐",
+     "desc": "케이블카로 구름 위에 올라가요",
+     "photo": "bana-hills/04.jpg",
+     "place_vi": "Bà Nà Hills"
+    },
+    {
+     "time": "오후 3:00",
+     "place": "참 조각 박물관",
+     "desc": "시원한 실내에서 쉬어가요",
+     "photo": "cham-museum/03.jpg",
+     "place_vi": "Bảo tàng Điêu khắc Chăm"
+    },
+    {
+     "time": "오후 6:30",
+     "place": "아시아파크",
+     "desc": "저녁 불빛을 구경해요",
+     "photo": "asia-park/05.jpg",
+     "place_vi": "Asia Park"
+    }
+   ]
+  },
+  {
+   "day": 3,
+   "stops": [
+    {
+     "time": "오전 9:00",
+     "place": "영흥사",
+     "desc": "바다를 보는 큰 하얀 불상",
+     "photo": "linh-ung/09.jpg",
+     "place_vi": "Chùa Linh Ứng"
+    },
+    {
+     "time": "오전 11:30",
+     "place": "오행산",
+     "desc": "동굴과 사원을 천천히 걸어요",
+     "photo": "marble-mountains/02.jpg",
+     "place_vi": "Ngũ Hành Sơn"
+    },
+    {
+     "time": "오후 3:00",
+     "place": "다낭 대성당",
+     "desc": "분홍빛 성당에서 사진을 남겨요",
+     "photo": "da-nang-cathedral/07.jpg",
+     "place_vi": "Nhà thờ Chính tòa Đà Nẵng"
+    }
+   ]
+  },
+  {
+   "day": 4,
+   "stops": [
+    {
+     "time": "오전 9:30",
+     "place": "호이안 구시가지",
+     "desc": "노란 골목을 구경해요",
+     "photo": "hoi-an-old-town/02.jpg",
+     "place_vi": "Phố cổ Hội An"
+    },
+    {
+     "time": "오후 2:00",
+     "place": "미선 유적지",
+     "desc": "오래된 사원 터를 둘러봐요",
+     "photo": "my-son/01.jpg",
+     "place_vi": "Thánh địa Mỹ Sơn"
+    },
+    {
+     "time": "오후 7:00",
+     "place": "호이안 야시장",
+     "desc": "등불 거리를 걸어요",
+     "photo": "hoi-an-night-market/02.jpg",
+     "place_vi": "Chợ đêm Hội An"
+    }
+   ]
+  }
+ ]
 }
