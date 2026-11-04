@@ -71,7 +71,7 @@ body.shownotes .notes{display:block}
 .print-only{display:none}
 .slide.full{padding:0}
 .slide.full>img{width:100%;height:100%;object-fit:contain;display:block}
-.slide.full .foot{bottom:14px}
+.slide.full .foot{display:none}
 /* 다이어그램 */
 .etable{width:100%;border-collapse:collapse}
 .etable th{font-size:11px;padding:0 12px 8px 0}
@@ -305,20 +305,21 @@ body.shownotes .notes{display:block}
       <table>
         <tr><th>규칙 (우선순위 순)</th></tr>
         <tr><td><b>영업시간 · 휴무</b></td></tr>
+        <tr><td><b>하루 구성</b> 최대 3곳, 점수 합이 <b>피로 예산</b> 이내</td></tr>
         <tr><td><b>연속 보행 한도</b> 12~90분, 닿으면 25분 휴식</td></tr>
         <tr><td><b>꼭 갈 곳</b>은 끝까지 유지</td></tr>
         <tr><td><b>하루 난이도 상한</b> 7</td></tr>
-        <tr><td><b>식사</b> 시간 · 취향</td></tr>
+        <tr><td><b>식사</b> 하루 2끼, 한식은 여행 전체 조건</td></tr>
         <tr><td><b>이동</b> 최소화, 도보 10분 넘으면 택시</td></tr>
       </table>
-      <p class="cap" style="margin-top:16px">AI는 요청을 수정 명령 9개 중 하나로 바꾸기만 합니다. 바뀐 일정은 승인해야 반영됩니다.</p>
+      <p class="cap" style="margin-top:14px">관광지와 식당을 하루 단위로 한 번에 묶어 계산하고, 남는 시간은 "자유 시간 · 숙소 휴식"으로 표시합니다. AI는 요청을 수정 명령 9개 중 하나로 바꾸기만 하며, 바뀐 일정은 승인해야 반영됩니다.</p>
     </div>
     <div class="col" style="flex:1.9">
       <div class="shot"><img src="assets/03-customer-comparison.png" alt="고객 화면: 이 날 적용된 규칙과 변경안 승인"></div>
       <div class="src">현재 화면 (시연 데이터) — 그날 적용된 규칙과 변경 근거를 화면에 표시</div>
     </div>
   </div>
-  <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3, src/planner/engine.py. 화면은 UI 확정 후 재캡처.</div>
+  <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3-2(하루 구성)·§3-3, src/planner/compose.py, config.json(fatigue·free_time). 피로 예산(9~17, 75세 이상 −1)·하루 최대 3곳·체류 범위는 근거 없는 가정값 — 8장 연령별 상한(14/12/11/10/8)과는 다른 값이며 서로 연동되지 않음. 날짜 배정이 쏠리던 문제는 해결(장소 수 차이 2 이상 30건→1건, 72건 비교), 빈 시간은 줄인 게 아니라 자유 시간 칸으로 표시(평균 10.7시간, 3일 기준). 화면 캡처는 변경 전 UI 기준이라 UI 확정 후 재캡처.</div>
 </section>
 
 <!-- HITL (MD + 가족 한 장) -->
@@ -446,6 +447,24 @@ body.shownotes .notes{display:block}
     </div>
   </div>
   <div class="notes"><b>출처:</b> scoring README 주의 문단, validation/gold_set_template.md, route_planner.md §6</div>
+</section>
+
+<!-- 부록 A -->
+<section class="slide full">
+  <img src="assets/workflow_1_evidence.png" alt="부록 A">
+  <div class="notes"><b>부록 A (Q&amp;A용).</b> 근거 수집·정제·저장. 합계 장소 15 · 근거 523(초기 조사 86 포함) · 리뷰 1,994.</div>
+</section>
+
+<!-- 부록 B -->
+<section class="slide full">
+  <img src="assets/workflow_2_judging_9c5719a.png" alt="부록 B">
+  <div class="notes"><b>부록 B (Q&amp;A용).</b> LLM 채점 → 코드 검증 → 코드 집계 → 사용. 틀리면 무효, 흔들리면 사람 검수.</div>
+</section>
+
+<!-- 부록 C -->
+<section class="slide full">
+  <img src="assets/workflow_full_9c5719a.png" alt="부록 C">
+  <div class="notes"><b>부록 C (Q&amp;A용).</b> ScoringAI v2.2 전체 구조. 글자가 작아 Q&amp;A에서만 사용. 주의: 그림 속 "28회 중 22회 통과"는 7장 "14/15"와 단위가 다름, "현재 한시장" 사례 포함, "하루 최대 +2"는 보너스 상한.</div>
 </section>
 
 </div>
