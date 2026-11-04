@@ -114,8 +114,8 @@ box(DX+20, 448, DW-40, 76, 'blue', rx=6, sw=1)
 text(DX+32, 467, ['**근거 등급**', 'A 측정 기후 · B GPS(궤적 5개 이상)·초기 조사 사실', 'C 지도 반경·리뷰 통계·GPS 표본 부족'], size=11.5, lh=17)
 dtable(540, 140, 'D3 `scoring_reviews`', ['리뷰 원문 1,994건 /', '출처·언어·여행 유형·평점'], ['예: `rev:dad-02:<번호>` 리뷰 원문 한 건'])
 text(DX, 728, ['**채점하면서 쌓이는 기록**'], size=13, color=COLS['blue'])
-dtable(740, 120, 'D4 `scoring_web_cache`', ['judge가 웹에서 찾아 인용한 페이지 242개', '/ URL·검색어·인용 문장'])
-dtable(905, 115, 'D5 `scoring_judgments`', ['채점 실행 원본 126회 /', '출력·인용 통과 여부·토큰'])
+dtable(740, 120, 'D4 `scoring_web_cache`', ['judge가 웹에서 찾아 인용한 페이지', '/ URL·검색어·인용 문장'])
+dtable(905, 115, 'D5 `scoring_judgments`', ['채점 실행 원본 전체 /', '출력·인용 통과 여부·토큰'])
 dtable(1045, 115, 'D6 `scoring_scores`', ['최종 점수 32행(v2.2 15곳) /', '차원 점수·종합·상태·조건'])
 # load_evidence -> D1 D2 D3
 for ty in (230, 360, 600):
@@ -166,7 +166,7 @@ arrow(f'M{LX+LW+4},480 H{RX-3}', 'purple', sw=1.5)
 # resubmit loop
 arrow(f'M{RX+200},660 C{RX+200},715 {RX+90},715 {RX+90},664', 'red', dash='6 4', sw=2)
 text(RX+145, 735, ['형식 틀리면 1회 재제출 요청'], size=12, color=COLS['red'], anchor='middle')
-text(RX+12, 775, ['**계단 수·엘리베이터 운행 등** 시기마다', '바뀌는 사실은 채점 때 **웹 검색**', '(v2.2: 17회, 누적 인용 242개)'], size=12, color='#4B2A9E', lh=17)
+text(RX+12, 775, ['**계단 수·엘리베이터 운행 등** 시기마다', '바뀌는 사실은 채점 때 **웹 검색**', '(v2.2 최종 채점: 17회)'], size=12, color='#4B2A9E', lh=17)
 arrow(f'M{RX-4},780 H{LX+212}', 'purple', dash='2 3', sw=1.2)
 
 # ---------------- lane 4
@@ -199,11 +199,11 @@ arrow(f'M{BX},390 V895 H{KX+20} V{KY+KH+3}', 'gray', dash='2 4', sw=1.4)
 text(1130, 888, ['대조 (D2·D3·D4의 ID·수치) → 검증 3·4번'], size=11.5, color=SUB, anchor='middle')
 
 # ---------------- lane 5
-AX, AW, AY, AH = 1835, 330, 360, 250
+AX, AW, AY, AH = 1835, 330, 360, 290
 box(AX, AY, AW, AH, 'green', rx=10, sw=2)
 yy = text(AX+14, AY+28, ['**필요할 때만 최대 3회 실행 →**', '**유효 실행 중 중앙값에 가장 가까운 것**'], size=14.5, lh=21)
 text(AX+14, yy+8, ['• 종합 점수 = `climb`×3 + `walking`×3', '  + `heat`×2 + `crowd`×1 의 가중평균', '  (코드 계산, LLM이 내지 않음)',
-                   '• 등급 표시: 1~3 하 · 4~6 중 · 7~10 상', '• 확신도: 실행 중 가장 낮은 값'], size=12.5, lh=19)
+                   '• 등급 표시: 1~3 하 · 4~5 중 · 6~10 상', '• 주의 태그: 차원 점수 7 이상', '  (계단·오르막·긴 보행·더위·혼잡)', '• 확신도: 실행 중 가장 낮은 값'], size=12.5, lh=19)
 # ok -> scores_v2.json
 arrow(f'M{AX+AW-40},{AY} V162 H2197', 'green', sw=2.5)
 text(AX+AW-50, 200, ['**ok** → 공개 점수'], size=13, color=COLS['green'], anchor='end')
