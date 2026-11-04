@@ -61,9 +61,11 @@ def test_restaurant_trip_is_added_around_the_meal(make_profile, restaurants):
                 continue
             go, back = d.stops[i - 1], d.stops[i + 1]
             assert go.type == "move" and go.note == f"→ {s.restaurant.name}" and go.end == s.start
-            assert back.type == "move" and back.start == s.end
-            assert go.minutes == back.minutes == s.restaurant.travel_min <= 10
-            assert go.transport == back.transport == s.restaurant.transport
+            assert go.minutes == s.restaurant.travel_min <= 10 and go.transport == s.restaurant.transport
+            # 식사 뒤에는 이동·자유 시간·복귀가 이어지거나, 식당이 다음 장소 바로 옆이면 관광이 바로 이어진다.
+            assert back.type in ("move", "rest", "base", "attraction")
+            if back.type == "move":
+                assert back.start >= s.end
             checked += 1
     assert checked >= 3
 

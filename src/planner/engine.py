@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 
 from src.planner.geo import travel_leg, travel_minutes
 from src.planner.hours import earliest_start, has_weekday_closure, hhmm_to_min, intervals_for, min_to_hhmm
-from src.planner.meals import choose_restaurant, is_korean, pinned_restaurant, use_pinned_restaurant
+from src.planner.meals import _pick, choose_restaurant, is_korean, pinned_restaurant, tags_allow, use_pinned_restaurant
 from src.planner.profile_merge import MergedProfile, merge_profiles
 from src.planner.schema import (DayPlan, Itinerary, PackageScore, PlanRequest, PlanState, Stop, Unscheduled)
 from src.planner.sources import Place, Restaurants, load_places, load_restaurants, load_settings
@@ -268,7 +268,49 @@ def simulate(order: list[str], modes: dict[str, str], day_idx: int, ctx: Ctx) ->
         stops.append(stop)
         anchors.append(anchor)
 
-    def add_meal(kind: str, at: int, loc, loc_id, in_site: str | None = None) -> None:
+    def use_pinned_meal(kind: str, at: int, loc) -> bool:
+        """하루 구성이 고른(또는 사용자가 고정한) 식당이 쓸 수 있으면 그 식당까지의 이동과 식사를 확정하고,
+        이후 이동은 식당에서 출발하게 한다. 쓸 수 없으면 False(기존처럼 식당을 나중에 고른다)."""
+        rid = ctx.state.meal_pins.get(f"{day_idx + 1}:{kind}")
+        r = ctx.rest.by_id.get(rid) if rid and ctx.rest.available else None
+        if r is None or rid in ctx.state.excluded_restaurants or not tags_allow(r, ctx.profile):
+            return False
+        miss = W.get("pinned_meal_miss", 80)    # 고정된 식당을 이 순서에서 못 쓰면 벌점: 고정한 끼니가 유지되는 순서를 고른다
+        xy = (r["lat"], r["lng"])
+        minutes, how = ctx.leg(loc, xy)
+        if minutes > allow:
+            totals["pen"] += miss
+            return False
+        eat_start = max(st["t"] + minutes, at)
+        if kind == "lunch" and eat_start > lunch_l:
+            totals["pen"] += miss
+            return False
+        hours = ctx.rest.hours.get(rid)
+        if hours is not None and earliest_start(intervals_for(hours, wd), eat_start, dur) != eat_start:
+            totals["pen"] += miss
+            return False
+        depart = eat_start - minutes            # 도착해서 기다리지 않도록 출발을 맞춘다
+        totals["wait"] += depart - st["t"]
+        st["t"] = depart
+        if minutes:
+            push(Stop(type="move", start=_hhmm(depart), end=_hhmm(eat_start), minutes=minutes, transport=how,
+                      note=f"→ {r['name']}"))
+            totals["travel"] += minutes
+            if how == "walk":
+                walk_leg(minutes)
+        push(Stop(type="meal", meal=kind, start=_hhmm(eat_start), end=_hhmm(eat_start + dur),
+                  restaurant=_pick(r, loc, hours is None, leg=(minutes, how))))
+        st["t"], st["cont"], st["pending"] = eat_start + dur, 0, 0
+        st["loc"] = xy
+        st[kind] = True
+        if kind == "dinner" and eat_start > dinner_l:
+            totals["pen"] += W["late_end"] * (eat_start - dinner_l)
+        return True
+
+    def add_meal(kind: str, at: int, loc, loc_id, in_site: str | None = None) -> bool:
+        """식사 칸을 넣는다. 식당이 확정된 경우 True, 식당을 나중에 고르는 빈 칸(anchor)이면 False."""
+        if not in_site and use_pinned_meal(kind, at, loc):
+            return True
         start = max(st["t"], at)
         span = dur + (0 if in_site else 2 * allow)
         push(Stop(type="meal", meal=kind, start=_hhmm(start), end=_hhmm(start + span)),
@@ -278,6 +320,7 @@ def simulate(order: list[str], modes: dict[str, str], day_idx: int, ctx: Ctx) ->
         st[kind] = True
         if kind == "dinner" and start > dinner_l:
             totals["pen"] += W["late_end"] * (start - dinner_l)
+        return False
 
     def walk_leg(minutes: int) -> None:
         total = st["cont"] + minutes
@@ -344,7 +387,8 @@ def simulate(order: list[str], modes: dict[str, str], day_idx: int, ctx: Ctx) ->
         if start > st["t"] and not st["lunch"]:
             lunch_at = max(st["t"], lunch_e)
             if lunch_at <= lunch_l and lunch_at + dur <= start:
-                add_meal("lunch", lunch_at, place.coord, pid)
+                if add_meal("lunch", lunch_at, place.coord, pid):
+                    add_move(place.coord, f"→ {place.name}")      # 식당에서 관광지로 돌아온다
                 start = earliest_start(intervals, st["t"], stay)
                 if start is None:
                     violations[pid] = "영업시간과 맞지 않거나 휴무일입니다."
@@ -369,7 +413,8 @@ def simulate(order: list[str], modes: dict[str, str], day_idx: int, ctx: Ctx) ->
             w1 = round(w * part1 / stay)
             segment(place, mode, start, part1, w1, "식사 전")
             in_site = pid if pid in S["in_site_meal_places"] else None
-            add_meal("lunch", lunch_start, place.coord, pid, in_site)
+            if add_meal("lunch", lunch_start, place.coord, pid, in_site):
+                add_move(place.coord, f"→ {place.name}")
             segment(place, mode, st["t"], stay - part1, w - w1, "식사 후")
         else:
             segment(place, mode, start, stay, w, None)
@@ -400,6 +445,53 @@ def simulate(order: list[str], modes: dict[str, str], day_idx: int, ctx: Ctx) ->
     cost = (W["travel"] * totals["travel"] + W["wait"] * totals["wait"] + totals["pen"]
             + 1000 * len(violations))
     return SimResult(stops, anchors, cost, violations, totals["walk"], st["max_cont"], placements)
+
+
+def fill_gaps(stops: list[Stop], day_idx: int, ctx: Ctx) -> None:
+    """빈 시간을 줄인다.
+    ① 이동 뒤에 도착해서 기다리게 되면 이동 출발을 늦춘다.
+    ② 앞 관광지의 체류를 허용 범위(config free_time.stay_range)의 최대까지 늘린다. 영업 종료 시각은 넘지 않는다.
+    ③ 그래도 남는 시간(min_gap_min 이상)은 '자유 시간 · 숙소 휴식' 칸으로 표시한다."""
+    cfg = ctx.settings["free_time"]
+    ranges = {int(k): v for k, v in cfg["stay_range"].items()}
+    m = hhmm_to_min
+    for i in range(len(stops) - 1):
+        s, n = stops[i], stops[i + 1]
+        if s.type == "move" and n.type in ("attraction", "meal"):
+            gap = m(n.start) - m(s.end)
+            if gap > 0:
+                s.start, s.end = _hhmm(m(s.start) + gap), _hhmm(m(s.end) + gap)
+    stay: dict[str, int] = {}
+    for s in stops:
+        if s.type == "attraction":
+            stay[s.place_id] = stay.get(s.place_id, 0) + m(s.end) - m(s.start)
+    wd = ctx.weekday(day_idx)
+    out: list[Stop] = []
+    for i, s in enumerate(stops):
+        out.append(s)
+        if i + 1 >= len(stops):
+            continue
+        n = stops[i + 1]
+        if s.type == "base" or n.type == "base":
+            continue
+        gap = m(n.start) - m(s.end)
+        if gap < cfg["min_gap_min"]:
+            continue
+        if s.type == "attraction" and s.place_id in ctx.places:
+            place = ctx.places[s.place_id]
+            hi = ranges.get(place.stay_min, (place.stay_min, place.stay_min))[1]
+            extend = min(gap, hi - stay[s.place_id])
+            intervals = intervals_for(place.hours, wd)
+            if intervals is not None:
+                room = [e - m(s.end) for a, e in intervals if a <= m(s.start) < e]
+                extend = min(extend, room[0]) if room else 0
+            if extend > 0:
+                s.end = _hhmm(m(s.end) + extend)
+                stay[s.place_id] += extend
+                gap -= extend
+        if gap >= cfg["min_gap_min"]:
+            out.append(Stop(type="rest", start=s.end, end=n.start, minutes=gap, reason=cfg["label"]))
+    stops[:] = out
 
 
 def _nearest_neighbor(pids: list[str], ctx: Ctx) -> list[str]:
@@ -628,7 +720,8 @@ def build_itinerary(request: PlanRequest, rest: Restaurants | None = None) -> It
         assignment[day] = [p for p, _ in sims[day].placements] or []
     unscheduled.extend(_reseat_dropped(assignment, sims, modes_by_day, dropped, ctx))
 
-    used: set[str] = set()
+    used: set[str] = {s.restaurant.place_id for sim in sims.values() for s in sim.stops
+                      if s.type == "meal" and s.restaurant}      # 시뮬레이션에서 이미 정해진 식당은 다른 날에 다시 쓰지 않는다
     plans: list[DayPlan] = []
     new_pins: dict[str, int] = {}
     new_meal_pins: dict[str, str] = {}
@@ -636,6 +729,7 @@ def build_itinerary(request: PlanRequest, rest: Restaurants | None = None) -> It
     for day in range(1, n_days + 1):
         sim = sims[day]
         fill_restaurants(day - 1, sim, ctx, used)
+        fill_gaps(sim.stops, day - 1, ctx)
         for s in sim.stops:
             if s.type == "meal" and s.restaurant and not s.fixed:
                 new_meal_pins[f"{day}:{s.meal}"] = s.restaurant.place_id

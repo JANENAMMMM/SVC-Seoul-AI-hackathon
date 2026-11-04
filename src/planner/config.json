@@ -73,12 +73,19 @@
     "max_places_per_day": 3,
     "max_places_per_day_explicit": 4
   },
+  "free_time": {
+    "_note": "빈 시간 처리. 체류 범위는 장소의 기본 체류시간(분)별 [최소, 최대]이며 근거 없는 가정값이다. 최대까지 늘려도 남는 시간은 자유 시간 칸으로 표시한다.",
+    "min_gap_min": 30,
+    "label": "자유 시간 · 숙소 휴식",
+    "stay_range": {"60": [45, 90], "120": [90, 150], "240": [180, 300]}
+  },
   "compose": {
     "_note": "하루 구성 탐색 설정. 비용 = 이동 분 + 0.5*대기 분 + 식당 점수 차이*restaurant_lambda + 식당 후보 없음 가산.",
     "restaurant_lambda": 10,
     "placeholder_penalty": 30,
     "balance_weight": 30,
     "empty_day_penalty": 800,
+    "repeat_penalty": 60,
     "node_limit": 60000,
     "top_restaurants": 3,
     "top_korean": 2,
@@ -110,7 +117,8 @@
     "travel": 1.0,
     "wait": 0.5,
     "late_end": 0.3,
-    "consecutive_demanding": 20.0
+    "consecutive_demanding": 20.0,
+    "pinned_meal_miss": 80.0
   },
   "clusters": {
     "region_to_cluster": {

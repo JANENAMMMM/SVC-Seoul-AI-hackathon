@@ -28,7 +28,7 @@ from typing import Callable
 
 from src.planner.geo import haversine_km
 from src.planner.hours import earliest_start, hhmm_to_min, intervals_for
-from src.planner.meals import is_korean, pinned_restaurant, restaurant_ok, restaurant_score
+from src.planner.meals import is_korean, pinned_restaurant, restaurant_ok, restaurant_score, tags_allow
 from src.planner.schema import Unscheduled
 
 
@@ -70,8 +70,10 @@ class Composition:
 
 
 class Composer:
-    def __init__(self, ctx, select_modes: Callable):
+    def __init__(self, ctx, select_modes: Callable, n_days: int = 1):
         self.ctx = ctx
+        # 식당은 여행 기간의 모든 요일에 열려 있어야 후보가 된다(하루 구성은 날짜를 모르고 계획하기 때문).
+        self.weekdays = ([(ctx.start_weekday + i) % 7 for i in range(n_days)] if ctx.start_weekday is not None else [None])
         self.select_modes = select_modes
         self.cfg = ctx.settings["compose"]
         self.F = ctx.profile.fatigue_budget
@@ -83,7 +85,7 @@ class Composer:
         self.rest = ctx.rest
         self.reserved = set(ctx.state.meal_pins.values()) | set(ctx.state.excluded_restaurants)
         self.in_site = set(ctx.settings["in_site_meal_places"])
-        self._plans: dict[frozenset, list[DayChoice]] = {}
+        self._plans: dict[tuple, list[DayChoice]] = {}
         self._opts: dict[tuple, tuple] = {}
         self._static: dict[tuple, list] = {}
 
@@ -108,6 +110,9 @@ class Composer:
         return None
 
     # ── 식당 후보 (기존 choose_restaurant 규칙과 같은 필터, 한 곳이 아니라 상위 여러 곳) ──
+
+    def _open(self, hours, eat_start) -> bool:
+        return all(earliest_start(intervals_for(hours, wd), eat_start, self.eat) == eat_start for wd in self.weekdays)
 
     def _placeholder(self, loc, t, window, penalty):
         eat_start = max(t, window[0])
@@ -137,14 +142,38 @@ class Composer:
             self._static[key] = out
         return self._static[key]
 
-    def meal_options(self, loc, t, kind):
-        key = (loc, t, kind)
+    def _pinned_option(self, rid, loc, t, window):
+        """이미 고정된 식당을 이 자리에서 쓸 수 있으면 후보 하나로 만든다. 쓸 수 없으면 None."""
+        ctx, cfg = self.ctx, self.ctx.settings["restaurant"]
+        r = self.rest.by_id.get(rid)
+        if r is None or rid in ctx.state.excluded_restaurants or not tags_allow(r, ctx.profile):
+            return None
+        xy = (r["lat"], r["lng"])
+        mins, how = ctx.leg(loc, xy)
+        if mins > self.allow:
+            return None
+        eat_start = max(t + mins, window[0])
+        if eat_start > window[1]:
+            return None
+        hours = self.rest.hours.get(rid)
+        if hours is not None and not self._open(hours, eat_start):
+            return None
+        return dict(pid=rid, name=r["name"], coord=xy, score=restaurant_score(r, haversine_km(loc, xy), ctx.profile, cfg),
+                    ko=is_korean(r), eat_start=eat_start, move=mins, how=how, placeholder=False, penalty=0.0,
+                    rating=r.get("rating"), rating_count=r.get("rating_count"), tags=r.get("ingredient_tags"),
+                    venue=r.get("venue_type"), local=bool(r.get("is_local")))
+
+    def meal_options(self, loc, t, kind, fixed_id=None):
+        key = (loc, t, kind, fixed_id)
         if key in self._opts:
             return self._opts[key]
         ctx, cfg = self.ctx, self.ctx.settings["restaurant"]
         window = self.lunch if kind == "lunch" else self.dinner
         result: tuple = ([], None)
-        if not self.rest.available:
+        pinned = self._pinned_option(fixed_id, loc, t, window) if fixed_id and self.rest.available else None
+        if pinned is not None:
+            result = ([pinned], pinned["score"])
+        elif not self.rest.available:
             ph = self._placeholder(loc, t, window, 0.0)
             result = ([ph], 0.0) if ph else ([], None)
         else:
@@ -155,7 +184,7 @@ class Composer:
                     if eat_start > window[1]:
                         continue
                     hours = self.rest.hours.get(pid)
-                    if hours is not None and earliest_start(intervals_for(hours, None), eat_start, self.eat) != eat_start:
+                    if hours is not None and not self._open(hours, eat_start):
                         continue
                     out.append(dict(pid=pid, name=r["name"], coord=xy, score=score,
                                     ko=is_korean(r), eat_start=eat_start, move=mins, how=how, placeholder=False,
@@ -175,22 +204,24 @@ class Composer:
 
     # ── 하루 후보 만들기 ─────────────────────────────────────
 
-    def plans_of(self, subset: frozenset) -> list[DayChoice]:
-        if subset not in self._plans:
-            self._plans[subset] = self._build(subset)
-        return self._plans[subset]
+    def plans_of(self, subset: frozenset, day: int = 0) -> list[DayChoice]:
+        """day는 사용자가 그 날짜로 고정한 경우만 넘긴다(그날 이미 고정된 식당은 계획에서도 그대로 쓴다)."""
+        if (subset, day) not in self._plans:
+            self._plans[(subset, day)] = self._build(subset, day)
+        return self._plans[(subset, day)]
 
-    def _build(self, subset: frozenset) -> list[DayChoice]:
+    def _build(self, subset: frozenset, day: int) -> list[DayChoice]:
         got = self.modes_for(subset)
         if got is None:
             return []
         modes, fat, shortened = got
+        fixed = {k: self.ctx.state.meal_pins.get(f"{day}:{k}") for k in ("lunch", "dinner")} if day else {}
         plans: list[DayChoice] = []
         for order in itertools.permutations(sorted(subset)):
             site = [p for p in order if p in self.in_site]
             positions = [order.index(site[0])] if site else range(-1, len(order))
             for lunch_pos in positions:
-                plans += self._run(order, lunch_pos, modes, fat, shortened, bool(site))
+                plans += self._run(order, lunch_pos, modes, fat, shortened, bool(site), fixed)
         plans.sort(key=lambda p: p.cost)
         keep, seen = [], set()
         for p in plans:
@@ -203,7 +234,7 @@ class Composer:
         keep += [p for p in plans if p.korean and p not in keep][:2]
         return keep
 
-    def _run(self, order, lunch_pos, modes, fat, shortened, in_site) -> list[DayChoice]:
+    def _run(self, order, lunch_pos, modes, fat, shortened, in_site, fixed) -> list[DayChoice]:
         ctx, pls = self.ctx, self.ctx.places
         lam = self.cfg["restaurant_lambda"]
 
@@ -245,7 +276,7 @@ class Composer:
                        tags=None, venue=None, local=False)
             lunches, lbest = [opt], 0.0
         else:
-            lunches, lbest = self.meal_options(st["loc"], st["t"], "lunch")
+            lunches, lbest = self.meal_options(st["loc"], st["t"], "lunch", fixed.get("lunch"))
         for lo in lunches:
             if in_site:
                 st2 = dict(st, events=st["events"] + [("점심", lo["eat_start"], lo["eat_start"] + self.eat, lo["pid"])])
@@ -263,7 +294,7 @@ class Composer:
                 mins, how = ctx.leg(st2["loc"], ctx.base)
                 st3 = dict(st2, t=st2["t"] + mins, loc=ctx.base, lid="base", travel=st2["travel"] + mins,
                            legs=st2["legs"] + [(st2["lid"], "base", mins, how)])
-            dinners, dbest = self.meal_options(st3["loc"], st3["t"], "dinner")
+            dinners, dbest = self.meal_options(st3["loc"], st3["t"], "dinner", fixed.get("dinner"))
             for do in dinners:
                 if do["pid"] and do["pid"] == lo["pid"]:
                     continue
@@ -301,6 +332,7 @@ def _solve(cm: Composer, groups: list[tuple], pin_day: dict, n_days: int, cap: i
     nodes, best = [0], [None]
     limit = cm.cfg["node_limit"]
     bal, empty_pen = cm.cfg["balance_weight"], cm.cfg["empty_day_penalty"]
+    rep_pen = cm.cfg["repeat_penalty"]
     INF = float("inf")
 
     def pinned_day_of(members):
@@ -320,7 +352,7 @@ def _solve(cm: Composer, groups: list[tuple], pin_day: dict, n_days: int, cap: i
             if not ok or pd is None:
                 infos[mask] = None
             else:
-                plans = cm.plans_of(frozenset(members))
+                plans = cm.plans_of(frozenset(members), pd)
                 infos[mask] = (members, pd, min((p.cost for p in plans), default=INF))
         return infos[mask]
 
@@ -407,14 +439,15 @@ def _solve(cm: Composer, groups: list[tuple], pin_day: dict, n_days: int, cap: i
             if best[0] is not None and spent + bound >= best[0][0]:
                 break
             must_ko = need_total - ko_days >= plans_left            # 남은 하루가 전부 한식이어야 하는 경우
-            for plan in cm.plans_of(frozenset(members)):
-                if not allow_repeat and (plan.rests & used_r):
+            for plan in cm.plans_of(frozenset(members), pd):
+                dup = len(plan.rests & used_r)
+                if dup and not allow_repeat:
                     continue
                 k = 1 if ko_count(plan) else 0
                 if must_ko and not k:
                     continue
-                dfs(after, chosen + [plan], used_r | plan.rests, pin_days | ({pd} if pd else set()), spent + plan.cost,
-                    ko_days + k)
+                dfs(after, chosen + [plan], used_r | plan.rests, pin_days | ({pd} if pd else set()),
+                    spent + plan.cost + rep_pen * dup, ko_days + k)
 
     dfs((1 << m) - 1, [], frozenset(), frozenset(), 0.0, 0)
     return best[0]
@@ -455,7 +488,7 @@ def _match_days(ctx, plans: list[DayChoice], n_days: int, pin_day: dict):
 
 
 def compose_days(ctx, place_ids: list[str], n_days: int, select_modes: Callable) -> Composition:
-    cm = Composer(ctx, select_modes)
+    cm = Composer(ctx, select_modes, n_days)
     cfgf = ctx.settings["fatigue"]
     pool = list(dict.fromkeys(place_ids))
     pin_day = {p: d for p, d in ctx.state.pins.items() if p in pool and 1 <= d <= n_days}
@@ -506,11 +539,14 @@ def compose_days(ctx, place_ids: list[str], n_days: int, select_modes: Callable)
     assignment = {d: list(placed[d].order) if d in placed else [] for d in range(1, n_days + 1)}
     modes = {d: dict(placed[d].modes) for d in placed}
     meal_pins: dict[str, str] = {}
-    for d, plan in placed.items():
+    seen = set(ctx.state.meal_pins.values())      # 같은 식당을 두 번 고정하지 않는다. 겹친 끼니는 고정을 풀어 시간표 단계가 안 쓴 식당을 고르게 한다
+    for d in sorted(placed):
+        plan = placed[d]
         for kind, meal in (("lunch", plan.lunch), ("dinner", plan.dinner)):
             key = f"{d}:{kind}"
-            if meal and meal["pid"] and key not in ctx.state.meal_pins:
+            if meal and meal["pid"] and key not in ctx.state.meal_pins and meal["pid"] not in seen:
                 meal_pins[key] = meal["pid"]
+                seen.add(meal["pid"])
         for pid in plan.shortened:
             notes.append(f"하루 피로 예산({cm.F})을 맞추려고 {names[pid]}은(는) "
                          f"'{ctx.places[pid].modes['short']['name']}' 코스로 잡았습니다.")
