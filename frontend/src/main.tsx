@@ -546,6 +546,64 @@ function App() {
       </>
     );
   }
+  const WALK_ANSWER: Record<string, string> = {
+    "15_30min": "15~30분",
+    under_15min: "15분 미만",
+    "30min_1h": "30분~1시간",
+    over_1h: "1시간 이상",
+  };
+  function pinsOf(): Record<string, number> {
+    const st = (
+      itinerary?.request as { state?: { pins?: Record<string, number> } }
+    )?.state;
+    return st?.pins ?? {};
+  }
+  /** 화면의 일정(Day)에서 실제로 관찰되는 사실만 규칙으로 요약한다. */
+  function dayRules(d: Day): { title: string; body: string }[] {
+    const rules: { title: string; body: string }[] = [];
+    const rests = d.stops.filter((s) => s.type === "rest");
+    const moves = d.stops.filter((s) => s.type === "move");
+    const taxis = moves.filter((s) => s.transport === "taxi");
+    const meals = d.stops.filter((s) => s.type === "meal" && s.start);
+    const answer =
+      WALK_ANSWER[
+        (
+          itinerary?.request as {
+            travelers?: { walking_duration?: string }[];
+          }
+        )?.travelers?.[0]?.walking_duration || ""
+      ];
+    rules.push({
+      title: "한 번에 걷는 시간",
+      body:
+        `이 날 최대 ${d.max_continuous_walk_min}분` +
+        (answer ? ` · 부모님 답변(${answer}) 반영` : "") +
+        (rests.some((s) => s.reason)
+          ? ` · 한도를 넘지 않도록 쉬어가기 ${rests.length}회`
+          : ""),
+    });
+    if (moves.length)
+      rules.push({
+        title: "이동 수단",
+        body: taxis.length
+          ? `도보가 길거나 한도를 넘는 구간은 차량 ${taxis.length}회 · 거리 기반 추정`
+          : "이동 구간은 모두 도보 · 거리 기반 추정",
+      });
+    const fixed = Object.entries(pinsOf())
+      .filter(([, n]) => n === d.day)
+      .map(([id]) => places.find((p) => p.place_id === id)?.name_ko || id);
+    if (fixed.length)
+      rules.push({
+        title: "꼭 갈 곳",
+        body: `${fixed.join(", ")} · ${d.day}일차에 고정하고 변경 후에도 유지 여부를 검사`,
+      });
+    if (meals.length)
+      rules.push({
+        title: "식사 시간",
+        body: `${meals.map((m) => m.start).join(" · ")} 확보`,
+      });
+    return rules;
+  }
   function timeline(d: Day) {
     let n = 0;
     return (
@@ -586,6 +644,11 @@ function App() {
                     <p className="move-line">
                       {s.transport === "taxi" ? "차량" : "도보"} 이동{" "}
                       <b>예상 {s.minutes}분</b>
+                      {s.transport === "taxi" && (
+                        <span className="move-why">
+                          도보가 길거나 연속 보행 한도를 넘어 차량으로 이동
+                        </span>
+                      )}
                     </p>
                   ) : (
                     <>
@@ -607,6 +670,22 @@ function App() {
                             "식사"}
                       </button>
                       {s.mode_name && <p className="muted">{s.mode_name}</p>}
+                      {s.type === "attraction" && (
+                        <p className="why-line">
+                          <b>배치 이유</b>{" "}
+                          {[
+                            s.place_id && pinsOf()[s.place_id] === d.day
+                              ? `꼭 갈 곳 · ${d.day}일차 고정`
+                              : null,
+                            s.note,
+                            s.walk_min != null
+                              ? `관람 중 걷기 예상 ${s.walk_min}분`
+                              : null,
+                          ]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </p>
+                      )}
                       {v && <div className="inline wrap">{chips(v)}</div>}
                       {v && (
                         <p className="reason-line">
@@ -621,6 +700,12 @@ function App() {
                           >
                             평가 근거 ↗
                           </button>
+                        </p>
+                      )}
+                      {s.type === "rest" && (
+                        <p className="why-line">
+                          <b>배치 이유</b>{" "}
+                          {s.reason || "휴식 시간을 확보했어요"}
                         </p>
                       )}
                       {s.type === "rest" && (
@@ -1959,6 +2044,24 @@ function App() {
                         관광지 안에서 걷는 시간도 포함
                       </span>
                     </div>
+                    <section
+                      className="rule-panel"
+                      aria-label="이 날 적용된 규칙"
+                    >
+                      <h3>이 날 적용된 규칙</h3>
+                      <ul>
+                        {dayRules(shown).map((r) => (
+                          <li key={r.title}>
+                            <b>{r.title}</b>
+                            <span>{r.body}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="rule-note">
+                        화면의 일정에서 확인되는 값만 요약했어요. 점수·보행
+                        시간은 설계 기준 추정이며 현장 측정 결과가 아닙니다.
+                      </p>
+                    </section>
                     {timeline(shown)}
                     <details className="assumptions">
                       <summary>계산 기준·예상값·미배치 장소 확인</summary>

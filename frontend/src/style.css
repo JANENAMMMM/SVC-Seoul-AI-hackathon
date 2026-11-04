@@ -3980,3 +3980,63 @@ pre {
   background: #fff0e9;
   color: #a44527;
 }
+
+.rule-panel {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1px solid #d9ccf2;
+  border-radius: 12px;
+  background: #f7f3ff;
+}
+.rule-panel h3 {
+  font-size: 13px;
+  color: var(--deep);
+  margin: 0 0 8px;
+}
+.rule-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.rule-panel li {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #333;
+}
+.rule-panel li b {
+  flex: 0 0 auto;
+  min-width: 84px;
+  color: var(--green);
+  font-weight: 700;
+}
+.rule-note {
+  margin: 10px 0 0;
+  font-size: 10px;
+  color: #777;
+}
+.why-line {
+  font-size: 11px;
+  color: #47208f;
+  margin-top: 6px;
+  line-height: 1.7;
+}
+.why-line b {
+  font-weight: 700;
+  margin-right: 4px;
+}
+.move-why {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  color: #878787;
+}
+@media (max-width: 640px) {
+  .rule-panel li {
+    flex-direction: column;
+    gap: 0;
+  }
+}
