@@ -2,6 +2,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+from src.scoring.display import mode_view
 from src.scoring.itinerary import evaluate_itinerary
 from src.scoring.visit_modes import load_modes
 
@@ -24,7 +25,7 @@ class Itinerary(BaseModel):
 def places():
     catalog = load_modes()
     return [{"place_id": pid, "name_ko": place["name_ko"], "status": place["status"],
-             "modes": {key: {"name": mode["name"], "score": mode["score"]}
+             "modes": {key: {"name": mode["name"], "score": mode["score"], **mode_view(mode)}
                        for key, mode in place["modes"].items()}}
             for pid, place in catalog.items()]
 
@@ -34,7 +35,7 @@ def place_detail(place_id: str):
     place = load_modes().get(place_id)
     if place is None:
         raise HTTPException(status_code=404, detail="unknown place")
-    return place
+    return {**place, "modes": {key: {**mode, **mode_view(mode)} for key, mode in place["modes"].items()}}
 
 
 @router.post("/packages/evaluate")

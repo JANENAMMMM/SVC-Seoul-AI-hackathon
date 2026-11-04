@@ -58,6 +58,15 @@ DDL = {
         composite_typical int, composite_lower int, composite_upper int,
         grade_display text, confidence text, status text, conditions_json jsonb,
         updated_at timestamptz default now(), primary key (place_id, rubric_version)""",
+    # HITL: created by supabase/migrations/20261104190000_scoring_hitl.sql (constraints, RLS live there)
+    "scoring_feedback": """
+        id text primary key, created_at timestamptz default now(), actor_role text, actor_id text,
+        target text, place_id text, plan_ref text, raw_text text, parsed jsonb,
+        status text default 'proposed', approved_by text, decided_at timestamptz,
+        before_json jsonb, after_json jsonb, llm_usage jsonb""",
+    "scoring_overrides": """
+        id text primary key, feedback_id text, place_id text, mode text, dimension text,
+        score int, reason text, active boolean default true, created_at timestamptz default now()""",
 }
 
 
@@ -85,7 +94,8 @@ def _adapt(v):
     return Jsonb(v) if isinstance(v, (dict, list)) else v
 
 
-JSONB_COLS = {"value", "meta", "output_json", "usage", "dimensions", "conditions_json"}
+JSONB_COLS = {"value", "meta", "output_json", "usage", "dimensions", "conditions_json",
+              "parsed", "before_json", "after_json", "llm_usage"}
 
 
 def upsert(conn, table, rows, key=("id",)):
