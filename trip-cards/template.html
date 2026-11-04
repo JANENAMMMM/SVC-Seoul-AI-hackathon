@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <title>여행지 소개 카드</title>
 <style>
-  /* 1080×1350. 전면 사진 + 하단 시트(전체 동선). 색은 잉크·크림·테라코타 3가지. 본문 산세리프, 장소명만 세리프. */
-  :root { --ink:#16282c; --cream:#faf5ec; --accent:#c4491c; --accent-soft:#fbe3d6; --muted:#4d5c60; --line:#d8cfbf; }
+  /* 1080×1350. 전면 사진 + 하단 시트(전체 동선). 색은 design-system/tokens.json(하나투어 계열 보라 #5e2bb8) 기준. 본문 산세리프, 장소명만 세리프. */
+  :root { --ink:#1c1432; --cream:#faf9fc; --accent:#5e2bb8; --accent-soft:#f3edfc; --muted:#5b6070; --line:#dedbe5; }
   * { box-sizing:border-box; margin:0; }
   html, body { width:1080px; height:1350px; }
   body { font-family:"Pretendard","Noto Sans CJK KR","Noto Sans KR",sans-serif; background:var(--ink); color:var(--ink); word-break:keep-all; }
   .card { position:relative; width:1080px; height:1350px; overflow:hidden; }
 
   .photo { position:absolute; left:0; top:0; width:1080px; height:840px; background:#222 center/cover no-repeat; }
-  .photo::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(10,20,22,.45) 0%, rgba(10,20,22,0) 22%, rgba(10,20,22,0) 42%, rgba(10,20,22,.88) 100%); }
+  .photo::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(24,10,50,.45) 0%, rgba(24,10,50,0) 22%, rgba(24,10,50,0) 42%, rgba(24,10,50,.88) 100%); }
 
-  .pill { position:absolute; top:44px; z-index:2; font-size:38px; font-weight:800; color:#fff; padding:12px 30px; border-radius:999px; background:rgba(20,32,36,.55); backdrop-filter:blur(6px); border:2px solid rgba(255,255,255,.55); }
+  .pill { position:absolute; top:44px; z-index:2; font-size:38px; font-weight:800; color:#fff; padding:12px 30px; border-radius:999px; background:rgba(36,16,78,.55); backdrop-filter:blur(6px); border:2px solid rgba(255,255,255,.55); }
   .pill.l { left:48px; } .pill.r { right:48px; font-weight:700; }
-  .pill b { color:#ffd2b8; }
+  .pill b { color:#e0d2fb; }
 
   .title { position:absolute; z-index:2; left:56px; right:56px; top:470px; color:#fff; }
   .time { display:inline-block; font-size:40px; font-weight:800; background:var(--cream); color:var(--accent); padding:6px 24px; border-radius:12px; }
@@ -32,11 +32,11 @@
   .dayh { position:relative; font-size:28px; font-weight:800; color:var(--accent); padding:8px 0 2px 52px; }
   .stop { position:relative; display:flex; align-items:center; font-size:35px; font-weight:600; color:var(--muted); height:56px; padding-left:52px; border-radius:14px; white-space:nowrap; }
   .stop::before { content:""; position:absolute; left:8px; top:50%; width:24px; height:24px; margin-top:-12px; border-radius:50%; background:var(--cream); border:5px solid var(--line); }
-  .stop.past { color:#6a7679; } .stop.past::before { background:var(--muted); border-color:var(--muted); }
-  .stop.cur { background:var(--ink); color:#fff; font-weight:800; margin-left:0; padding-left:52px; }
-  .stop.cur::before { background:var(--accent); border-color:#fff; left:6px; width:28px; height:28px; margin-top:-14px; }
-  .stop.cur .now { margin-left:auto; padding-right:14px; font-size:26px; color:#ffd2b8; }
-  .credit { position:absolute; z-index:2; right:20px; top:744px; font-size:19px; color:#fff; background:rgba(20,32,36,.6); padding:3px 12px; border-radius:8px; }
+  .stop.past { color:#7a7f8e; } .stop.past::before { background:var(--muted); border-color:var(--muted); }
+  .stop.cur { background:var(--accent); color:#fff; font-weight:800; margin-left:0; padding-left:52px; }
+  .stop.cur::before { background:#fff; border-color:#c9b3f0; left:6px; width:28px; height:28px; margin-top:-14px; }
+  .stop.cur .now { margin-left:auto; padding-right:14px; font-size:26px; color:#e0d2fb; }
+  .credit { position:absolute; z-index:2; right:20px; top:744px; font-size:19px; color:#fff; background:rgba(36,16,78,.6); padding:3px 12px; border-radius:8px; }
   .vi { margin-left:18px; font-size:36px; font-weight:600; color:#fff; vertical-align:middle; text-shadow:0 2px 10px rgba(0,0,0,.6); }
 </style>
 </head>
