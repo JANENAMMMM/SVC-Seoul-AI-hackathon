@@ -247,3 +247,44 @@ test("시연 검수는 원본 등급을 바꾸지 않고 완료 기록으로 이
   await expect(page.locator(".demo-review-row")).toContainText("한시장");
   await expect(page.locator(".demo-review-row")).toContainText("부담 하");
 });
+
+test("동선 근거: 적용된 규칙·배치 이유·등급 설명이 보인다", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  const legend = page.locator(".place-sidebar .grade-legend");
+  await expect(legend).toContainText("관광지 자체의 부담 정도");
+  await expect(legend).toContainText("하 1~3");
+  await expect(legend).toContainText("중 4~5");
+  await expect(legend).toContainText("상 6 이상");
+  await expect(legend).toContainText("운영자가 검수");
+  await page.getByRole("button", { name: "고객 일정에서 확인" }).click();
+  const panel = page.getByRole("region", { name: "이 날 적용된 규칙" });
+  await expect(panel).toBeVisible();
+  await expect(panel).toContainText("한 번에 걷는 시간");
+  await expect(panel).toContainText("꼭 갈 곳");
+  await expect(panel.locator(".grade-legend")).toContainText(
+    "개인 체력이 아님",
+  );
+  await expect(page.locator(".why-line").first()).toContainText("배치 이유");
+  const rules = await panel.boundingBox();
+  const map = await page.locator(".map-wrap").first().boundingBox();
+  expect(rules!.y).toBeLessThan(map!.y);
+  expect(errors).toEqual([]);
+});
+
+test("390px 모바일에서 규칙 박스가 가로로 넘치지 않는다", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "고객 일정에서 확인" }).click();
+  await expect(
+    page.getByRole("region", { name: "이 날 적용된 규칙" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+});
