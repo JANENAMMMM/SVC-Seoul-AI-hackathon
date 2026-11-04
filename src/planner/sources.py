@@ -9,7 +9,7 @@ from pathlib import Path
 from src.planner.hours import Hours, hhmm_to_min, parse_google_hours, parse_korean_hours
 from src.planner.stay import load_config as load_stay_config
 from src.planner.stay import resolve_stay, stay_minutes
-from src.scoring.visit_modes import load_catalog
+from src.scoring.visit_modes import load_modes
 
 ROOT = Path(__file__).resolve().parents[2]
 PLANNER_DIR = Path(__file__).resolve().parent
@@ -39,7 +39,6 @@ class Place:
     hours_confidence: str | None = None
     types: list[str] = field(default_factory=list)
     evening: bool = False
-    adjusted: bool = False  # MD 임시 점수(HITL) 반영 여부
 
     @property
     def coord(self) -> tuple[float, float]:
@@ -59,7 +58,7 @@ def load_places() -> dict[str, Place]:
     manual = json.loads((PLANNER_DIR / "attraction_hours.json").read_text(encoding="utf-8"))["places"]
     attractions = {a["id"]: a for a in json.loads(
         (ROOT / "data" / "scoring" / "attractions.json").read_text(encoding="utf-8"))}
-    catalog = load_catalog()
+    catalog = load_modes()
     stay_cfg = load_stay_config()
 
     places: dict[str, Place] = {}
@@ -83,7 +82,6 @@ def load_places() -> dict[str, Place]:
             hours=hours, hours_source=source, hours_confidence=confidence,
             types=prof.get("types", []),
             evening=bool(starts) and min(starts) >= evening_from,
-            adjusted=bool(catalog[pid].get("hitl_pending")),
         )
     return places
 

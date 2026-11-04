@@ -32,7 +32,6 @@ class PlanState(BaseModel):
     meal_pins: dict[str, str] = Field(default_factory=dict)
     excluded_restaurants: list[str] = Field(default_factory=list)
     walk_limit_override: int | None = None
-    feedback_log: list[str] = Field(default_factory=list)  # 승인된 조정 요약(HITL). 다음 자연어 해석의 맥락
 
 
 class PlanRequest(BaseModel):

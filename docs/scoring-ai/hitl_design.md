@@ -1,72 +1,64 @@
-# HITL 피드백 루프 — 사람이 고치고, AI가 근거로 다시 판단한다
+# HITL 피드백 루프 (해커톤 버전) — 사람이 고치고, AI가 근거로 다시 판단한다
 
-> 2026-11-04 · 남재은 · 브랜치 `feat/scoring-hitl` · 그림 생성: `python docs/scoring-ai/assets/gen_hitl.py`
+> 2026-11-04 · 남재은 · 브랜치 `feat/scoring-hitl` · 그림: `python docs/scoring-ai/assets/gen_hitl.py`
+> 상용화 고도화안(전체 버전)은 [hitl_roadmap.md](hitl_roadmap.md). 전체 구현은 `archive/scoring-hitl-full` 브랜치에 보관.
 
 ![HITL 피드백 루프](assets/hitl_loop.png)
 
 ## 원칙
 
-- **개인 의견은 그 여행만 바꾸고, 전체 점수는 MD를 거쳐 근거로만 바뀐다.** 자녀·부모님 피드백이 공용 점수를 직접 바꾸지 않는다.
-- LLM은 자연어를 구조로 바꾸고(Haiku), 근거를 보고 판정한다(Sonnet judge). 점수 합산·일정 계산은 코드가 한다.
-- 모든 조정은 **제안 → 승인** 순서다. 승인 전에는 일정이 바뀌지 않는다(기존 `/refine`은 바로 적용했음).
+- **개인 의견은 그 여행만 바꾸고, 관광지 점수는 MD 의견을 근거로 AI가 다시 채점한 뒤 승인해야 바뀐다.**
+- LLM은 자연어를 구조로 바꾸고(Haiku), 근거를 보고 판정한다(Sonnet judge). 점수 합산과 일정 계산은 코드가 한다.
+- 모든 조정은 **제안 → 승인**. 승인 전에는 일정도 점수도 바뀌지 않는다.
 
-## 이미 있던 것 (planner, 이지원·노희윤)
+## 두 장면
 
-| 모듈 | 하는 일 |
-|---|---|
-| `src/planner/feedback.py` | 자연어 → 수정 명령 9종 (Haiku 5.5 1회, strict 도구, 모호하면 되묻기) |
-| `src/planner/edit.py` | 명령을 `state`에 반영하고 엔진으로 다시 짬. 하나라도 틀리면 적용 안 함, 변경 요약 생성 |
-
-새로 만든 것은 ① 점수 조정 경로 ② 승인 단계 ③ 기록과 "다음 판단" 반영 통로다.
-
-## 세 갈래
-
-| | 누가 | 흐름 | 다음 판단에 반영되는 방식 |
+| | 누가 | 흐름 | LLM |
 |---|---|---|---|
-| ① 일정 | 자녀(부모님 의견 포함) | 자연어/버튼 → 명령 → `refine` 제안 → 자녀 승인 | 승인 요약이 `state.feedback_log`에 남아 다음 자연어 해석의 맥락이 됨 |
-| ② 점수 | MD | 자연어 → 조정안(장소·차원·점수·주장) → 임시 점수 즉시 표시 → [재채점] MD 주장을 `human:` 근거로 넣고 그 장소만 재채점 → MD 승인 시 게시 | 근거 DB에 남아 이후 모든 채점에서 judge가 웹으로 교차 확인하고 인용 |
-| ③ 신호 | 시스템 → MD | 서로 다른 일정 3개 이상에서 같은 관광지를 가볍게(short·제외) 바꾸면 재채점 검토 후보 | MD가 ②로 넘김 |
+| ① 점수 | 하나투어 MD | 의견 입력 → 조정안(장소·항목·주장) → [재채점] 의견을 `human:` 근거로 넣고 그 장소만 다시 채점(결과는 보관만) → 전후 점수·인용 근거 확인 → 승인 시 공개 점수 반영 | Haiku 1회 + Sonnet 1~3회 |
+| ② 일정 | 자녀(부모님 의견 포함) | 자연어/버튼 → 수정 명령(기존 `feedback.py`) → 바뀐 일정 미리보기(기존 `refine`) → 자녀 승인 시 확정 | 자연어면 Haiku 1회, 버튼이면 0 |
+
+일정 쪽 해석·재계산은 이지원·노희윤님의 `src/planner/feedback.py`·`edit.py`를 그대로 쓴다. 새로 더한 것은 "미리보기 → 승인" 단계와 기록이다.
 
 ## API (`api/hitl.py`)
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
-| POST | `/api/hitl/itinerary/preview` | `{itinerary, commands?, feedback?, actor_role, actor_id}` → `{feedback_id, proposal}` |
-| POST | `/api/hitl/score/preview` | MD 자연어 `{text, actor_id}` → 조정안·전후 점수·임시 점수 |
-| POST | `/api/hitl/score/{id}/rejudge` | 재채점(스테이징, 게시 안 함) |
-| POST | `/api/hitl/{id}/approve` | 일정: 확정 일정 반환 / 점수: 게시·카탈로그 재생성·임시 점수 해제 |
-| POST | `/api/hitl/{id}/reject` | 거절(점수면 임시 점수·`human:` 근거 삭제) |
-| GET | `/api/hitl/feedback?place_id=` · `/api/hitl/signals` | 기록·신호 |
+| POST | `/api/hitl/itinerary/preview` | `{itinerary, commands?, feedback?, actor_role, actor_id}` → `{feedback_id, proposal}` (일정은 아직 안 바뀜) |
+| POST | `/api/hitl/score/preview` | MD `{text, actor_id}` → 조정안·현재 점수 (점수는 아직 안 바뀜) |
+| POST | `/api/hitl/score/{id}/rejudge` | 재채점 → 전후 점수, `human_cited`(의견 근거를 인용했는지) |
+| POST | `/api/hitl/{id}/approve` | 일정: 확정 일정 반환 / 점수: 공개 점수·카탈로그 갱신 |
+| POST | `/api/hitl/{id}/reject` | 거절(점수면 `human:` 근거 삭제) |
+| GET | `/api/hitl/feedback?place_id=` | 조정 기록 |
 
-- `GET /api/scoring/places`와 일정 엔진은 **검증 점수 + 활성 임시 점수**를 읽는다(`load_catalog`). 임시 점수가 반영된 곳은 `hitl_pending`과 "MD 조정값(재채점 대기)" 안내가 붙는다.
-- MD 엔드포인트: 환경변수 `HITL_MD_TOKEN`이 있으면 `X-MD-Token` 헤더 필요. 호출 제한: 해석 30회/시간, 재채점 5회/일(사용자별), `/api/planner/refine` 자연어 60회/시간(서버 전체).
+- 프론트 연결(고객 화면 승인 버튼, MD 작업실 의견 입력)은 프론트 담당.
+- 비용 보호: 해석은 사용자별 시간당 30회, 재채점은 하루 5회까지. 기존 `/api/planner/refine`의 자연어 해석은 서버 전체 시간당 60회. `HITL_MD_TOKEN`을 설정하면 MD 엔드포인트에 `X-MD-Token` 헤더가 필요하다.
 
-## 저장 (마이그레이션 `supabase/migrations/20261104190000_scoring_hitl.sql`, 적용 완료)
+## 저장
 
-- `scoring_feedback`: 모든 조정. 역할·대상·원문·해석 결과·상태(proposed → rejudged → applied/rejected)·승인자·전후 값·LLM 사용량
-- `scoring_overrides`: MD 임시 점수(장소·방식·차원·점수·사유·active). 런타임용으로 `data/scoring/hitl_overrides.json`에 내보냄(git 제외)
-- 기존 `scoring_evidence`에는 `human:<id>:<n>` 행만 추가(basis B, source `hanatour_md`). 테이블 구조 변경 없음
-- 재채점 실행 기록은 `data/scoring/judge/hitl/<id>/`에 스테이징, 승인 시 기존 기록은 `judge/v2/archive_hitl/<id>/`로 옮김(되돌리기 가능)
+- `scoring_feedback`(마이그레이션 `supabase/migrations/20261104190000_scoring_hitl.sql`): 누가·무엇을·원문·해석 결과·상태(proposed → rejudged → applied/rejected)·전후 값·LLM 사용량
+- 기존 `scoring_evidence`에 `human:<id>:<n>` 행만 추가(basis B, source `hanatour_md`). 테이블 구조 변경 없음
+- 재채점 실행 기록은 `data/scoring/judge/hitl/<id>/`에 따로 두고, 승인 시 기존 기록은 `judge/v2/archive_hitl/<id>/`로 옮긴다(되돌리기 가능)
+- 같은 마이그레이션의 `scoring_overrides`는 고도화안(임시 점수)용이다. 해커톤 버전에서는 쓰지 않는다(테이블은 비어 있음)
 
-## 비용 (조정 1회당)
+## 비용 (조정 1회당, 실측)
 
-| 조정 | LLM 호출 | 비용 |
+| 조정 | 호출 | 비용 |
 |---|---|---|
 | 일정 버튼 | 0 | $0 |
-| 일정 자연어 | Haiku 1회 | 약 $0.0004 (같은 구조의 MD 해석 실측: 입력 2,344 · 출력 304 토큰) |
-| MD 자연어 | Haiku 1회 | 약 $0.0004 (실측) |
-| 재채점(버튼 누를 때만) | Sonnet 1~3회 + 웹 검색 | 평균 $0.157, 범위 $0.07~0.30 (v2.2 15곳 실측) |
+| 일정 자연어 / MD 의견 해석 | Haiku 1회 | 약 $0.0004~0.0006 (입력 약 2.3K · 출력 0.3~0.8K 토큰) |
+| 점수 재채점(버튼 누를 때만) | Sonnet 1~3회 + 웹 검색 | 평균 $0.157, 범위 $0.07~0.30 (v2.2 15곳 실측) |
 
-시연 규모(일정 조정 50회 + 재채점 5곳)는 약 $0.8. 팀 크레딧 $50 대비 충분하다.
+시연 규모(일정 조정 50회 + 재채점 5곳)는 약 $0.8.
 
-## 심사기준 연결
+## 발표 연결
 
-- **AI 활용 구체성**: 자연어 구조화(Haiku) → 근거 기반 재채점(Sonnet) → 인용 검증(verify). 사람 의견이 검증 가능한 `human:` 근거로 남아 다음 채점에 실제로 쓰인다. 재채점 결과의 `human_cited`로 반영 여부를 보여줄 수 있다.
-- **실현가능성**: 조정 1회 1원 미만, 재채점 1곳 약 200원. 기존 엔진·채점 파이프라인 재사용, 새 테이블 2개.
+- **AI 활용 구체성**: 의견을 구조로 바꾸고(Haiku), 사람 말을 그대로 믿지 않고 웹 근거로 교차 확인해 다시 채점(Sonnet + 인용 검증). `human_cited`로 AI가 의견을 근거로 썼는지 보여줄 수 있다.
+- **실현가능성**: 일정 조정 1회 1원 미만, 재채점 1곳 약 200원. 기존 엔진·채점 파이프라인 재사용, 새 테이블 1개.
+- 상용화 확장은 [hitl_roadmap.md](hitl_roadmap.md)의 "발표용 한 문장"을 쓴다.
 
 ## 확인한 것 / 하지 않은 것
 
-- 단위 테스트 `tests/test_scoring_hitl.py` 10개 (DB·API 호출 없음), 전체 `uv run pytest` 221개 통과
-- 실제 DB E2E: 일정 제안→승인→`feedback_log`·신호, MD 자연어(실제 Haiku 1회)→임시 점수가 `/api/scoring/places`와 일정 안내에 반영→거절 후 해제. 시험 행은 삭제
-- 재채점→승인: 저장된 오행산 실행 기록을 재생하는 가짜 judge로 스테이징·게시·카탈로그 재생성·임시 점수 해제까지 확인 후 파일·DB 복원. **실제 Sonnet 재채점은 아직 돌리지 않음**
-- 프론트(고객 화면·MD 작업실) 연결은 프론트 담당. 인증은 MD 토큰 수준이며 사용자 계정 권한은 없음
+- `uv run pytest` 217개 통과(HITL 6개: 해석 검증·strict 스키마·근거 행·호출 제한·일정 제안→승인)
+- 실제 DB: 일정 제안→승인, MD 의견(실제 Haiku 1회)→조정안 기록·점수 불변→거절. 시험 행 삭제
+- 재채점→승인: 저장된 오행산 실행 기록을 재생하는 가짜 judge로 게시·카탈로그 재생성까지 확인(전체 버전에서, 같은 코드). **실제 Sonnet 재채점은 아직 안 돌림**

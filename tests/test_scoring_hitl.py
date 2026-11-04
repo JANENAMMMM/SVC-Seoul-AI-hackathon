@@ -1,44 +1,8 @@
 """HITL 피드백 루프 단위 테스트 (DB·Claude 호출 없음)."""
-import json
 from types import SimpleNamespace
 
-from src.planner.edit import refine
-from src.planner.engine import build_itinerary
-from src.planner.feedback import summarize
-from src.planner.schema import LightenDay, PlanRequest, RemovePlace
 from src.scoring import hitl
-from src.scoring.verify import round_half_up
-from src.scoring.visit_modes import apply_overrides, load_catalog, load_modes
-
-
-def test_override_changes_only_target_and_recomputes_mode_score():
-    verified = load_modes()
-    before = json.dumps(verified, sort_keys=True)
-    std = verified["dad-02"]["modes"]["standard"]
-    new_climb = 10 if std["dimensions"]["climb"]["score"] < 10 else 1
-    out = apply_overrides(verified, [{"feedback_id": "fb-1", "place_id": "dad-02", "mode": "standard",
-                                      "dimension": "climb", "score": new_climb, "reason": "엘리베이터 운휴"}])
-    assert json.dumps(verified, sort_keys=True) == before  # verified catalog untouched
-    dim = out["dad-02"]["modes"]["standard"]["dimensions"]["climb"]
-    assert dim["score"] == new_climb and dim["verified_score"] == std["dimensions"]["climb"]["score"]
-    assert dim["override"]["feedback_id"] == "fb-1"
-    dims = out["dad-02"]["modes"]["standard"]["dimensions"]
-    expected = round_half_up((3 * dims["climb"]["score"] + 3 * dims["walking"]["score"]
-                      + 2 * dims["heat"]["score"] + dims["crowd"]["score"]) / 9)
-    assert out["dad-02"]["modes"]["standard"]["score"] == expected
-    assert out["dad-02"]["modes"]["short"] == verified["dad-02"]["modes"]["short"]  # other modes unchanged
-    assert out["dad-02"]["hitl_pending"] == ["fb-1"]
-    assert "hitl_pending" not in out["dad-03"]
-
-
-def test_override_mode_none_applies_to_all_modes():
-    out = apply_overrides(load_modes(), [{"feedback_id": "fb-2", "place_id": "dad-05", "mode": None,
-                                          "dimension": "heat", "score": 9, "reason": None}])
-    assert {m["dimensions"]["heat"]["score"] for m in out["dad-05"]["modes"].values()} == {9}
-
-
-def test_runtime_catalog_without_override_file_equals_verified():
-    assert load_catalog() == load_modes()
+from src.scoring.visit_modes import load_modes
 
 
 def test_rate_limiter_window():
@@ -89,23 +53,21 @@ def test_human_evidence_rows():
     assert rows[0]["value"] == {"suggested_score": 8, "mode": "all"}
 
 
-def _plan(make_profile):
-    req = PlanRequest(travelers=[make_profile(age=70)], place_ids=["dad-03", "dad-06", "dad-08", "dad-02"], days=2)
-    return build_itinerary(req)
+def test_itinerary_is_only_proposed_until_approved(make_profile, monkeypatch):
+    from src.planner.engine import build_itinerary
+    from src.planner.schema import LightenDay, PlanRequest
 
-
-def test_lighter_places_from_refine(make_profile):
-    it = _plan(make_profile)
+    store = {}
+    monkeypatch.setattr(hitl, "_save", lambda conn, row: store.__setitem__(row["id"], dict(row)))
+    monkeypatch.setattr(hitl, "get_feedback", lambda conn, fid: store[fid])
+    monkeypatch.setattr(hitl, "_decide", lambda conn, fid, status, who: store[fid].update(status=status))
+    it = build_itinerary(PlanRequest(travelers=[make_profile(age=70)],
+                                     place_ids=["dad-03", "dad-06", "dad-08", "dad-02"], days=2))
     day = it.state.pins["dad-02"]
-    resp = refine(it, [LightenDay(op="lighten_day", day=day)])
-    lighter = hitl.lighter_places(it, resp.itinerary)
-    assert "dad-02" in lighter
-    resp2 = refine(it, [RemovePlace(op="remove_place", place_id="dad-06")])
-    assert "dad-06" in hitl.lighter_places(it, resp2.itinerary)
-
-
-def test_feedback_log_is_interpreter_context(make_profile):
-    it = _plan(make_profile)
-    assert "이전에 승인된 요청" not in summarize(it)
-    it.state.feedback_log = ["2일차 가볍게 → 오행산 엘리베이터 코스"]
-    assert "2일차 가볍게" in summarize(it)
+    out = hitl.propose_itinerary(None, it, [LightenDay(op="lighten_day", day=day)], "엄마가 힘들대", "parent")
+    fid = out["feedback_id"]
+    assert store[fid]["status"] == "proposed" and store[fid]["actor_role"] == "parent"
+    assert it.state.mode_overrides == {}  # 원래 일정은 그대로
+    approved = hitl.approve_itinerary(None, fid, "child")
+    assert store[fid]["status"] == "applied"
+    assert approved.state.mode_overrides.get("dad-02") == "short"

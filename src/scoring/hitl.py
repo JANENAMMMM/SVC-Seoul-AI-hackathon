@@ -1,15 +1,11 @@
-"""HITL 피드백 루프: 유저(자녀·부모님)와 MD가 AI 산출물을 조정하고, 그 조정이 다음 판단에 반영된다.
+"""HITL(해커톤 단순화 버전): 사람이 고치고, AI가 근거로 다시 판단한다. 설계: docs/scoring-ai/hitl_design.md
 
-조정 두 갈래 (설계: docs/scoring-ai/hitl_design.md)
-- 점수(MD): 자연어 → Haiku가 구조화(장소·차원·점수·주장) → 임시 점수(scoring_overrides)로 즉시 표시
-  → [재채점 버튼] MD 주장을 human: 근거로 넣고 그 장소만 Sonnet judge 재채점(스테이징)
-  → MD 승인 시 게시(scores_v2.json·scoring_scores·카탈로그), 임시 점수 해제
-- 일정(자녀, 부모님 의견 포함): 자연어/명령 → 기존 planner.refine으로 "제안"만 만들고 기록
-  → 승인 시 적용. 승인된 조정은 다음 자연어 해석의 맥락(state.feedback_log)과
-    장소별 신호(signals: 여러 가족이 가볍게 바꾼 곳 → MD 재채점 검토)로 쓰인다.
+- 점수(MD): 자연어 → Haiku가 조정안으로 구조화 → MD 주장을 human: 근거로 넣고 그 장소만 Sonnet 재채점
+  (결과는 스테이징, 게시 안 함) → MD 승인 시 게시(scores_v2.json·scoring_scores·카탈로그)
+- 일정(자녀·부모님): 기존 planner.refine으로 "제안"만 만들고 기록 → 승인 시 확정
 
-원칙: 개인 피드백은 전체 점수를 직접 바꾸지 않는다(MD를 거친다). LLM은 수치를 계산하지 않고
-구조화·근거 기반 판정만 한다. 모든 쓰기는 scoring_ 테이블과 data/scoring 파일에만 한다.
+원칙: 개인 피드백은 전체 점수를 바꾸지 않는다(MD를 거친다). LLM은 구조화·근거 판정만 하고 계산은 코드가 한다.
+상용화 고도화안(임시 점수, 반복 조정 신호, 승인 맥락 기억 등): docs/scoring-ai/hitl_roadmap.md
 """
 import json
 import shutil
@@ -22,7 +18,7 @@ from typing import Any, Optional
 
 from . import db
 from .verify import DIMS
-from .visit_modes import build_modes, load_catalog, load_modes, overrides_path
+from .visit_modes import build_modes, load_modes
 
 ROOT = Path(__file__).resolve().parents[2]
 RUN_DIR = ROOT / "data/scoring/judge/v2"
@@ -33,7 +29,6 @@ CATALOG = ROOT / "data/scoring/visit_modes_v2_2.json"
 PARSE_MODEL = "claude-haiku-5-5"
 PARSE_EFFORT = "low"
 MAX_TEXT = 1000
-SIGNAL_THRESHOLD = 3  # 서로 다른 일정에서 같은 장소를 가볍게 바꾼 횟수
 MODES = ("standard", "short", "full")
 
 
@@ -45,9 +40,9 @@ def new_id(prefix):
     return f"{prefix}-{_now():%Y%m%d%H%M%S}-{uuid.uuid4().hex[:6]}"
 
 
-# ── 호출 제한 (LLM을 쓰는 엔드포인트) ─────────────────────────────
-
 class RateLimiter:
+    """LLM을 쓰는 엔드포인트의 호출 제한(팀 크레딧 보호)."""
+
     def __init__(self, max_calls=20, window_s=3600, clock=time.monotonic):
         self.max_calls, self.window_s, self.clock = max_calls, window_s, clock
         self.calls: dict[str, list[float]] = defaultdict(list)
@@ -62,7 +57,7 @@ class RateLimiter:
         return True
 
 
-# ── 점수 피드백 해석 (Haiku 1회) ─────────────────────────────────
+# ── 점수: MD 자연어 해석 (Haiku 1회) ─────────────────────────────
 
 SCORE_SYSTEM = """너는 여행사 상품 담당자(MD)의 관광지 난이도 의견을 정해진 형식으로 바꾸는 변환기다.
 
@@ -138,29 +133,6 @@ def interpret_score(text, catalog, client=None):
 
 # ── 저장소 ──────────────────────────────────────────────────────
 
-def active_overrides(conn):
-    return db.query(conn, "select id, feedback_id, place_id, mode, dimension, score, reason "
-                          "from scoring_overrides where active order by created_at")
-
-
-def sync_overrides(conn):
-    """DB의 활성 임시 점수를 런타임 카탈로그용 JSON으로 내보낸다(planner·API가 DB 없이 읽음)."""
-    rows = active_overrides(conn)
-    path = overrides_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(db.dumps(rows), encoding="utf-8")
-    _clear_runtime_caches()
-    return rows
-
-
-def _clear_runtime_caches():
-    try:
-        from src.planner.sources import load_places
-        load_places.cache_clear()
-    except ImportError:
-        pass
-
-
 def get_feedback(conn, fid):
     rows = db.query(conn, "select * from scoring_feedback where id=%s", (fid,))
     if not rows:
@@ -177,36 +149,34 @@ def _decide(conn, fid, status, approver):
                  (status, approver, _now(), fid))
 
 
+def _jsonb(v):
+    from psycopg.types.json import Jsonb
+
+    return Jsonb(json.loads(db.dumps(v)))
+
+
 def _mode_scores(catalog, pid):
     return {m: catalog[pid]["modes"][m]["score"] for m in MODES}
 
 
-# ── 점수 조정 흐름 ───────────────────────────────────────────────
+# ── 점수 조정: 의견 → 재채점 → 승인 ──────────────────────────────
 
 def propose_score(conn, text, actor_id=None, interpreter=interpret_score):
-    """MD 의견 → 제안 기록 + 임시 점수(즉시 표시). LLM: Haiku 1회."""
-    verified = load_modes(CATALOG)
-    parsed = interpreter(text, verified)
+    """MD 의견을 조정안으로 바꿔 기록한다(점수는 아직 안 바뀜). LLM: Haiku 1회."""
+    catalog = load_modes(CATALOG)
+    parsed = interpreter(text, catalog)
     if not parsed["adjustments"]:
         return {"feedback_id": None, "question": parsed["question"], "usage": parsed["usage"]}
     places = sorted({a["place_id"] for a in parsed["adjustments"]})
     fid = new_id("fb")
-    before = {pid: _mode_scores(verified, pid) for pid in places}
+    before = {pid: _mode_scores(catalog, pid) for pid in places}
     _save(conn, dict(id=fid, created_at=_now(), actor_role="md", actor_id=actor_id, target="score",
                      place_id=places[0] if len(places) == 1 else None, plan_ref=None, raw_text=text,
                      parsed={"adjustments": parsed["adjustments"], "question": parsed["question"]},
                      status="proposed", approved_by=None, decided_at=None,
                      before_json=before, after_json=None, llm_usage={"parse": parsed["usage"]}))
-    db.upsert(conn, "scoring_overrides", [
-        dict(id=f"{fid}:{i}", feedback_id=fid, place_id=a["place_id"], mode=a["mode"],
-             dimension=a["dimension"], score=int(a["score"]), reason=a["claim"], active=True, created_at=_now())
-        for i, a in enumerate(parsed["adjustments"])])
-    sync_overrides(conn)
-    provisional = load_catalog(CATALOG)
     return {"feedback_id": fid, "status": "proposed", "adjustments": parsed["adjustments"],
-            "question": parsed["question"], "before": before,
-            "provisional": {pid: _mode_scores(provisional, pid) for pid in places},
-            "usage": parsed["usage"]}
+            "question": parsed["question"], "before": before, "usage": parsed["usage"]}
 
 
 def human_evidence(fid, adjustments):
@@ -228,8 +198,7 @@ def rejudge(conn, fid, max_runs=3, judge_fn=None):
     db.upsert(conn, "scoring_evidence", human_evidence(fid, adjustments))
     results, usage = {}, []
     for pid in sorted({a["place_id"] for a in adjustments}):
-        stage = STAGING / fid
-        runs = judge_site(conn, pid, max_runs=max_runs, out_dir=stage, judge_fn=judge_fn)
+        runs = judge_site(conn, pid, max_runs=max_runs, out_dir=STAGING / fid, judge_fn=judge_fn)
         agg = aggregate_site(conn, pid, runs)
         cited = sorted({i for r in runs for d in (r["output"].get("dimensions") or {}).values()
                         if isinstance(d, dict) for i in d.get("evidence_ids", []) if str(i).startswith("human:")})
@@ -241,18 +210,7 @@ def rejudge(conn, fid, max_runs=3, judge_fn=None):
              for pid, r in results.items()}
     conn.execute("update scoring_feedback set status='rejudged', after_json=%s, llm_usage=%s where id=%s",
                  (_jsonb({"results": results}), _jsonb({**(fb["llm_usage"] or {}), "rejudge": usage}), fid))
-    return {"feedback_id": fid, "status": "rejudged", "after": after}
-
-
-def _jsonb(v):
-    from psycopg.types.json import Jsonb
-
-    return Jsonb(json.loads(db.dumps(v)))
-
-
-def _deactivate(conn, fid):
-    conn.execute("update scoring_overrides set active=false where feedback_id=%s", (fid,))
-    sync_overrides(conn)
+    return {"feedback_id": fid, "status": "rejudged", "before": fb["before_json"], "after": after}
 
 
 def approve_score(conn, fid, approver=None, run_dir=RUN_DIR, scores_path=SCORES, catalog_path=CATALOG):
@@ -274,7 +232,11 @@ def approve_score(conn, fid, approver=None, run_dir=RUN_DIR, scores_path=SCORES,
     scores = json.loads(Path(scores_path).read_text(encoding="utf-8"))
     Path(catalog_path).write_text(db.dumps(build_modes(scores, run_dir)), encoding="utf-8")
     _decide(conn, fid, "applied", approver)
-    _deactivate(conn, fid)
+    try:  # 일정 엔진이 새 점수를 읽도록
+        from src.planner.sources import load_places
+        load_places.cache_clear()
+    except ImportError:
+        pass
     return {"feedback_id": fid, "status": "applied"}
 
 
@@ -284,20 +246,11 @@ def reject(conn, fid, approver=None):
         raise ValueError(f"이미 처리된 조정입니다: {fb['status']}")
     _decide(conn, fid, "rejected", approver)
     if fb["target"] == "score":
-        _deactivate(conn, fid)
         conn.execute("delete from scoring_evidence where id like %s", (f"human:{fid}:%",))
     return {"feedback_id": fid, "status": "rejected"}
 
 
-# ── 일정 조정 흐름 ───────────────────────────────────────────────
-
-def lighter_places(before, after):
-    """조정으로 더 가벼워진 관광지: short로 바뀌었거나 일정에서 빠진 곳."""
-    out = set(before.request.place_ids) - set(after.request.place_ids)
-    bm, am = before.state.mode_overrides, after.state.mode_overrides
-    out |= {p for p, m in am.items() if m == "short" and bm.get(p) != "short"}
-    return sorted(out)
-
+# ── 일정 조정: 제안 → 승인 ───────────────────────────────────────
 
 def _metrics(it):
     return {"peak": it.package.peak if it.package else None, "mean": it.package.mean if it.package else None,
@@ -312,47 +265,28 @@ def propose_itinerary(conn, itinerary, commands, feedback, actor_role, actor_id=
     if not resp.applied_commands:  # 되묻기·오류: 기록하지 않고 그대로 돌려준다
         return {"feedback_id": None, "response": resp}
     fid = new_id("fb")
-    lighter = lighter_places(itinerary, resp.itinerary)
-    usage = getattr(interpreter, "budget", None)
+    budget = getattr(interpreter, "budget", None)
     _save(conn, dict(id=fid, created_at=_now(), actor_role=actor_role, actor_id=actor_id, target="itinerary",
-                     place_id=lighter[0] if len(lighter) == 1 else None, plan_ref=itinerary.plan_id,
-                     raw_text=feedback, parsed={"commands": [c.model_dump() for c in resp.applied_commands],
-                                                "lighter_places": lighter, "summary": resp.change_summary},
+                     place_id=None, plan_ref=itinerary.plan_id, raw_text=feedback,
+                     parsed={"commands": [c.model_dump() for c in resp.applied_commands],
+                             "summary": resp.change_summary},
                      status="proposed", approved_by=None, decided_at=None,
                      before_json=_metrics(itinerary),
                      after_json={"metrics": _metrics(resp.itinerary),
                                  "itinerary": resp.itinerary.model_dump(mode="json")},
-                     llm_usage={"parse_usd": round(usage.spent_usd, 6), "calls": usage.calls} if usage else None))
+                     llm_usage={"parse_usd": round(budget.spent_usd, 6), "calls": budget.calls} if budget else None))
     return {"feedback_id": fid, "response": resp}
 
 
 def approve_itinerary(conn, fid, approver=None):
-    """제안된 일정을 확정한다. 승인된 요청은 feedback_log에 남아 다음 자연어 해석의 맥락이 된다."""
+    """제안된 일정을 확정해 돌려준다."""
     from src.planner.schema import Itinerary
 
     fb = get_feedback(conn, fid)
     if fb["target"] != "itinerary" or fb["status"] != "proposed":
         raise ValueError(f"승인할 수 없는 상태입니다: {fb['status']}")
-    it = Itinerary.model_validate(fb["after_json"]["itinerary"])
-    note = (fb["raw_text"] or "") + (" → " if fb["raw_text"] else "") + (fb["parsed"].get("summary") or "").replace("\n", "; ")
-    it.state.feedback_log = [*it.state.feedback_log, note.strip()][-10:]
-    it.request.state.feedback_log = list(it.state.feedback_log)
     _decide(conn, fid, "applied", approver)
-    return it
-
-
-def signals(conn, threshold=SIGNAL_THRESHOLD):
-    """여러 일정에서 반복해서 가볍게 바뀐 관광지 → MD 재채점 검토 후보."""
-    rows = db.query(conn, "select plan_ref, parsed from scoring_feedback "
-                          "where target='itinerary' and status='applied'")
-    plans = defaultdict(set)
-    for r in rows:
-        for pid in (r["parsed"] or {}).get("lighter_places", []):
-            plans[pid].add(r["plan_ref"])
-    catalog = load_modes(CATALOG)
-    return sorted(({"place_id": pid, "name_ko": catalog.get(pid, {}).get("name_ko", pid),
-                    "plans": len(refs), "review_suggested": len(refs) >= threshold}
-                   for pid, refs in plans.items()), key=lambda x: -x["plans"])
+    return Itinerary.model_validate(fb["after_json"]["itinerary"])
 
 
 def history(conn, place_id: Optional[str] = None, limit=50) -> list[dict[str, Any]]:

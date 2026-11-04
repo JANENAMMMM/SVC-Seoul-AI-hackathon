@@ -1,4 +1,4 @@
-"""HITL 피드백 루프 설계 그림 (1920x1080 SVG + PNG). gen_workflow.py의 그림 도구를 그대로 쓴다.
+"""HITL 피드백 루프 그림 2장 (1920x1080 SVG + PNG): hitl_loop(해커톤 단순화 버전), hitl_loop_full(상용화 고도화안). gen_workflow.py의 그림 도구를 그대로 쓴다.
 usage: python gen_hitl.py [out_dir]
 """
 import os
@@ -9,9 +9,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gen_workflow import SUB, Fig, render  # noqa: E402
 
 
-def fig(p):
+def fig_full(p):
     f = Fig()
-    f.title('HITL 피드백 루프 — 사람이 고치고, AI가 근거로 다시 판단한다')
+    f.title('상용화 고도화안 — 임시 점수·반복 조정 신호·승인 맥락까지')
     f.text(80, 140, ['개인 의견은 그 여행만 바꾸고, 전체 점수는 MD를 거쳐 근거로만 바뀐다. LLM은 구조화·근거 판정만 하고 계산은 코드가 한다.'],
            size=21, color=SUB)
 
@@ -88,9 +88,49 @@ def fig(p):
     f.save(p)
 
 
+def fig_simple(p):
+    f = Fig()
+    f.title('사람이 고치고, AI가 근거로 다시 판단한다')
+    f.text(80, 140, ['개인 의견은 그 여행만 바꾸고, 관광지 점수는 MD 의견을 근거로 AI가 다시 채점한 뒤 승인해야 바뀐다.'],
+           size=22, color=SUB)
+    # 장면 ① MD
+    y = 210
+    f.text(80, y, ['**① 하나투어 MD — 관광지 점수 조정**'], size=28, color='#E07B1A')
+    xs = [(80, 'orange', ['**MD 의견**', '"오행산 엘리베이터', '점검이 잦아요"']),
+          (520, 'orange', ['**AI가 정리**', 'Haiku 1회 · 약 $0.0005', '장소·항목·주장']),
+          (960, 'purple', ['**AI가 다시 채점**', '의견 = 근거 1건, 웹으로 확인', 'Sonnet 1~3회 · 평균 $0.16']),
+          (1400, 'blue', ['**MD 승인 → 반영**', '점수 전후·인용 근거 확인', '승인해야 공개 점수 변경'])]
+    for x, col, lines in xs:
+        f.box(x, y + 30, 380, 170, col)
+        f.text(x + 190, y + 85, lines, size=22, anchor='middle', lh=34)
+    for x in (460, 900, 1340):
+        f.arrow(f'M{x},{y + 115} H{x + 56}', 'orange')
+    # 장면 ② 고객
+    y = 520
+    f.text(80, y, ['**② 자녀·부모님 — 일정 조정**'], size=28, color='#2F9E54')
+    xs = [(80, ['**부모님 의견**', '"2일차 힘들어"', '또는 버튼']),
+          (520, ['**AI가 명령으로**', 'Haiku 1회 · 약 $0.0005', '버튼이면 $0']),
+          (960, ['**바뀐 일정 미리보기**', '엔진이 다시 짬', '오행산 → 엘리베이터 코스']),
+          (1400, ['**자녀 승인 → 확정**', '승인 전엔 안 바뀜', '난이도 전후 비교'])]
+    for x, lines in xs:
+        f.box(x, y + 30, 380, 170, 'green')
+        f.text(x + 190, y + 85, lines, size=22, anchor='middle', lh=34)
+    for x in (460, 900, 1340):
+        f.arrow(f'M{x},{y + 115} H{x + 56}', 'green')
+    # 기록
+    f.cyl(80, 790, 380, 150)
+    f.text(270, 858, ['**조정 기록** `scoring_feedback`', '누가·무엇을·전후 값·비용'], size=20, anchor='middle', lh=32)
+    f.box(520, 800, 1260, 150, 'gray', sw=1.5)
+    f.text(545, 845, ['**왜 AI인가** 자연어 의견을 구조로 바꾸고, 사람 말을 그대로 믿지 않고 웹 근거로 교차 확인해 다시 판단',
+                      '**얼마나 드나** 일정 조정 1회 1원 미만 · 점수 재채점 1곳 약 200원 (팀 크레딧 $50 대비 충분)',
+                      '**상용화 시** 임시 점수 즉시 표시 · 여러 가족의 반복 조정 → MD 검토 신호 · 승인 맥락 기억 (고도화안 문서)'],
+           size=20, lh=34)
+    f.save(p)
+
+
 if __name__ == '__main__':
     out = Path(sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.abspath(__file__)))
-    svg = out / 'hitl_loop.svg'
-    fig(svg)
-    render(svg)
-    print('wrote', svg, svg.with_suffix('.png'))
+    for name, draw in (('hitl_loop.svg', fig_simple), ('hitl_loop_full.svg', fig_full)):
+        draw(out / name)
+        render(out / name)
+        print('wrote', name)

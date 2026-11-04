@@ -4,17 +4,17 @@
 
 ## HITL 피드백 루프 (2026-11-04) — 사람이 고치고 AI가 근거로 다시 판단 · feat/scoring-hitl
 
-**왜**: 일정 수정(`/api/planner/refine`)은 확인 없이 바로 적용되고 아무것도 기록하지 않아, 유저·MD의 조정이 다음 판단에 반영되지 않았다. 점수를 조정할 경로도 없었다. 설계·그림 → [hitl_design.md](hitl_design.md)
+**왜**: 일정 수정(`/api/planner/refine`)은 확인 없이 바로 적용되고 아무것도 기록하지 않았다. 관광지 점수를 사람이 조정할 경로도 없었다. 설계 → [hitl_design.md](hitl_design.md), 상용화 고도화안 → [hitl_roadmap.md](hitl_roadmap.md)
 
-- **점수(MD)**: 자연어 → Haiku가 조정안으로 구조화 → 임시 점수 즉시 표시(`scoring_overrides`) → [재채점] MD 주장을 `human:` 근거로 넣고 그 장소만 재채점(스테이징) → MD 승인 시 게시·카탈로그 재생성
-- **일정(자녀·부모님)**: 기존 `refine`으로 제안만 만들고 승인 시 적용. 승인 요약을 `state.feedback_log`로 남겨 다음 자연어 해석의 맥락으로 씀
-- **신호**: 3개 이상 일정에서 가볍게 바뀐 관광지 → MD 재채점 검토 후보(`/api/hitl/signals`)
-- DB: 새 테이블 `scoring_feedback`·`scoring_overrides` (마이그레이션 `20261104190000_scoring_hitl.sql`, RLS on, 적용 완료). 기존 테이블 구조 변경 없음
-- `run_judge`를 `judge_site`(채점)·`aggregate_site`·`publish_site`(게시)로 나눔. CLI 동작은 그대로
-- judge 프롬프트에 `human:` 근거 규칙 1줄 추가(웹으로 교차 확인 후 인용). 루브릭 점수 기준은 그대로라 버전은 v2.2 유지. 프롬프트가 바뀌어 다음 실행에서 캐시를 한 번 다시 씀
-- planner(이지원·노희윤 코드, 사용자 승인 하에 수정): 런타임 카탈로그를 `load_catalog`(검증 + 임시 점수)로, `PlanState.feedback_log` 추가, 자연어 해석에 이전 승인 요청 제공, `/refine` 자연어 호출 제한, 임시 점수 안내 문구
-- 비용: 자연어 조정 1회 Haiku 약 $0.0004 (실측 입력 2,344·출력 304 토큰), 재채점 1곳 평균 $0.157 (버튼 누를 때만)
-- 테스트 10개 추가(전체 221개 통과). 실제 DB E2E 확인 후 시험 행 삭제. 실제 Sonnet 재채점은 미실행
+- **점수(MD)**: 의견 → Haiku가 조정안으로 구조화 → [재채점] 의견을 `human:` 근거로 넣고 그 장소만 Sonnet 재채점(결과는 보관만) → MD 승인 시 공개 점수·카탈로그 갱신
+- **일정(자녀·부모님)**: 기존 `refine`으로 미리보기만 만들고 자녀 승인 시 확정
+- DB: 마이그레이션 `20261104190000_scoring_hitl.sql`로 `scoring_feedback`(사용)·`scoring_overrides`(고도화안용, 비어 있음) 생성, RLS on, 적용 완료. 기존 테이블 구조 변경 없음
+- `run_judge`를 `judge_site`·`aggregate_site`·`publish_site`로 나눔(CLI 동작 그대로)
+- judge 프롬프트에 `human:` 근거 규칙 1줄 추가(웹으로 교차 확인 후 인용). 점수 기준은 그대로라 v2.2 유지. 다음 실행에서 프롬프트 캐시를 한 번 새로 씀
+- planner 코드는 `/refine` 자연어 호출 제한만 추가
+- **단순화**: 처음 구현한 전체 버전(임시 점수 즉시 표시, 반복 조정 신호, 승인 맥락 기억)은 시연에서 드러나지 않아 뺐다. 구현·테스트된 상태로 `archive/scoring-hitl-full`(c055630)에 보관
+- 비용 실측: 해석 1회 Haiku 약 $0.0004~0.0006, 재채점 1곳 평균 $0.157(버튼 누를 때만)
+- 테스트 6개 추가(전체 217개 통과). 실제 DB E2E 후 시험 행 삭제. 실제 Sonnet 재채점은 미실행
 
 ## v2.2 (2026-11-03) — 관광지별 사실은 웹 검색으로, 비용 약 70% 절감 · 92186b8
 

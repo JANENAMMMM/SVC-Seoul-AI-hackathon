@@ -1,8 +1,8 @@
-"""HITL 조정 API: 제안 → (점수는 재채점) → 승인/거절. 설계: docs/scoring-ai/hitl_design.md
+"""HITL 조정 API(해커톤 단순화 버전): 제안 → (점수는 재채점) → 승인/거절. 설계: docs/scoring-ai/hitl_design.md
 
 - 일정: POST /api/hitl/itinerary/preview → POST /api/hitl/{id}/approve (확정 일정 반환)
 - 점수(MD): POST /api/hitl/score/preview → POST /api/hitl/score/{id}/rejudge → POST /api/hitl/{id}/approve
-- 공통: POST /api/hitl/{id}/reject, GET /api/hitl/feedback, GET /api/hitl/signals
+- 공통: POST /api/hitl/{id}/reject, GET /api/hitl/feedback
 
 MD 엔드포인트는 환경변수 HITL_MD_TOKEN이 있으면 X-MD-Token 헤더가 같아야 한다(값은 로그·응답에 남기지 않음).
 LLM을 쓰는 엔드포인트는 사용자별 시간당 호출 수를 제한한다(팀 크레딧 보호).
@@ -126,8 +126,3 @@ def feedback(place_id: Optional[str] = None, limit: int = 50):
     with db.connect() as conn:
         return hitl.history(conn, place_id, min(limit, 200))
 
-
-@router.get("/signals")
-def signals(threshold: int = hitl.SIGNAL_THRESHOLD):
-    with db.connect() as conn:
-        return hitl.signals(conn, threshold)

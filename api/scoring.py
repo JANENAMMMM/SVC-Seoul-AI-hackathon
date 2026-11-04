@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from src.scoring.itinerary import evaluate_itinerary
-from src.scoring.visit_modes import load_catalog as load_modes  # verified + MD provisional (HITL)
+from src.scoring.visit_modes import load_modes
 
 
 router = APIRouter(prefix="/api/scoring", tags=["scoring"])
@@ -23,7 +23,7 @@ class Itinerary(BaseModel):
 @router.get("/places")
 def places():
     catalog = load_modes()
-    return [{"place_id": pid, "name_ko": place["name_ko"], "status": place["status"], "hitl_pending": place.get("hitl_pending", []),
+    return [{"place_id": pid, "name_ko": place["name_ko"], "status": place["status"],
              "modes": {key: {"name": mode["name"], "score": mode["score"]}
                        for key, mode in place["modes"].items()}}
             for pid, place in catalog.items()]
