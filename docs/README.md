@@ -12,4 +12,4 @@
 | `presentation/day1/pitch.html` | 1일차 발표 슬라이드 (브라우저에서 ←/→로 넘김) |
 | `presentation/day1/pitch.pdf` | 슬라이드 PDF (16:9, 10쪽) |
 | `backend/parent-profile.md` | 부모님 프로필 API (`POST /api/profile`) 필드·사용법 |
-| `restaurants/restaurant-collector.md` | 관광지 주변 식당 수집: 흐름·입출력, **Google 데이터 저장 규칙과 약관**, LLM 사용 미결정 사항 |
+| `restaurants/restaurant-collector.md` | 관광지 주변 식당 수집: 고르는 로직·Claude 한식 판단, **저장·리뷰 규칙**, 한계 |

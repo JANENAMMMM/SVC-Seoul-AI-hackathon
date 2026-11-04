@@ -1,6 +1,8 @@
 """Google Places 장소 타입을 팀 음식 분류로 바꾸는 규칙. LLM을 쓰지 않는다.
 
 타입 목록: https://developers.google.com/maps/documentation/places/web-service/place-types (Table A)
+
+타입 문자열을 우리 분류표로 바꾸는 순수 계산이고 아무것도 저장하지 않는다.
 """
 
 from typing import Literal, Optional

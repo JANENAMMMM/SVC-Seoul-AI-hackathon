@@ -1,0 +1,12 @@
+{
+  "_note": "Google 영업시간이 없거나 '현재 상태 문구'뿐인 관광지의 수동 영업시간. 모두 가정값이며 팀 확인 전까지 assumptions에 노출한다.",
+  "places": {
+    "dad-03": { "intervals": [["00:00", "24:00"]], "confidence": "medium", "note": "개방형 시가지 가정(입장권 구역 시간 미반영)" },
+    "dad-04": { "intervals": [["06:00", "21:00"]], "confidence": "medium", "note": "Google 스냅샷 '21시 마감'에서 추정, 개장 시각은 가정" },
+    "dad-05": { "intervals": [["00:00", "24:00"]], "confidence": "high", "note": "개방형 해변" },
+    "dad-10": { "intervals": [["15:00", "22:00"]], "confidence": "high", "note": "팀 확인 완료(2026-11-04)" },
+    "dad-12": { "intervals": [["06:00", "17:00"]], "confidence": "medium", "note": "Google 스냅샷 '06시 개장'에서 추정, 마감은 가정" },
+    "dad-13": { "intervals": [["00:00", "24:00"]], "confidence": "high", "note": "도로·전망 정차지" },
+    "dad-14": { "intervals": [["17:00", "22:00"]], "confidence": "medium", "note": "Google 스냅샷 '22시 마감'에서 추정, 개장 시각은 가정" }
+  }
+}
