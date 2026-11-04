@@ -5,7 +5,7 @@
 LLM(Claude)은 일정을 직접 쓰지 않는다. 자연어 피드백을 이 엔진의 명령으로 바꾸는 일만 맡는다(8장).
 
 - 브랜치: `feat/route-planner`
-- 코드: `src/planner/`, `api/routes/planner.py`
+- 코드: `src/planner/` (엔진). 화면용 API는 `api/ui.py`
 - 테스트: `tests/test_planner_*.py` (99개 통과, 전체 210개)
 - 담당: 지원(규칙 엔진·명령 적용기) / 희윤(식당 데이터·LLM 변환) / 재은(난이도 점수) / 천지(UI)
 
@@ -20,16 +20,26 @@ LLM(Claude)은 일정을 직접 쓰지 않는다. 자연어 피드백을 이 엔
 사용자 피드백 ─► (Claude 변환) ─► EditCommand ─► 검증 ─► state 수정 ─► 같은 엔진으로 재생성 ─► 변경 요약
 ```
 
-서버는 아무것도 저장하지 않는다. 클라이언트가 이전 일정(`state` 포함)을 다시 보내면 그 위에서 수정한다.
+엔진은 아무것도 저장하지 않는다. 이전 일정(`state` 포함)을 다시 넘기면 그 위에서 수정한다. 여행 저장·승인은 화면용 API(`api/ui.py`)가 맡는다.
 
-## 2. API
+## 2. 엔진을 부르는 방법
 
-| 엔드포인트 | 용도 |
+엔진 전용 HTTP API는 없다(화면이 쓰지 않아 2026-11-04에 삭제). 엔진은 함수로 부른다.
+
+| 함수 | 용도 |
 |---|---|
-| `POST /api/planner/plan` | 일정 생성 |
-| `POST /api/planner/refine` | 명령(또는 피드백)으로 일정 수정 |
+| `build_itinerary(PlanRequest, rest=None)` | 일정 생성. 잘못된 입력(없는 관광지 등)은 `ValueError` |
+| `refine(itinerary, commands, feedback=None, rest=None, interpreter=None)` | 명령(또는 피드백)으로 일정 수정 |
 
-잘못된 입력(없는 관광지, 범위 밖 일차 등)은 `422`. 실행은 `uv run uvicorn api.main:app --reload`.
+화면은 `api/ui.py`의 API가 위 함수를 불러서 쓴다.
+
+| 화면용 API | 엔진 호출 |
+|---|---|
+| `POST /api/ui/trips` | `build_itinerary` (실패하면 422) |
+| `POST /api/ui/trips/{id}/preview` | `refine` + 자연어 변환기. 변경안을 저장만 하고 일정은 아직 안 바뀜 |
+| `POST /api/ui/trips/{id}/proposals/{fid}/approve` | 엔진 호출 없이 저장된 변경안을 확정 |
+
+실행은 `uv run uvicorn api.main:app --reload`. 식당 데이터 경로는 5장.
 
 ### 입력 `PlanRequest`
 
@@ -109,13 +119,13 @@ LLM(Claude)은 일정을 직접 쓰지 않는다. 자연어 피드백을 이 엔
 
 ## 4. 피드백 재생성
 
-엔진은 아래 **닫힌 명령 집합**만 받는다. `/refine`에 `commands`를 직접 보내도 되고, `feedback`(자연어)만 보내면 서버가 Claude로 이 명령들로 바꿔서 적용한다(8장).
+엔진은 아래 **닫힌 명령 집합**만 받는다. `refine`에 `commands`를 직접 주거나, `feedback`(자연어)과 `interpreter`를 주면 Claude가 이 명령들로 바꿔서 적용한다(8장).
 
-```json
-POST /api/planner/refine
-{ "itinerary": { ... 이전 응답 ... },
-  "commands": [ { "op": "swap_restaurant", "day": 2, "meal": "lunch" } ],
-  "feedback": "자연어 원문(선택). commands가 없을 때만 명령으로 변환된다" }
+```python
+refine(itinerary,                                                  # 이전 결과(state 포함)
+       commands=[SwapRestaurant(op="swap_restaurant", day=2, meal="lunch")],
+       feedback="자연어 원문(선택). commands가 없고 interpreter가 있을 때만 명령으로 변환된다",
+       interpreter=None)
 ```
 
 | `op` | 필드 | 동작 |
@@ -133,7 +143,7 @@ POST /api/planner/refine
 규칙
 - **전부 성공하거나 전부 실패**한다. 하나라도 잘못되면 일정은 그대로 두고 `clarification`에 되묻는 문장을 담아 돌려준다.
 - 응답: `itinerary`(새 일정), `applied_commands`, `change_summary`(무엇이 바뀌었는지), `clarification`.
-- 명령 없이 자연어만 오면 변환기가 명령으로 바꿔 적용한다. `ANTHROPIC_API_KEY`가 없으면 "LLM 변환이 연결되지 않았다"는 안내(`NO_LLM_MESSAGE`)를 돌려준다.
+- 명령 없이 자연어만 오면 변환기(`interpreter`)가 명령으로 바꿔 적용한다. 변환기가 없거나 `ANTHROPIC_API_KEY`가 없으면 "LLM 변환이 연결되지 않았다"는 안내(`NO_LLM_MESSAGE`)를 돌려준다.
 - 변환 결과 중 명령으로 만들 수 없는 요청(`unsupported`)과 되묻는 질문은 `clarification`에 담긴다. 일부만 변환되면 가능한 명령은 적용되고 `clarification`에 나머지가 안내된다.
 - 아직 없는 명령: `set_food_pref`, `avoid_ingredient`, `suggest_alternatives`. 이런 요청은 변환 단계에서 `unsupported`로 안내된다.
 
@@ -190,7 +200,7 @@ uv run uvicorn api.main:app --reload
 
 ## 8. 자연어 피드백 변환 (LLM)
 
-자연어 피드백을 4장의 닫힌 명령 집합으로 바꿔서 `/refine`에 넣는다. **LLM은 일정을 직접 쓰지 않고 명령만 만든다.** 일정은 같은 엔진이 다시 짠다.
+자연어 피드백을 4장의 닫힌 명령 집합으로 바꿔서 `refine`에 넣는다. **LLM은 일정을 직접 쓰지 않고 명령만 만든다.** 일정은 같은 엔진이 다시 짠다.
 
 ```text
 feedback ─► FeedbackInterpreter(Claude) ─► commands / unsupported / question
@@ -204,7 +214,7 @@ feedback ─► FeedbackInterpreter(Claude) ─► commands / unsupported / ques
 | 조건 | 결과 |
 | --- | --- |
 | `commands`가 있음 | LLM을 부르지 않고 명령을 그대로 적용 (피드백 문장은 무시) |
-| `commands`가 없고 `feedback`만 있음, `ANTHROPIC_API_KEY` 있음 | LLM이 명령으로 변환한 뒤 적용 |
+| `commands`가 없고 `feedback`과 변환기가 있음 (화면용 API는 `ANTHROPIC_API_KEY`가 있을 때 변환기를 붙임) | LLM이 명령으로 변환한 뒤 적용 |
 | 같은 경우인데 키가 없음 | 이전처럼 `NO_LLM_MESSAGE` 안내 |
 | 변환된 명령이 하나라도 검증에 실패 (날짜 범위 밖, 없는 장소 등) | 일정 그대로, `clarification`에 이유 |
 | 일부만 명령으로 바꿀 수 있음 | 바꿀 수 있는 것은 적용하고, 나머지는 `clarification`에 안내 |
@@ -255,5 +265,5 @@ feedback ─► FeedbackInterpreter(Claude) ─► commands / unsupported / ques
 | --- | --- |
 | `src/planner/feedback.py` | 변환기 `FeedbackInterpreter`, 도구 스키마, 일정 요약 |
 | `src/planner/edit.py` | `refine(..., interpreter=None)` 에서 변환기를 호출 |
-| `api/routes/planner.py` | 키가 있을 때 변환기를 만들어 `refine`에 연결 |
+| `api/ui.py` | `preview`가 키가 있을 때 변환기를 만들어 `refine`에 연결. 여행당 시간당 30회 호출 제한 |
 | `tests/test_planner_feedback.py` | 변환기 테스트 |

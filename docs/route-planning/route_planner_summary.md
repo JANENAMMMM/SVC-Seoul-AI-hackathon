@@ -11,26 +11,28 @@
 
 | 되는 것 | 아직 안 되는 것 |
 |---|---|
-| 일정 생성·수정 API 2개 | 현재 명령 9개로 표현할 수 없는 요청(재료 기피 추가, 비는 날 채우기 등)은 반영되지 않고 안내만 나옴 |
+| 일정 생성·수정 엔진(`build_itinerary`, `refine`), 화면용 API는 `api/ui.py` | 현재 명령 9개로 표현할 수 없는 요청(재료 기피 추가, 비는 날 채우기 등)은 반영되지 않고 안내만 나옴 |
 | 도보·택시 이동, 연속 보행 한도, 휴식 | 실제 길찾기(이동은 직선거리 추정) |
-| **자연어 피드백 → 명령 변환(Claude)**, `/refine`에 `feedback`만 보내면 적용 | 변환 정확도 확인(문장 1개로만 시험) |
+| **자연어 피드백 → 명령 변환(Claude)**, `feedback`만 주면 적용 | 변환 정확도 확인(문장 1개로만 시험) |
 | 점심·저녁 식당 선택, 한식 빈도, 식당 고정·교체 | 날 사이 균형(한 곳만 있는 날), 식당에서 다음 장소로 바로 가는 이동 |
 | 식당 태그(`venue_type`, `ingredient_tags`)로 식사 장소·기피 재료 거름 (데모 식당 데이터, 돼지고기 기피 일정 1건으로 확인) | - |
 | 영업시간·휴무 반영, 난이도 상한(재은님 모듈) | 직접 입력한 기피 재료(`avoid_other`) 반영 |
 | 테스트 전체 210개 통과 (일정 99개) | `set_food_pref`, `avoid_ingredient`, `suggest_alternatives` 명령 |
 
-## API
+## 엔진 호출
 
-| 엔드포인트 | 용도 |
+엔진 전용 HTTP API는 없다(화면이 쓰지 않아 삭제). 함수로 부른다.
+
+| 함수 | 용도 |
 |---|---|
-| `POST /api/planner/plan` | 일정 생성 (`travelers`, `place_ids`, `days`, `start_date`) |
-| `POST /api/planner/refine` | 명령으로 일정 수정 (`itinerary`, `commands`) |
+| `build_itinerary(PlanRequest, rest=None)` | 일정 생성 (`travelers`, `place_ids`, `days`, `start_date`) |
+| `refine(itinerary, commands, feedback, rest, interpreter)` | 명령으로 일정 수정 |
 
-서버는 저장하지 않는다. 수정할 때는 **이전 응답 전체(`state` 포함)를 그대로 다시 보낸다.**
+엔진은 저장하지 않는다. 수정할 때는 **이전 결과 전체(`state` 포함)를 그대로 다시 넘긴다.** 화면은 `api/ui.py`가 여행을 DB에 저장하고 승인 단계를 둔다.
 
 ## 자연어 피드백과 수정 명령
 
-`/refine`에 `commands`를 직접 보내거나, `feedback`(자연어)만 보내면 서버가 Claude Haiku 5.5로 아래 명령 목록으로 바꿔 적용한다. 자세한 내용은 [route_planner.md](route_planner.md) 8장.
+`commands`를 직접 주거나, `feedback`(자연어)과 변환기를 주면 Claude Haiku 5.5로 아래 명령 목록으로 바꿔 적용한다. 자세한 내용은 [route_planner.md](route_planner.md) 8장.
 
 | `op` | 필드 | 동작 |
 |---|---|---|
