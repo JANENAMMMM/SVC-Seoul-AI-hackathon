@@ -50,7 +50,7 @@
 <rect x="370" y="395" width="300" height="140" rx="16" fill="#F3EDFF" stroke="#7B4FD6" stroke-width="2.5"/>
 <text x="520" y="433.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">재채점 (버튼)</tspan></text>
 <text x="520" y="464.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">MD 주장 = <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">human:</tspan> 근거</text>
-<text x="520" y="495.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">Sonnet 1~3회 (~$0.16)</text>
+<text x="520" y="495.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">Sonnet medium (1회 ~$0.065)</text>
 <path d="M1430,465 H1374" fill="none" stroke="#E07B1A" stroke-width="3" marker-end="url(#m-orange)"/>
 <path d="M1080,465 H1024" fill="none" stroke="#E07B1A" stroke-width="3" marker-end="url(#m-orange)"/>
 <path d="M730,465 H674" fill="none" stroke="#E07B1A" stroke-width="3" marker-end="url(#m-orange)"/>
@@ -93,11 +93,11 @@
 <rect x="80" y="900" width="860" height="150" rx="16" fill="#F1F3F5" stroke="#868E96" stroke-width="1.5"/>
 <text x="105" y="940.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">조정 1회당 LLM 호출 (팀 크레딧 $50)</tspan></text>
 <text x="105" y="970.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">일정 버튼 0회 $0 · 일정 자연어 Haiku 1회 ~$0.0004 (실측 2.3K/0.3K 토큰)</text>
-<text x="105" y="1000.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">MD 의견 Haiku 1회 ~$0.0004 · 재채점은 버튼·승인 때만 Sonnet 1~3회 평균 $0.157</text>
+<text x="105" y="1000.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">MD 의견 Haiku 1회 ~$0.0004 · 재채점은 버튼 누를 때만 Sonnet medium 1회 약 $0.065</text>
 <text x="105" y="1030.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">호출 제한: 해석 30회/시간 · 재채점 5회/일 (사용자별)</text>
 <rect x="980" y="900" width="860" height="150" rx="16" fill="#F1F3F5" stroke="#868E96" stroke-width="1.5"/>
 <text x="1005" y="940.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">심사기준 연결</tspan></text>
 <text x="1005" y="970.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">AI 활용 구체성: 자연어 구조화(Haiku) → 근거 재채점(Sonnet) → 인용 검증</text>
 <text x="1005" y="1000.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">사람 의견이 <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">human:</tspan> 근거로 남아 다음 채점이 실제로 달라진다</text>
-<text x="1005" y="1030.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">실현가능성: 조정 1회 1원 미만, 재채점 1곳 약 200원 · 기존 엔진 재사용</text>
+<text x="1005" y="1030.0" font-size="19" fill="#212529" font-weight="400" text-anchor="start">실현가능성: 조정 1회 1원 미만, 재채점 1곳 약 90원 · 기존 엔진 재사용</text>
 </svg>
