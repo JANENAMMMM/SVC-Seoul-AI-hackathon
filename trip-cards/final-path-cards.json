@@ -1,0 +1,78 @@
+{
+ "_note": "final-path.json(엔진 실행 결과)의 관광지 순서·시각 기준. desc는 data/scoring/visit_modes_v2_2.json의 short 모드 조건(편하게 보는 방법)을 쉬운 말로 줄인 것.",
+ "days": [
+  {
+   "day": 1,
+   "stops": [
+    {
+     "time": "오전 9:10",
+     "place": "용다리",
+     "desc": "카페 테라스에서 편하게 구경해요",
+     "photo": "dragon-bridge/01.jpg",
+     "place_vi": "Cầu Rồng"
+    },
+    {
+     "time": "오전 10:27",
+     "place": "오행산(마블마운틴)",
+     "desc": "엘리베이터로 올라 편하게 봐요",
+     "photo": "marble-mountains/01.jpg"
+    },
+    {
+     "time": "오후 3:00",
+     "place": "아시아파크(썬휠)",
+     "desc": "썬휠 중심으로 1시간쯤 둘러봐요",
+     "photo": "asia-park/01.jpg",
+     "place_vi": "Asia Park"
+    }
+   ]
+  },
+  {
+   "day": 2,
+   "stops": [
+    {
+     "time": "오전 9:53",
+     "place": "호이안 구시가지",
+     "desc": "핵심 거리만 천천히, 쉬어가며 봐요",
+     "photo": "hoi-an-old-town/01.jpg"
+    },
+    {
+     "time": "오후 3:45",
+     "place": "참 조각 박물관",
+     "desc": "1층 전시 위주로 둘러봐요",
+     "photo": "cham-museum/01.jpg",
+     "place_vi": "Bảo tàng Điêu khắc Chăm"
+    },
+    {
+     "time": "오후 4:55",
+     "place": "한시장",
+     "desc": "1층만 가볍게 둘러봐요",
+     "photo": "han-market/01.jpg",
+     "place_vi": "Chợ Hàn"
+    }
+   ]
+  },
+  {
+   "day": 3,
+   "stops": [
+    {
+     "time": "오전 9:39",
+     "place": "하이반 고개",
+     "desc": "정상 전망대와 카페에서 쉬어가요",
+     "photo": "hai-van-pass/01.jpg"
+    },
+    {
+     "time": "오전 11:21",
+     "place": "영흥사",
+     "desc": "차로 위까지 올라 본당을 봐요",
+     "photo": "linh-ung/01.jpg"
+    },
+    {
+     "time": "오후 2:44",
+     "place": "핑크성당",
+     "desc": "정문 앞에서 외관을 구경해요",
+     "photo": "da-nang-cathedral/01.jpg"
+    }
+   ]
+  }
+ ]
+}
