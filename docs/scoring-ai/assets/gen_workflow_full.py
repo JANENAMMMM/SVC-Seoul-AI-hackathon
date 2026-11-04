@@ -58,7 +58,7 @@ a('</defs>')
 a(f'<rect width="{W}" height="{H}" fill="#FFFFFF"/>')
 
 # title
-text(30, 40, ['**ScoringAI 워크플로우 (v2.1)**'], size=26)
+text(30, 40, ['**ScoringAI 워크플로우 (v2.2)**'], size=26)
 text(370, 40, ['수집 → DB 저장 → LLM 채점 → 검증 → 집계 → 활용'], size=17, color=SUB)
 
 # lanes
@@ -114,16 +114,16 @@ box(DX+20, 448, DW-40, 76, 'blue', rx=6, sw=1)
 text(DX+32, 467, ['**근거 등급**', 'A 측정 기후 · B GPS(궤적 5개 이상)·초기 조사 사실', 'C 지도 반경·리뷰 통계·GPS 표본 부족'], size=11.5, lh=17)
 dtable(540, 140, 'D3 `scoring_reviews`', ['리뷰 원문 1,994건 /', '출처·언어·여행 유형·평점'], ['예: `rev:dad-02:<번호>` 리뷰 원문 한 건'])
 text(DX, 728, ['**채점하면서 쌓이는 기록**'], size=13, color=COLS['blue'])
-dtable(740, 120, 'D4 `scoring_web_cache`', ['judge가 웹에서 찾아 인용한 페이지 103개', '/ URL·검색어·인용 문장'])
-dtable(905, 115, 'D5 `scoring_judgments`', ['채점 실행 원본 67회 /', '출력·인용 통과 여부·토큰'])
-dtable(1045, 115, 'D6 `scoring_scores`', ['최종 점수 17행(v2.1 15곳) /', '차원 점수·종합·상태·조건'])
+dtable(740, 120, 'D4 `scoring_web_cache`', ['judge가 웹에서 찾아 인용한 페이지 242개', '/ URL·검색어·인용 문장'])
+dtable(905, 115, 'D5 `scoring_judgments`', ['채점 실행 원본 126회 /', '출력·인용 통과 여부·토큰'])
+dtable(1045, 115, 'D6 `scoring_scores`', ['최종 점수 32행(v2.2 15곳) /', '차원 점수·종합·상태·조건'])
 # load_evidence -> D1 D2 D3
 for ty in (230, 360, 600):
     arrow(f'M400,{ty} H{DX-3}', 'gray')
 
 # ---------------- lane 3
 box(840, 110, 560, 760, 'purple', rx=16, sw=2.5)
-text(1120, 142, ['**Claude Sonnet judge (rubric v2.1)**'], size=21, anchor='middle', color='#4B2A9E')
+text(1120, 142, ['**Claude Sonnet judge (rubric v2.2)**'], size=21, anchor='middle', color='#4B2A9E')
 # step 2 tools (left column)
 LX, LW = 860, 230
 text(LX, 172, ['**2. 도구로 근거 찾기** (최대 12회)'], size=13.5, color='#4B2A9E')
@@ -166,7 +166,7 @@ arrow(f'M{LX+LW+4},480 H{RX-3}', 'purple', sw=1.5)
 # resubmit loop
 arrow(f'M{RX+200},660 C{RX+200},715 {RX+90},715 {RX+90},664', 'red', dash='6 4', sw=2)
 text(RX+145, 735, ['형식 틀리면 1회 재제출 요청'], size=12, color=COLS['red'], anchor='middle')
-text(RX+12, 775, ['**계단 수·엘리베이터 운행 등** 시기마다', '바뀌는 사실은 채점 때 **웹 검색**', '(v2.1: 31회, 인용 103개)'], size=12, color='#4B2A9E', lh=17)
+text(RX+12, 775, ['**계단 수·엘리베이터 운행 등** 시기마다', '바뀌는 사실은 채점 때 **웹 검색**', '(v2.2: 17회, 누적 인용 242개)'], size=12, color='#4B2A9E', lh=17)
 arrow(f'M{RX-4},780 H{LX+212}', 'purple', dash='2 3', sw=1.2)
 
 # ---------------- lane 4
@@ -190,7 +190,7 @@ text(1792, 385, ['통과 →', '이 차원 유효'], size=12, color=COLS['green'
 arrow(f'M{KX+200},{KY+KH} V717', 'red', dash='6 4')
 box(KX+110, 720, 200, 60, 'red', rx=8, dash='6 4')
 text(KX+210, 744, ['하나라도 어김 →', '이 차원은 이번 실행 무효'], size=12, color=COLS['red'], anchor='middle', lh=17)
-text(KX+KW, 810, ['v2.1 실행 65회 중 56회 전 차원 통과'], size=12, color=SUB, anchor='end')
+text(KX+KW, 810, ['v2.2 최종 실행 28회 중 22회 전 차원 통과'], size=12, color=SUB, anchor='end')
 # 대조 bus D2/D3/D4 -> item 3
 BX = 798
 for ty in (390, 650, 830):
@@ -201,9 +201,9 @@ text(1130, 888, ['대조 (D2·D3·D4의 ID·수치) → 검증 3·4번'], size=1
 # ---------------- lane 5
 AX, AW, AY, AH = 1835, 330, 360, 250
 box(AX, AY, AW, AH, 'green', rx=10, sw=2)
-yy = text(AX+14, AY+28, ['**같은 관광지를 3회 실행 →**', '**유효한 실행만 차원별 중앙값**'], size=14.5, lh=21)
+yy = text(AX+14, AY+28, ['**필요할 때만 최대 3회 실행 →**', '**유효 실행 중 중앙값에 가장 가까운 것**'], size=14.5, lh=21)
 text(AX+14, yy+8, ['• 종합 점수 = `climb`×3 + `walking`×3', '  + `heat`×2 + `crowd`×1 의 가중평균', '  (코드 계산, LLM이 내지 않음)',
-                   '• 등급 표시: 1~3 하 · 4~6 중 · 7~10 상', '• 확신도: 3회 중 가장 낮은 값'], size=12.5, lh=19)
+                   '• 등급 표시: 1~3 하 · 4~6 중 · 7~10 상', '• 확신도: 실행 중 가장 낮은 값'], size=12.5, lh=19)
 # ok -> scores_v2.json
 arrow(f'M{AX+AW-40},{AY} V162 H2197', 'green', sw=2.5)
 text(AX+AW-50, 200, ['**ok** → 공개 점수'], size=13, color=COLS['green'], anchor='end')
@@ -211,11 +211,11 @@ text(AX+AW-50, 218, ['최종 → `scores_v2.json`'], size=11.5, color=SUB, ancho
 # needs_review
 arrow(f'M{AX+210},{AY+AH} V687', 'red', dash='6 4')
 box(1905, 690, 260, 92, 'red', rx=8, dash='6 4')
-text(2035, 714, ['실행 간 차이 >2점 · 유효 실행 없음 ·', '무효 실행 있음 →', '`needs_review`(검수 대기)'], size=12, color=COLS['red'], anchor='middle', lh=18)
+text(2035, 714, ['실행 간 차이 >2점 · 유효 실행 없음 ·', '무효 + 유효 2회 미만·불일치 →', '`needs_review`(검수 대기)'], size=12, color=COLS['red'], anchor='middle', lh=18)
 arrow('M2035,782 V817', 'red', dash='6 4')
 box(1905, 820, 260, 80, 'gray', rx=8)
 a('<circle cx="1932" cy="846" r="8" fill="#868E96"/><path d="M1918,872 q14,-20 28,0 z" fill="#868E96"/>')
-text(1956, 846, ['**사람 검수**', '현재 껌탄 코코넛 마을,', '참 조각 박물관'], size=12, lh=17)
+text(1956, 846, ['**사람 검수**', '현재 한시장', '(혼잡 2점 차이)'], size=12, lh=17)
 # storage -> D5, D6
 arrow(f'M{AX+30},{AY+AH} V962 H{DX+DW+3}', 'dark')
 arrow(f'M{AX+30},962 V1102 H{DX+DW+3}', 'dark')
@@ -228,7 +228,7 @@ def obox(y, h, lines, size=12.5, lh=18.5):
     box(OX, y, OW, h, 'orange', rx=10, sw=1.8)
     text(OX+14, y+24, lines, size=size, lh=lh)
 obox(140, 44, ['`scores_v2.json`'], size=14)
-obox(215, 190, ['**관람 방식 카탈로그**', '`visit_modes_v2_1.json`', '15곳 × 3방식:', '  `standard` 일반', '  `short` 이동 보조·짧은 관람', '  `full` 전체 관람', '예: 오행산 short 5점 · standard 7점 ·', '  full 7점'])
+obox(215, 190, ['**관람 방식 카탈로그**', '`visit_modes_v2_2.json`', '15곳 × 3방식:', '  `standard` 일반', '  `short` 이동 보조·짧은 관람', '  `full` 전체 관람', '예: 오행산 short 5점 · standard 6점 ·', '  full 7점'])
 obox(440, 180, ['**패키지 난이도** (`package_difficulty.py`)', '입력: 일정표(관광지·방식·일정표 출처·', '  경로 메모)', '규칙: 하루 최고 점수 + 6점 이상 연속', '  방문마다 +1 (하루 최대 +2)', '예: 바나힐(6) → 오행산 전체(7) = 8점', '  / 오행산을 short로 바꾸면 6점'])
 obox(655, 120, ['**API** (`api/scoring.py`)', '저장 파일만 읽음, DB·Claude 호출 없음', '`GET /api/scoring/places`', '`GET /places/{id}`', '`POST /packages/evaluate`'])
 arrow(f'M{OX+OW/2},184 V212', 'orange', sw=2.2)

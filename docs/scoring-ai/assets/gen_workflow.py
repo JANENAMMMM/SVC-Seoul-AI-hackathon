@@ -140,7 +140,7 @@ def fig2(p):
     f.cloud(80, jy + 190, 210, 110)
     f.text(185, jy + 280, ['**웹**'], size=28, anchor='middle')
     f.text(185, jy + 345, ['계단 수·엘리베이터 운행 등', '시기마다 바뀌는 사실'], size=20, anchor='middle', color=SUB, lh=26)
-    f.text(185, jy + 415, ['인용한 페이지는 DB에 기록', '(`scoring_web_cache` 103개)'], size=19, anchor='middle', color=COLS['purple'], lh=26)
+    f.text(185, jy + 415, ['인용한 페이지는 DB에 기록', '(`scoring_web_cache` 242개)'], size=19, anchor='middle', color=COLS['purple'], lh=26)
     # 2 Claude
     jx, jw = 400, 360
     f.box(jx, jy, jw, jh, 'purple')
@@ -163,7 +163,7 @@ def fig2(p):
     ax, aw = 1210, 300
     f.box(ax, jy, aw, jh, 'green')
     f.text(ax + 30, jy + 60, ['**4** 집계 (코드)'], size=30)
-    f.text(ax + 30, jy + 125, ['3번 반복 → 중앙값'], size=23)
+    f.text(ax + 30, jy + 125, ['최대 3번 → 중앙값'], size=23)
     f.text(ax + 30, jy + 200, ['종합 점수는', '코드가 가중평균'], size=23)
     f.arrow(f'M{vx + vw},{jy + jh / 2} H{ax - 6}', 'dark')
     f.box(ax, 760, aw, 90, 'red', dash='8 6')
