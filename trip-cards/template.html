@@ -2,68 +2,82 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>여행 일정 카드</title>
+<title>여행지 소개 카드</title>
 <style>
-  /* 1080×1350 (4:5) 카드. 노인 친화: 본문 최소 34px, 대비 7:1 이상, 한 줄 한 정보 */
-  :root {
-    --brand: #5e2bb8; --brand-dark: #3f1c82; --brand-soft: #f3edfc;
-    --ink: #1a1a1a; --text: #2b2b2b; --muted: #55505f;
-    --canvas: #fbf8f2; --line: #e3dcec; --accent: #b4491f;
-  }
+  /* 1080×1350. 여행지 1곳 = 카드 1장. 상단 사진 + 하단 시간·장소 + 전체 동선(세로) */
+  :root { --brand:#5e2bb8; --brand-dark:#3f1c82; --brand-soft:#f3edfc; --ink:#1a1a1a; --text:#2b2b2b; --muted:#6b6577; --canvas:#fbf8f2; --line:#cfc4e3; }
   * { box-sizing: border-box; margin: 0; }
-  html, body { width: 1080px; height: 1350px; }
-  body { font-family: "Pretendard", "Noto Sans CJK KR", "Noto Sans KR", sans-serif; background: var(--canvas); color: var(--text); word-break: keep-all; }
-  .card { width: 1080px; height: 1350px; display: flex; flex-direction: column; }
+  html, body { width:1080px; height:1350px; }
+  body { font-family:"Pretendard","Noto Sans CJK KR","Noto Sans KR",sans-serif; background:var(--canvas); color:var(--text); word-break:keep-all; }
+  .card { width:1080px; height:1350px; display:flex; flex-direction:column; }
 
-  .hero { position: relative; height: 560px; flex: none; background: #222 center/cover no-repeat; }
-  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.05) 35%, rgba(20,8,45,.82) 100%); }
-  .hero > * { position: relative; z-index: 1; }
-  .badge { position: absolute; left: 56px; top: 48px; background: var(--brand); color: #fff; font-size: 44px; font-weight: 800; padding: 12px 34px; border-radius: 999px; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
-  .hero-text { position: absolute; left: 56px; right: 56px; bottom: 40px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.5); }
-  .date { font-size: 38px; font-weight: 600; opacity: .95; }
-  h1 { font-size: 76px; line-height: 1.18; font-weight: 800; margin-top: 8px; letter-spacing: -1px; }
-  .credit { position: absolute; right: 16px; top: 16px; font-size: 18px; color: #fff; background: rgba(0,0,0,.55); padding: 4px 12px; border-radius: 8px; white-space: nowrap; }
+  .hero { position:relative; height:450px; flex:none; background:#222 center/cover no-repeat; }
+  .hero::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,0) 30%); }
+  .badge { position:absolute; z-index:1; left:48px; top:40px; display:flex; align-items:center; gap:14px; background:var(--brand); color:#fff; font-size:44px; font-weight:800; padding:10px 18px 10px 32px; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.3); }
+  .badge .n { display:inline-grid; place-items:center; width:58px; height:58px; border-radius:50%; background:#fff; color:var(--brand); font-size:40px; }
+  .credit { position:absolute; z-index:1; right:16px; bottom:14px; font-size:18px; color:#fff; background:rgba(0,0,0,.55); padding:4px 12px; border-radius:8px; white-space:nowrap; }
 
-  .stops { flex: 1; padding: 36px 56px 0; display: flex; flex-direction: column; gap: 0; }
-  .stop { display: grid; grid-template-columns: 250px 1fr; align-items: center; column-gap: 24px; padding: 20px 0; border-bottom: 2px solid var(--line); flex: 1; }
-  .stop:last-child { border-bottom: 0; }
-  .time { font-size: 44px; font-weight: 800; color: var(--brand); line-height: 1.15; white-space: nowrap; }
-  .time small { display: block; font-size: 30px; font-weight: 600; color: var(--muted); margin-top: 4px; }
-  .place { font-size: 50px; font-weight: 800; color: var(--ink); line-height: 1.2; }
-  .desc { font-size: 34px; line-height: 1.4; color: var(--text); margin-top: 6px; }
+  .head { flex:none; padding:28px 56px 22px; border-bottom:3px solid var(--brand); background:#fff; }
+  .when-where { display:flex; align-items:baseline; gap:22px; }
+  .time { font-size:46px; font-weight:800; color:var(--brand); white-space:nowrap; }
+  .place { font-size:62px; font-weight:800; color:var(--ink); line-height:1.15; }
+  .desc { font-size:36px; margin-top:8px; line-height:1.35; }
 
-  .foot { flex: none; margin: 0 56px 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .foot div { background: var(--brand-soft); border: 2px solid var(--line); border-radius: 22px; padding: 18px 26px; }
-  .foot b { display: block; font-size: 30px; color: var(--brand-dark); font-weight: 700; }
-  .foot span { display: block; font-size: 38px; font-weight: 800; color: var(--ink); margin-top: 2px; }
+  .route { flex:1; padding:18px 56px 40px; display:flex; flex-direction:column; min-height:0; }
+  .route-title { font-size:30px; font-weight:700; color:var(--muted); margin-bottom:6px; }
+  .rows { flex:1; display:flex; flex-direction:column; min-height:0; }
+  .row { flex:1; display:grid; grid-template-columns:120px 56px 1fr auto; align-items:center; opacity:.72; position:relative; }
+  .row.cur { flex:1.5; opacity:1; }
+  .daylab { font-size:30px; font-weight:800; color:var(--brand-dark); }
+  .rail { position:relative; align-self:stretch; display:flex; justify-content:center; align-items:center; }
+  .rail::before { content:""; position:absolute; left:50%; top:0; bottom:0; width:6px; margin-left:-3px; background:var(--line); }
+  .row:first-child .rail::before { top:50%; }
+  .row:last-child .rail::before { bottom:50%; }
+  .row.past .rail::before, .row.cur .rail::before { background:var(--brand); }
+  .row.cur + .row .rail::before { background:var(--line); }
+  .dot { position:relative; width:26px; height:26px; border-radius:50%; background:var(--canvas); border:6px solid var(--line); }
+  .row.past .dot { background:var(--brand); border-color:var(--brand); }
+  .row.cur .dot { width:44px; height:44px; background:var(--brand); border:8px solid #fff; box-shadow:0 0 0 5px var(--brand); }
+  .name { font-size:36px; font-weight:600; color:var(--text); padding-left:12px; }
+  .row.cur .name { font-size:46px; font-weight:800; color:var(--ink); }
+  .here { display:inline-block; margin-left:14px; font-size:28px; font-weight:800; background:var(--brand); color:#fff; padding:2px 16px; border-radius:999px; vertical-align:middle; }
+  .t { font-size:30px; color:var(--muted); font-weight:600; }
+  .row.cur .t { font-size:36px; color:var(--brand); font-weight:800; }
+  .name { color:#4a4455 !important; }
+  .row.cur .name { color:var(--ink) !important; }
+  .gap { text-align:center; font-size:32px; color:var(--muted); line-height:.6; padding-left:120px; }
 </style>
 </head>
 <body>
-<div class="card" id="card">
-  <div class="hero" id="hero">
-    <div class="badge" id="badge"></div>
-    <div class="credit" id="credit"></div>
-    <div class="hero-text"><div class="date" id="date"></div><h1 id="title"></h1></div>
-  </div>
-  <div class="stops" id="stops"></div>
-  <div class="foot" id="foot"></div>
+<div class="card">
+  <div class="hero" id="hero"><div class="badge" id="badge"></div><div class="credit" id="credit"></div></div>
+  <div class="head"><div class="when-where"><span class="time" id="time"></span><span class="place" id="place"></span></div><div class="desc" id="desc"></div></div>
+  <div class="route"><div class="route-title">전체 여행 동선</div><div class="rows" id="rows"></div></div>
 </div>
 <script>
-  // 렌더 스크립트가 window.CARD = { day, date, title, photo, credit, stops:[{time,place,desc}], meal, stay } 를 주입합니다.
+  // window.CARD = { day, order, time, place, desc, photo, credit, route:[{day, name, time, state:'past'|'cur'|'next'}] }
   const c = window.CARD || {};
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[m]));
   $("hero").style.backgroundImage = c.photo ? `url("${c.photo}")` : "";
-  $("badge").textContent = `${c.day}일차`;
-  $("date").textContent = c.date || "";
-  $("title").textContent = c.title || "";
+  $("badge").innerHTML = `${c.day}일차 <span class="n">${c.order}</span>`;
   $("credit").textContent = c.credit ? `사진: ${c.credit}` : "";
-  $("stops").innerHTML = (c.stops || []).map((s) => `
-    <div class="stop">
-      <div class="time">${esc(s.time)}</div>
-      <div><div class="place">${esc(s.place)}</div><div class="desc">${esc(s.desc)}</div></div>
-    </div>`).join("");
-  $("foot").innerHTML = `<div><b>오늘의 식사</b><span>${esc(c.meal)}</span></div><div><b>오늘 묵는 곳</b><span>${esc(c.stay)}</span></div>`;
+  $("time").textContent = c.time; $("place").textContent = c.place; $("desc").textContent = c.desc;
+  const MAX = 12; // 12곳 초과 시 현재 위치 앞뒤만 보여주고 나머지는 접음
+  let route = c.route || [], head = 0, tail = 0;
+  if (route.length > MAX) {
+    const cur = route.findIndex((r) => r.state === "cur");
+    let s = Math.max(0, Math.min(cur - 4, route.length - (MAX - 2)));
+    head = s; tail = route.length - (s + MAX - 2); route = route.slice(s, s + MAX - 2);
+  }
+  let out = head ? `<div class="gap">⋮ 앞 ${head}곳</div>` : "";
+  let prevDay = null;
+  out += route.map((r) => {
+    const lab = r.day !== prevDay ? `${r.day}일차` : ""; prevDay = r.day;
+    return `<div class="row ${r.state === "next" ? "" : r.state}"><div class="daylab">${lab}</div><div class="rail"><span class="dot"></span></div><div class="name">${esc(r.name)}${r.state === "cur" ? '<span class="here">지금</span>' : ""}</div><div class="t">${esc(r.time)}</div></div>`;
+  }).join("");
+  out += tail ? `<div class="gap">⋮ 뒤 ${tail}곳</div>` : "";
+  $("rows").innerHTML = out;
 </script>
 </body>
 </html>
