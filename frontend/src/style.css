@@ -4040,3 +4040,68 @@ pre {
     gap: 0;
   }
 }
+
+.grade-legend {
+  margin: 6px 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fafafa;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #444;
+}
+.grade-legend p {
+  margin: 0;
+}
+.grade-legend p + p {
+  margin-top: 2px;
+}
+.grade-legend .range {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #efe9fb;
+  color: var(--deep);
+  font-weight: 700;
+}
+.grade-legend.compact {
+  margin: 10px 0 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.inline-edit {
+  padding: 8px 6px;
+}
+@media (max-width: 640px) {
+  .rule-panel li {
+    flex-direction: row;
+    gap: 10px;
+  }
+  .rule-panel li b {
+    min-width: 74px;
+  }
+  .rule-note {
+    font-size: 11px;
+  }
+  .why-line,
+  .reason-line,
+  .timeline time {
+    font-size: 12px;
+  }
+  .reason-line button {
+    display: inline-block;
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  .stop-title {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .inline-edit {
+    padding: 12px 8px;
+  }
+}
