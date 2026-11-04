@@ -2,7 +2,7 @@
 
 2. 거르기: 대표 타입이 음식점이 아닌 곳(호텔 등), 이름에 쿠킹 클래스가 있는 곳, 식사 시간에 문을 닫는 곳, 부모님이 피하는 해산물 전문점 제외
 3. 정렬: 평점과 리뷰 수를 함께 반영한 베이지안 평균 + 현지 음식 선호 보정
-   한식이 필요하면 상위 5개에 한식당 1곳을 반드시 넣는다.
+   한식이 필요하면 상위 5개에 한식당 1곳을 반드시 넣는다 (한식 여부는 Candidate.is_korean_final 기준).
 
 저장 규칙: 이름·평점·리뷰 수·영업시간 같은 데이터와 점수·제외 사유 같은 계산값은 메모리에서만 쓰고
 저장하지 않는다.
@@ -16,6 +16,7 @@ from pydantic import BaseModel
 
 from .cuisine import CuisineInfo, classify
 from .google_places import OpeningPeriod, Restaurant
+from .korean_judgment import KoreanCheck
 from .preferences import FoodPreference
 
 MINUTES_PER_DAY = 24 * 60
@@ -73,6 +74,19 @@ class Candidate(BaseModel):
     score: float = 0.0
     hours_unknown: bool = False  # 영업시간 정보가 없어 시간 필터를 적용하지 못함
     excluded_reason: Optional[str] = None
+    # Claude 한식 판단 (korean_check.py, 선택 기능). 판단하지 않았으면 None.
+    # cuisine(원본 분류)은 건드리지 않고 이 값을 옆에 붙인다.
+    korean_check: Optional["KoreanCheck"] = None
+
+    @property
+    def is_korean_final(self) -> bool:
+        """한식 여부 최종값. Claude 판단이 있으면 그것을, 없으면 Google 분류 기준(cuisine.is_korean)을 쓴다.
+
+        Claude가 uncertain이면 한식이 아닌 것으로 처리한다.
+        """
+        if self.korean_check is None:
+            return self.cuisine.is_korean
+        return self.korean_check.verdict == "korean"
 
 
 def _minutes(hhmm: str) -> int:
@@ -166,8 +180,8 @@ def select_top(candidates: list[Candidate], pref: FoodPreference, n: int = TOP_N
         (c for c in candidates if c.excluded_reason is None), key=lambda c: c.score, reverse=True
     )
     top = kept[:n]
-    if pref.needs_korean and top and not any(c.cuisine.is_korean for c in top):
-        best_korean = next((c for c in kept[n:] if c.cuisine.is_korean), None)
+    if pref.needs_korean and top and not any(c.is_korean_final for c in top):
+        best_korean = next((c for c in kept[n:] if c.is_korean_final), None)
         if best_korean:
             top = top[: n - 1] + [best_korean]
     return top
