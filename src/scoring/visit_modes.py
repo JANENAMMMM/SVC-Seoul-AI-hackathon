@@ -1,4 +1,4 @@
-"""Derive named visit modes from the already verified v2.1 score snapshot."""
+"""Derive named visit modes from the already verified v2.2 score snapshot."""
 import json
 from pathlib import Path
 
@@ -62,5 +62,5 @@ def _mode(place_id, name, levels, place, source):
 
 
 def load_modes(path=None):
-    path = Path(path) if path else Path(__file__).resolve().parents[2] / "data/scoring/visit_modes_v2_1.json"
+    path = Path(path) if path else Path(__file__).resolve().parents[2] / "data/scoring/visit_modes_v2_2.json"
     return json.loads(path.read_text(encoding="utf-8"))

@@ -54,9 +54,9 @@ def test_itinerary_requires_route_evidence_and_flags_review_place():
     catalog = load_modes()
     with pytest.raises(ValueError, match="Route evidence required"):
         evaluate_itinerary([[{"place_id": "dad-02", "mode": "short"}]], catalog)
-    result = evaluate_itinerary([[{"place_id": "dad-09", "mode": "standard",
-                                   "source_ref": "sample itinerary p2", "route_note": "museum visit"}]], catalog)
-    assert result["status"] == "needs_review" and result["review_required"] == ["dad-09"]
+    result = evaluate_itinerary([[{"place_id": "dad-07", "mode": "standard",
+                                   "source_ref": "sample itinerary p2", "route_note": "market visit"}]], catalog)  # v2.2 needs_review site
+    assert result["status"] == "needs_review" and result["review_required"] == ["dad-07"]
 
 
 def test_existing_score_cannot_be_replaced_by_accidental_single_run(monkeypatch):
@@ -71,3 +71,17 @@ def test_existing_score_cannot_be_replaced_by_accidental_single_run(monkeypatch)
     monkeypatch.setattr(run_judge.db, "connect", lambda: pytest.fail("must not connect"))
     with pytest.raises(SystemExit):
         run_judge.main(["--sites", "dad-02", "--runs", "1"])
+
+
+def test_invalid_run_outvoted_by_two_agreeing_runs_is_not_review():
+    from src.scoring.verify import DIMS, aggregate
+    dim = {"typical": 4, "lower": 3, "upper": 5}
+    ok = {d: {"valid": True} for d in DIMS}
+    bad = {**ok, "heat": {"valid": False}}
+    out = {"dimensions": {d: dict(dim) for d in DIMS}, "confidence": "medium"}
+    runs = [{"output": out, "report": bad}, {"output": out, "report": ok}, {"output": out, "report": ok}]
+    agg = aggregate(runs)
+    assert agg["status"] == "ok" and agg["notes"] == ["heat: 1 invalid run(s)"]
+    # only one valid run left -> still needs review
+    agg = aggregate([{"output": out, "report": bad}, {"output": out, "report": ok}])
+    assert agg["status"] == "needs_review"

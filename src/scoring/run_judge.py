@@ -6,7 +6,7 @@ from pathlib import Path
 
 from . import db
 from .judge import RUBRIC_VERSION, cache_web, judge
-from .provenance import explanations
+from .provenance import explanations, snapshot_runs
 from .verify import aggregate, verify_run
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,10 +24,33 @@ def known(conn):
     return ids, values, {r["url"]: r["id"] for r in web}
 
 
+def enough(runs):
+    """Adaptive repeat: stop early when the runs so far are already stable.
+
+    - 1 run is enough if every dimension passed verification and confidence is not low.
+    - 2 runs are enough if both are fully valid and every dimension's typical/lower/upper differ by <= 1.
+    Otherwise run again (up to --runs).
+    """
+    if not runs:
+        return False
+    def ok(r):
+        return all(v.get("valid") for v in r["report"].values())
+    if len(runs) == 1:
+        r = runs[0]
+        return ok(r) and (r["output"].get("confidence") or "low") != "low"
+    if len(runs) == 2 and all(ok(r) for r in runs):
+        d0, d1 = (r["output"]["dimensions"] for r in runs)
+        return all(abs(d0[d][lv] - d1[d][lv]) <= 1 for d in d0 for lv in ("typical", "lower", "upper"))
+    return False
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--sites", required=True)
-    ap.add_argument("--runs", type=int, default=1)
+    ap.add_argument("--runs", type=int, default=3, help="maximum runs per site")
+    ap.add_argument("--fixed", action="store_true", help="always do --runs runs (no early stop)")
+    ap.add_argument("--reaggregate", action="store_true",
+                    help="no API calls: rebuild published scores from saved run files (after a rule change)")
     ap.add_argument("--replace", action="store_true", help="explicitly replace an existing site's published score")
     a = ap.parse_args(argv)
     sites = [s.strip() for s in a.sites.split(",") if s.strip()]
@@ -41,8 +64,17 @@ def main(argv=None):
     with db.connect() as conn:
         db.ensure_schema(conn)
         for site in sites:
-            runs = []
-            for k in range(1, a.runs + 1):
+            if a.reaggregate:
+                runs = snapshot_runs(site, OUT_DIR)
+                if not runs:
+                    raise SystemExit(f"no saved runs for {site}")
+            else:
+                runs = []
+            for old in ([] if a.reaggregate else OUT_DIR.glob(f"{site}_run*.json")):  # adaptive runs may be fewer than before
+                old.unlink()
+            for k in range(1, 0 if a.reaggregate else a.runs + 1):
+                if not a.fixed and enough(runs):
+                    break
                 res = judge(site, conn, run_index=k)
                 if isinstance(res.get("output"), str):  # normalize stringified JSON output
                     try:
@@ -65,6 +97,8 @@ def main(argv=None):
                              "output": res["output"], "report": report})
                 print(site, f"run{k}", "tool_calls", res["tool_calls"], "usage", res["usage"], "valid", ok)
             agg = aggregate(runs)
+            place = db.query(conn, "select name_ko from scoring_places where id=%s", (site,))
+            agg = {"name_ko": place[0]["name_ko"] if place else site, **agg}  # needed by visit_modes.build_modes
             source = explanations(agg, runs)
             agg["conditions"] = {d: {k: source[d][k] for k in ("lower_conditions", "upper_conditions")}
                                  for d in source}

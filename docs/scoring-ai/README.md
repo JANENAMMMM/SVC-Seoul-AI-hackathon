@@ -1,7 +1,7 @@
 # ScoringAI — 관광지 여행 난이도 평가 (최종 문서)
 
 > **이 문서 하나로 ScoringAI의 현재 상태를 파악할 수 있게 정리했다.** 세부는 링크로 연결한다.
-> 담당: 남재은 · 브랜치 `JANENAMMMM/scoring-ai` · 기준: 2026-11-03 · 현재 버전 **v2.1**
+> 담당: 남재은 · 브랜치 `JANENAMMMM/scoring-ai` · 기준: 2026-11-04 · 현재 버전 **v2.2**
 > 과거 변경 이력: [CHANGELOG.md](CHANGELOG.md)
 
 ---
@@ -16,7 +16,7 @@
 |---|---|---|
 | 근거는 DB에 | 지도·GPS·리뷰·기후를 출처와 한계 메모까지 저장 | 멘토 지적: "그 정보를 어디서 구하나" |
 | 해석은 LLM judge, 합산은 코드 | Claude가 도구로 근거를 조회·웹 검색해 차원 점수를 내고, 종합 점수는 코드가 가중평균 | 관광지 범위·실제 관람 경로(정상까지 안 갈 수 있음, 케이블카가 대신함)는 규칙으로 판단 불가 |
-| 인용 없으면 무효 | 인용한 근거 ID가 DB에 없거나 수치가 다르면 그 차원은 무효, 3회 실행 중앙값 | LLM끼리도 등급이 8/15만 일치 → 흔들림 억제 장치 필요 |
+| 인용 없으면 무효 | 인용한 근거 ID가 DB에 없거나 수치가 다르면 그 차원은 무효, 필요할 때만 최대 3회 반복해 중앙값에 가장 가까운 실행 채택 | LLM끼리도 등급이 8/15만 일치 → 흔들림 억제 장치 필요 |
 
 ## 3. 구조
 
@@ -32,15 +32,15 @@
   GPS 궤적, 기후, OSM(부분), 초기 조사 사실  web_cache · judgments · scores
                                   │ 도구 호출
                                   ▼
-                 LLM judge (Claude Sonnet, rubric v2.1)
+                 LLM judge (Claude Sonnet, rubric v2.2)
                  get_place · list_evidence · search_reviews · get_climate · web_search · google_web_search
                  ① 대표 관람 경로 → ② 차원별 typical/lower/upper + 조건 + 근거 ID
                                   │
                                   ▼
-                 검증 코드: 인용 실재·수치 일치, 3회 중앙값, 폭 >2 → needs_review
+                 검증 코드: 인용 실재·수치 일치, 최대 3회 medoid, 폭 >2 → needs_review
                                   │
                                   ▼
-       점수(scores_v2.json) ─▶ 관람 방식 카탈로그(visit_modes_v2_1.json) ─▶ 패키지 난이도 · API
+       점수(scores_v2.json) ─▶ 관람 방식 카탈로그(visit_modes_v2_2.json) ─▶ 패키지 난이도 · API
 ```
 
 </details>
@@ -48,7 +48,7 @@
 - 상세 명세: [judge_spec_v2.md](spec/judge_spec_v2.md) · 근거·일정 연결 규칙: [evidence_workflow.md](spec/evidence_workflow.md)
 - 전체 흐름을 그림 한 장으로 그리기 위한 설명서: [workflow_diagram.md](workflow_diagram.md) · 팀원 설명 대본(+질의응답 부록): [workflow_script.md](workflow_script.md)
 
-### 3-1. DB에 저장된 것 (Supabase, 2026-11-03 기준 행 수)
+### 3-1. DB에 저장된 것 (Supabase, 2026-11-04 기준 행 수)
 
 모든 테이블 이름은 `scoring_`으로 시작한다. `src/scoring/db.py`는 이 접두어가 아닌 테이블은 읽거나 쓰지 않으며, DROP·TRUNCATE·ALTER 문도 없다. 다른 팀원 테이블(`hello_world_test` 등)은 건드리지 않는다.
 
@@ -57,17 +57,18 @@
 | `scoring_places` | 15 | 관광지 1곳 | `id`(dad-01~15), 한/영 이름, 좌표, `google_place_id`, `tripadvisor_url`, `meta`(Google 유형·운영시간·평점·리뷰 수·주소) | `load_evidence.py` |
 | `scoring_evidence` | 523 | 근거 1건(수치나 사실 하나) | `id`, `place_id`, `dimension`(climb·walking·heat·crowd·general), `basis`(등급 A·B·C), `metric`, `value`, `unit`, `text`(사람이 읽는 문장), `source`, `source_url`, `caveat`(한계 메모) | `load_evidence.py` |
 | `scoring_reviews` | 1,994 | 리뷰 원문 1건 | `id`, `place_id`, `source`, `lang`, `date`, `trip_type`(가족·커플 등), `rating`, `text` | `load_evidence.py` |
-| `scoring_web_cache` | 103 | judge가 웹 검색으로 찾아 **실제로 인용한** 페이지 1개 | `id`(`web:`+URL 해시), `place_id`, `query`, `url`, `title`, `excerpt`(인용 문장, 최대 2,000자) | `run_judge.py` (채점 중 자동) |
-| `scoring_judgments` | 67 | judge 실행 1회의 원본 출력 | `run_id`, `place_id`, `model`, `rubric_version`, `run_index`, `output_json`, `citations_valid`, `usage`(토큰·도구 호출 수·검증 보고서) | `run_judge.py` |
-| `scoring_scores` | 17 | 관광지 × 루브릭 버전별 최종 점수 | `dimensions`(차원별 typical·lower·upper), `composite_*`, `grade_display`, `confidence`, `status`, `conditions_json`(조건·플래그·대표 경로·설명 출처) | `run_judge.py` |
+| `scoring_web_cache` | 242 | judge가 웹 검색으로 찾아 **실제로 인용한** 페이지 1개 | `id`(`web:`+URL 해시), `place_id`, `query`, `url`, `title`, `excerpt`(인용 문장, 최대 2,000자) | `run_judge.py` (채점 중 자동) |
+| `scoring_judgments` | 126 | judge 실행 1회의 원본 출력 | `run_id`, `place_id`, `model`, `rubric_version`, `run_index`, `output_json`, `citations_valid`, `usage`(토큰·도구 호출 수·검증 보고서) | `run_judge.py` |
+| `scoring_scores` | 32 | 관광지 × 루브릭 버전별 최종 점수 | `dimensions`(차원별 typical·lower·upper), `composite_*`, `grade_display`, `confidence`, `status`, `conditions_json`(조건·플래그·대표 경로·설명 출처) | `run_judge.py` |
 
-- `scoring_judgments` 67회 = v2.1 65회(유효 56, 무효 9) + v2.0 시험 2회. `scoring_scores` 17행 = v2.1 15곳 + v2.0 시험 2곳.
+- `scoring_judgments` 126회 = v2.2 59회(유효 49, 중단된 시도 포함, 최종 점수에 쓴 실행 28회) + v2.1 65회(유효 56) + v2.0 시험 2회. `scoring_scores` 32행 = v2.2 15곳 + v2.1 15곳 + v2.0 시험 2곳.
+- `scoring_web_cache` 242개는 v2.1·v2.2 채점에서 쌓인 누적 값이다.
 
 **근거 523건의 구성** (근거 ID 접두어 = 출처)
 
 | ID 접두어 | 건수 | 등급 | 출처와 만드는 방법 | 주의점(`caveat`에 기록) |
 |---|---|---|---|---|
-| `fact:<곳>:<항목>` | 86 | B | **초기 참고용.** 1일차에 AI가 관광청·UNESCO·백과·블로그를 웹 조사해 정리한 사실(실외 노출, 노면, 대체 이동수단 등). 계단 수는 오행산 1곳(블로그 추정)뿐이고 공식 수치는 드묾. 시기마다 바뀌는 사실이라 새 출처로는 쓰지 않고, 채점 때 judge가 웹 검색으로 확인한다. `data/scoring/derived/site_facts.json` | 출처 유형·신뢰도와 URL 목록 |
+| `fact:<곳>:<항목>` | 86 | B | **초기 참고용.** 1일차에 AI가 관광청·UNESCO·백과·블로그를 웹 조사해 정리한 사실(실외 노출, 노면, 대체 이동수단 등). 계단 수는 오행산 1곳(블로그 추정)뿐이고 공식 수치는 드묾. 시기마다 바뀌는 사실이라 새 출처로는 쓰지 않고, 채점 때 judge가 웹 검색으로 확인한다. v2.2부터 judge 도구와 인용 검증에서 제외(행은 되돌릴 수 있게 남김). `data/scoring/derived/site_facts.json` | 출처 유형·신뢰도와 URL 목록 |
 | `gps:<곳>:<지표>` | 36 | B(궤적 5개 이상)·C | OSM에 공개된 GPS 궤적을 관광지 구역으로 잘라 보행 거리(중앙값·p25·p75), 소요 시간, 누적 오르막, 속도 계산. 고도는 Open-Meteo | 궤적 수 n, 5개 미만이면 "표본 부족" |
 | `osm:<곳>:<지표>` | 35 | C | OpenStreetMap Overpass로 반경 300m 안의 보행로 길이, 계단, 엘리베이터, 벤치, 화장실, 고도 범위 | 관광지 경계가 아니라 300m 반경, 태그 누락 많음 |
 | `rev:<곳>:sig_<주제>` | 104 | C | Tripadvisor 리뷰(13곳 × 약 150건)에서 정규식으로 계단·보행·더위·혼잡 등 언급 비율과 95% 신뢰구간 계산 | 정규식 정밀도(계단 약 90%, 혼잡 약 70%) |
@@ -83,7 +84,7 @@
 1. **채점 시작**: `run_judge.py`가 관광지 ID 하나를 주고 Claude(`claude-sonnet-5-5`)를 부른다. 시스템 프롬프트에는 차원 정의, 차원별 앵커, 절차, 근거 규칙만 있고 근거 자체는 없다.
 2. **도구로 근거 읽기** (도구 호출 최대 12회, 넘으면 제출 강제)
    - `get_place` → `scoring_places` 기본 정보
-   - `list_evidence(place_id, dimension)` → `scoring_evidence`의 근거 목록(ID·값·caveat 포함)
+   - `list_evidence(place_id, dimension)` → `scoring_evidence`의 근거 목록(ID·값·caveat 포함, v2.2부터 `fact:` 제외)
    - `search_reviews(place_id, keyword)` → `scoring_reviews` 원문 키워드 검색, 최대 8건
    - `get_climate(month)` → `climate:<월>` 근거
    - `web_search`(Anthropic 서버 검색, 최대 4회) · `google_web_search`(SerpApi Google 웹 결과) → DB에 없는 계단 수·경로 길이·셔틀 범위 확인
@@ -95,8 +96,8 @@
    - 인용한 ID가 전부 DB(evidence·reviews·web_cache)에 있는지. URL은 `www.`·http/https·끝 슬래시 차이를 무시하고 비교
    - `numeric_claims`의 수치가 DB 원본 값과 5% 안에서 일치하는지
    - 하나라도 어기면 **그 차원은 이번 실행에서 무효**
-6. **집계**: 3회 실행 중 유효한 실행만 모아 차원별 중앙값을 낸다. 실행 간 차이가 2점을 넘거나, 유효 실행이 없거나, 무효 실행이 있으면 `needs_review`(검수 대기)로 표시한다. 종합 점수는 코드가 가중평균으로 계산하고, 확신도는 3회 중 가장 낮은 값을 쓴다.
-7. **저장**: 실행마다 `scoring_judgments`와 `data/scoring/judge/v2/<곳>_run<k>.json`, 최종은 `scoring_scores`와 `data/scoring/scores_v2.json`. 이 점수에서 관람 방식 카탈로그(`visit_modes_v2_1.json`)를 만들고, API와 패키지 난이도는 이 파일만 읽는다(DB·Claude 호출 없음).
+6. **반복과 집계**: 1회 실행이 전 차원 검증을 통과하고 확신도가 low가 아니면 끝내고, 2회가 모두 통과하고 차원별 차이가 1점 이내여도 끝낸다. 아니면 최대 3회까지 반복한다(`run_judge.enough`). 차원마다 유효한 실행 중 중앙값에 가장 가까운 실행(medoid)의 점수를 그대로 쓴다. 실행 간 차이가 2점을 넘거나, 유효 실행이 없거나, 무효 실행이 있는데 남은 유효 실행이 2회 미만이거나 서로 2점 이상 벌어지면 `needs_review`(검수 대기)로 표시한다. 무효 실행이 있어도 유효 2회 이상이 1점 이내로 일치하면 `notes`에만 남긴다. 종합 점수는 코드가 가중평균으로 계산하고, 확신도는 실행 중 가장 낮은 값을 쓴다.
+7. **저장**: 실행마다 `scoring_judgments`와 `data/scoring/judge/v2/<곳>_run<k>.json`, 최종은 `scoring_scores`와 `data/scoring/scores_v2.json`. 이 점수에서 관람 방식 카탈로그(`visit_modes_v2_2.json`)를 만들고, API와 패키지 난이도는 이 파일만 읽는다(DB·Claude 호출 없음).
 
 ## 4. 점수 체계
 
@@ -109,17 +110,18 @@
 
 | 관광지 | 종합(일반/하한/상한) | 등급 | 상태 | | 관광지 | 종합 | 등급 | 상태 |
 |---|---|---|---|---|---|---|---|---|
-| 오행산 | 7 / 4 / 8 | 상 | ok | | 미케 해변 | 3 / 2 / 5 | 하 | ok |
-| 바나힐 | 6 / 4 / 8 | 중 | ok | | 아시아파크 | 3 / 2 / 5 | 하 | ok |
-| 누이탄타이 온천 | 5 / 3 / 6 | 중 | ok | | 하이반 고개 | 3 / 2 / 5 | 하 | ok |
-| 미선 유적지 | 5 / 3 / 6 | 중 | ok | | 호이안 야시장 | 3 / 3 / 5 | 하 | ok |
-| 호이안 구시가지 | 4 / 3 / 5 | 중 | ok | | 껌탄 코코넛 마을 | 3 / 2 / 5 | 하 | 검수 대기 |
-| 영흥사 | 4 / 3 / 5 | 중 | ok | | 용다리 | 2 / 1 / 4 | 하 | ok |
-| 한시장 | 4 / 2 / 5 | 중 | ok | | 다낭 대성당 | 2 / 2 / 4 | 하 | ok |
-| | | | | | 참 조각 박물관 | 2 / 1 / 3 | 하 | 검수 대기 |
+| 바나힐 | 6 / 4 / 7 | 중 | ok | | 한시장 | 3 / 2 / 5 | 하 | 검수 대기 |
+| 오행산 | 6 / 5 / 7 | 중 | ok | | 하이반 고개 | 3 / 2 / 5 | 하 | ok |
+| 미선 유적지 | 5 / 3 / 6 | 중 | ok | | 호이안 야시장 | 3 / 2 / 5 | 하 | ok |
+| 호이안 구시가지 | 4 / 3 / 6 | 중 | ok | | 용다리 | 3 / 2 / 4 | 하 | ok |
+| 누이탄타이 온천 | 4 / 2 / 6 | 중 | ok | | 껌탄 코코넛 마을 | 3 / 2 / 4 | 하 | ok |
+| 영흥사 | 4 / 2 / 5 | 중 | ok | | 다낭 대성당 | 2 / 1 / 4 | 하 | ok |
+| 아시아파크 | 4 / 3 / 5 | 중 | ok | | 참 조각 박물관 | 2 / 2 / 4 | 하 | ok |
+| 미케 해변 | 4 / 2 / 4 | 중 | ok | | | | | |
 
-- 원본: [`data/scoring/scores_v2.json`](../../data/scoring/scores_v2.json) · 관람 방식: [visit_modes_v2_1.json](../../data/scoring/visit_modes_v2_1.json)
-- 예: 오행산 `short` = 엘리베이터 이용·사원 일부 → 5점 / `full` = 계단으로 정상까지 → 7점
+- 원본: [`data/scoring/scores_v2.json`](../../data/scoring/scores_v2.json) · 관람 방식: [visit_modes_v2_2.json](../../data/scoring/visit_modes_v2_2.json)
+- 등급 상(7 이상)은 없음. v2.1 대비 바뀐 곳: 오행산 상→중(7→6), 미케 해변·아시아파크 하→중(3→4), 한시장 중→하(4→3)
+- 예: 오행산 `short` = 엘리베이터 이용·사원 일부 → 5점 / `standard` → 6점 / `full` = 계단으로 정상까지 → 7점
 
 ## 6. 패키지 난이도 (상품기획자용)
 
@@ -132,13 +134,14 @@
 ## 7. 사용 방법
 
 ```bash
-uv run pytest -q                                              # 테스트 30개
-uv run python -m src.scoring.run_judge --sites dad-02 --runs 3 --replace   # 재채점(비용 발생, 기존 점수 덮어쓰기는 --replace 필요)
+uv run pytest -q                                              # 테스트 70개
+uv run python -m src.scoring.run_judge --sites dad-02 --runs 3 --replace   # 재채점(비용 발생, 최대 3회·필요할 때만 반복, 덮어쓰기는 --replace 필요)
+uv run python -m src.scoring.run_judge --reaggregate              # 저장된 실행 기록으로 재집계(API 호출 없음)
 uv run python -m src.scoring.run_itinerary <일정.json> --output <결과.json>  # 패키지 난이도
 uv run python -m src.scoring.run_review_validation docs/scoring-ai/validation/heldout_review_annotations.csv --output <보고서.json>
 ```
 
-**API** (`api/scoring.py`, 저장된 v2.1 카탈로그를 읽음, DB 쓰기·API 비용 없음)
+**API** (`api/scoring.py`, 저장된 v2.2 카탈로그를 읽음, DB 쓰기·API 비용 없음)
 
 | 엔드포인트 | 내용 |
 |---|---|
@@ -148,11 +151,39 @@ uv run python -m src.scoring.run_review_validation docs/scoring-ai/validation/he
 
 **다른 담당이 쓰는 법**: 동선 짜기 = 방식별 점수와 패키지 함수 · 챗봇 = 조건·근거 ID로 "왜 힘든지" 설명 · UI = 점수, 힘든 이유 1~2개, 부담을 줄이는 조건, 출처 링크, 검수 상태만 노출
 
+### 7-1. 비용 — 새 관광지 1곳을 채점할 때 (v2.2 실측, 2026-11-03)
+
+**채점(LLM judge) 비용: 1곳당 평균 약 $0.16 (약 220원), 범위 $0.07~$0.30**
+
+| 경우 | 실행 횟수 | 1곳 비용 | 이번 15곳 중 |
+|---|---|---|---|
+| 첫 실행이 검증 통과·확신도 충분 | 1회 | $0.07~$0.16 (중앙값 약 $0.11) | 8곳 |
+| 두 번째에서 안정 | 2회 | 약 $0.12 | 1곳 |
+| 무효·불안정으로 최대 반복 | 3회 | $0.17~$0.30 | 6곳 |
+| **평균** | 1.9회 | **$0.157** | |
+
+- 실행 1회: $0.035~$0.158 (중앙값 $0.078). 대부분 캐시 쓰기와 출력 토큰. 도구 호출 5~9회, 웹 검색 0~2회
+- 비교: v2.1(캐싱 없음·3회 고정)은 1곳당 $0.535 → 약 70% 절감
+- 1,000곳이면 약 $160, 5,000곳이면 약 $800 (채점만, 한 번 매기면 API 조회 비용 0)
+- 단가: Sonnet 5.5 입력 $2 · 캐시 쓰기 $2.5 · 캐시 읽기 $0.2 · 출력 $10 (1M 토큰당), Anthropic 웹 검색 $10/1,000회. 외부 공유 전 공식 요금표 재확인
+- 계산 명령: `uv run python -m src.scoring.cost_report --rubric v2.2`
+
+**근거 수집 비용 (채점 전, 1곳당 한 번)** — 요금제 단위 과금이라 건수로 기록
+
+| 출처 | 1곳당 사용량 | 비용 |
+|---|---|---|
+| Google 지도 (SerpApi) | 약 3회 (장소 식별·리뷰 주제·리뷰) | SerpApi 요금제 차감 |
+| Tripadvisor 리뷰 (Apify) | 약 150건 | Apify 요금제 차감 (해커톤 때 13곳으로 월 무료 한도 소진) |
+| GPS 궤적 · OSM · 기후 (Open-Meteo) | 질의 몇 회 | 무료 |
+| 채점 중 Google 웹 검색 도구 (SerpApi) | 0~수 회 | SerpApi 요금제 차감 (위 채점 비용에 미포함) |
+
+- 하나투어 운영 시에는 Tripadvisor·SerpApi 대신 자체 후기와 Google Places 공식 API를 쓰는 것이 전제(§9)이므로, 수집 비용은 그 계약 조건을 따른다
+
 ## 8. 검증 현황
 
 | 검증 | 결과 | 문서 |
 |---|---|---|
-| 인용 검증 | 재실행 18/18 통과, 최종 13곳 ok · 2곳 검수 대기 | [CHANGELOG](CHANGELOG.md) |
+| 인용 검증 | v2.2 최종 실행 28회 중 22회 전 차원 통과, 15곳 중 14곳 ok · 1곳(한시장) 검수 대기 | [CHANGELOG](CHANGELOG.md) |
 | v1 규칙 엔진과 비교 | 13곳 중 8곳 등급 일치. 차이는 v2가 웹 검색으로 근거를 보강한 경우(영흥사 계단, 누이탄타이 경사) | [judge_comparison.md](archive/v1-rule-engine/judge_comparison.md) |
 | 공개 후기 반례 탐색 | 오행산·바나힐·미선 방식별 차이는 후기와 일치. **참 조각 박물관 더위(냉방 부재), 용다리 쇼·야시장 혼잡은 과소 평가 가능 → 재검토 우선** | [review_spotcheck_2026-11-03.md](validation/review_spotcheck_2026-11-03.md) |
 | 채점 미사용 후기 대조 | 양식·스크립트 준비, 작성 전 | [heldout_review_annotations.csv](validation/heldout_review_annotations.csv) |
@@ -169,7 +200,7 @@ uv run python -m src.scoring.run_review_validation docs/scoring-ai/validation/he
 | Tripadvisor (Apify) | 13곳 × 150건 | △ 시연용 | X |
 | OSM 공개 GPS 궤적 | 실보행 3곳 | O | O |
 | 기후 | 다낭 월별 체감온도 | O | O |
-| 관광지별 사실 | 채점 때 judge가 웹 검색(31회, 인용 103개). 초기 조사 86건은 참고용 | O | O |
+| 관광지별 사실 | 채점 때 judge가 웹 검색(v2.2 최종 28회에서 17회, 출력에 인용한 URL 122개). 초기 조사 86건은 참고용(v2.2 judge에는 숨김) | O | O |
 | 하나투어 자체 후기·가이드 | — | — | **최우선** |
 
 - 법적 검토·출처별 판단: [design_b_serpapi.md §1-6](archive/v0-design/design_b_serpapi.md) · 데이터 조사 보고서: [research/report_data_sources.md](research/report_data_sources.md)
@@ -177,10 +208,10 @@ uv run python -m src.scoring.run_review_validation docs/scoring-ai/validation/he
 
 ## 10. 남은 일
 
-1. **재검토 우선 3곳**: 참 조각 박물관 더위, 용다리(쇼 관람 방식 분리), 호이안 야시장 혼잡
+1. **재검토 우선**: 한시장(검수 대기, 혼잡 점수 2점 차이), 참 조각 박물관 더위, 용다리(쇼 관람 방식 분리), 호이안 야시장 혼잡
 2. **사람 검증**: 사람 기준셋 + 채점 미사용 후기 대조 → ±1점 일치율
 3. **하나투어 일정표 연결**: 공개 상품 2~3개를 `itin:` 근거로 넣고 일정 기준 점수 산출
-4. 정리: 미커밋 변경 커밋, `osm_features.json`(중단된 4곳 측정) 폐기 여부 결정, main 병합 PR
+4. 정리: `osm_features.json`(중단된 4곳 측정) 폐기 여부 결정, develop PR #14 병합 후 main 병합 PR
 
 ## 11. 파일 지도
 

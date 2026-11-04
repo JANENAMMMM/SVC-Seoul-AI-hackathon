@@ -137,20 +137,29 @@ def verify_run(output, known_ids, values, web_urls=None):
 
 def aggregate(runs):
     """runs: [{output, report}] -> score record (median over valid runs per dimension)."""
-    dims, flags = {}, []
+    dims, flags, notes = {}, [], []
     for d in DIMS:
         vals = [r["output"]["dimensions"][d] for r in runs if r["report"].get(d, {}).get("valid")]
         if not vals:
             dims[d] = {lv: None for lv in LEVELS}
             flags.append(f"{d}: no valid run")
             continue
-        dims[d] = {lv: round_half_up(statistics.median(v[lv] for v in vals)) for lv in LEVELS}
+        # medoid: the valid run closest to the per-level median, so every published score is exactly
+        # one run's output (provenance needs an exact match; a 2-run median can fall between runs)
+        med = {lv: statistics.median(v[lv] for v in vals) for lv in LEVELS}
+        best = min(vals, key=lambda v: sum(abs(v[lv] - med[lv]) for lv in LEVELS))
+        dims[d] = {lv: best[lv] for lv in LEVELS}
         for lv in LEVELS:
             spread = max(v[lv] for v in vals) - min(v[lv] for v in vals)
             if spread > 2:
                 flags.append(f"{d}.{lv}: spread {spread} > 2")
         if len(vals) < len(runs):
-            flags.append(f"{d}: {len(runs) - len(vals)} invalid run(s)")
+            msg = f"{d}: {len(runs) - len(vals)} invalid run(s)"
+            agree = len(vals) >= 2 and all(
+                max(v[lv] for v in vals) - min(v[lv] for v in vals) <= 1 for lv in LEVELS)
+            # v2.2: an invalid run is only a review trigger if the remaining valid runs can't vouch
+            # for the score (fewer than 2, or they disagree by more than 1 point)
+            (notes if agree else flags).append(msg)
     comp = composite(dims)
     confs = [r["output"].get("confidence") for r in runs if r["output"].get("confidence")]
     order = {"low": 0, "medium": 1, "high": 2}
@@ -162,5 +171,6 @@ def aggregate(runs):
         "confidence": conf,
         "status": "needs_review" if flags else "ok",
         "flags": flags,
+        "notes": notes,  # invalid runs outvoted by >=2 agreeing valid runs (not a review trigger)
         "n_runs": len(runs),
     }
