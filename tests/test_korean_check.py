@@ -15,7 +15,6 @@ from src.restaurants.korean_check import (
     apply_judgments,
     parse_judgments,
 )
-from src.restaurants.preferences import FoodPreference
 from src.restaurants.ranking import build_candidates
 
 HOURS = [OpeningPeriod(open_day=d, open_time="10:00", close_day=d, close_time="22:00") for d in range(7)]
@@ -48,7 +47,6 @@ def test_apply_judgments_keeps_original_and_attaches_check():
     """Claude 판단은 원본 분류(cuisine_tag, is_korean)를 덮어쓰지 않고 korean_check로 옆에 붙는다."""
     cands = build_candidates(
         [make("ga", "korean_restaurant"), make("bulgogi", "restaurant"), make("x", "korean_restaurant")],
-        FoodPreference(),
     )
     js = parse_judgments(
         [tool_block([
@@ -75,7 +73,7 @@ def test_apply_judgments_keeps_original_and_attaches_check():
 
 
 def test_is_korean_final_without_judgment_uses_original():
-    cands = build_candidates([make("k", "korean_restaurant"), make("v", "vietnamese_restaurant")], FoodPreference())
+    cands = build_candidates([make("k", "korean_restaurant"), make("v", "vietnamese_restaurant")])
     by = {c.restaurant.place_id: c for c in cands}
     assert by["k"].korean_check is None and by["k"].is_korean_final is True
     assert by["v"].is_korean_final is False
@@ -177,9 +175,7 @@ def test_collect_korean_judge_optional():
         return [make("ga", "korean_restaurant", 4.9), make("v1", "vietnamese_restaurant"), make("bulgogi")]
 
     att = [Attraction(id="a", name="한시장", lat=16.07, lng=108.22)]
-    pref = FoodPreference(korean_need="none")
-
-    off = collect(att, pref, city="다낭", with_reviews=False, google_search=search)
+    off = collect(att, city="다낭", with_reviews=False, google_search=search)
     assert {r.place_id: r.is_korean for r in off.attractions[0].restaurants}["ga"] is True
     assert all(r.korean_check is None for r in off.attractions[0].restaurants)  # 기본 꺼짐: 판단 필드 없음
 
@@ -189,7 +185,7 @@ def test_collect_korean_judge_optional():
             return {r.place_id: KoreanCheck(verdict="korean" if r.place_id == "bulgogi" else "not_korean",
                                          reason="r") for r in restaurants}
 
-    on = collect(att, pref, city="다낭", with_reviews=False, google_search=search, korean_judge=Judge())
+    on = collect(att, city="다낭", with_reviews=False, google_search=search, korean_judge=Judge())
     rs = {r.place_id: r for r in on.attractions[0].restaurants}
     # 원본 필드(is_korean)는 그대로, 최종 값(is_korean_final)만 Claude 판단을 따른다
     assert {k: v.is_korean for k, v in rs.items()} == {"ga": True, "v1": False, "bulgogi": False}

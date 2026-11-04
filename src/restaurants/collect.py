@@ -7,6 +7,9 @@
 
 리뷰는 가공하지 않고 원문 그대로 담는다 (키워드 태그·경고 없음). 리뷰 내용 판단은 LLM 단계의 일이다.
 
+부모님 프로필은 받지 않는다. 해산물 기피·현지 음식 선호·한식 빈도는 일정 엔진이 이 결과를 받아 반영한다.
+그래서 같은 결과를 프로필이 다른 여러 일정에 그대로 쓸 수 있다.
+
 저장 규칙:
 - 저장하지 않는다. 이름·평점·영업시간·리뷰 등 식당 데이터와 점수·분류·한식 판단 같은 계산값은
   호출한 쪽(그래프 state 등)에 돌려주기만 하고 파일·DB에 쓰지 않는다.
@@ -31,7 +34,6 @@ from .google_places import Restaurant, search_nearby_restaurants
 from .google_reviews import PlaceReviews, Review, fetch_reviews
 from .korean_check import KoreanJudge, apply_judgments
 from .korean_judgment import KoreanCheck
-from .preferences import FoodPreference
 from .ranking import ALL_DAYS, DEFAULT_MEAL_TIMES, build_candidates, select_top
 
 GoogleSearch = Callable[..., list[Restaurant]]
@@ -86,7 +88,6 @@ class AttractionResult(BaseModel):
 class CollectResult(BaseModel):
     city: str
     country: Optional[str]
-    preference: FoodPreference
     attractions: list[AttractionResult]
 
 
@@ -102,7 +103,6 @@ def review_info(place: PlaceReviews) -> ReviewInfo:
 
 def collect(
     attractions: list[Attraction],
-    pref: FoodPreference,
     city: str,
     country: Optional[str] = None,
     radius_m: float = 1000,
@@ -126,7 +126,7 @@ def collect(
         )
 
     def candidates_for(found: list[Restaurant], attraction: Attraction, origin) -> list:
-        cands = build_candidates(found, pref, origin, country, days, meal_times)
+        cands = build_candidates(found, origin, country, days, meal_times)
         if korean_judge is not None:
             usable = [c.restaurant for c in cands if c.excluded_reason is None]
             apply_judgments(cands, korean_judge.judge(usable, f"{attraction.name}, {city}"))
@@ -140,13 +140,13 @@ def collect(
 
         # 2~3단계: 거르기 + 점수
         candidates = candidates_for(found, attraction, origin)
-        # 한식이 필요한데 20개 안에 한식당이 없으면 한식당만 1회 더 검색
-        if pref.needs_korean and not any(
+        # 20개 안에 한식당이 없으면 한식당만 1회 더 검색 (한식을 쓸지는 일정 엔진이 정한다)
+        if not any(
             c.is_korean_final and c.excluded_reason is None for c in candidates
         ):
             korean = search(attraction, ("korean_restaurant",))
             candidates = candidates_for(found + korean, attraction, origin)
-        top = select_top(candidates, pref)
+        top = select_top(candidates)
 
         # 4~5단계: 상위 식당마다 리뷰 조회 1회 + 키워드 태그
         recommended = []
@@ -190,4 +190,4 @@ def collect(
                 restaurants=recommended,
             )
         )
-    return CollectResult(city=city, country=country, preference=pref, attractions=results)
+    return CollectResult(city=city, country=country, attractions=results)

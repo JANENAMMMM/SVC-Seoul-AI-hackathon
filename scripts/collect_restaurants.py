@@ -3,7 +3,6 @@
 예시 (루트에서):
     uv run python scripts/collect_restaurants.py \
         --attractions scripts/examples/attractions_danang.json \
-        --prefs scripts/examples/food_prefs_example.json \
         --city 다낭 --country VN --limit 1
 
 필요한 환경변수: GOOGLE_API_KEY
@@ -21,13 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.restaurants.collect import Attraction, collect  # noqa: E402
-from src.restaurants.preferences import FoodPreference  # noqa: E402
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="관광지 주변 추천 식당 수집 (저장 없음)")
     parser.add_argument("--attractions", type=Path, required=True, help="관광지 목록 JSON")
-    parser.add_argument("--prefs", type=Path, required=True, help="부모님 음식 취향 JSON")
     parser.add_argument("--city", required=True, help="도시명 (예: 다낭)")
     parser.add_argument("--country", help="ISO 국가 코드 (예: VN). 현지 음식 판단에 사용")
     parser.add_argument("--radius", type=float, default=1000, help="반경 m (기본 1000)")
@@ -41,11 +38,9 @@ def main() -> None:
         Attraction.model_validate(a)
         for a in json.loads(args.attractions.read_text(encoding="utf-8"))
     ][: args.limit]
-    pref = FoodPreference.model_validate_json(args.prefs.read_text(encoding="utf-8"))
 
     result = collect(
         attractions,
-        pref,
         city=args.city,
         country=args.country,
         radius_m=args.radius,

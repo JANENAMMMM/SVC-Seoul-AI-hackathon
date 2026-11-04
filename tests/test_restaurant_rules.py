@@ -3,7 +3,6 @@
 import pytest
 
 from src.restaurants.google_places import OpeningPeriod, Restaurant
-from src.restaurants.preferences import FoodPreference
 from src.restaurants.ranking import build_candidates, is_food_place
 
 HOURS = [OpeningPeriod(open_day=d, open_time="10:00", close_day=d, close_time="22:00") for d in range(7)]
@@ -59,15 +58,15 @@ def test_cooking_class_by_name(name, expected):
 def test_cooking_class_excluded_by_name_not_reviews():
     """대표 타입이 restaurant여도 이름에 쿠킹 클래스가 있으면 제외한다."""
     cands = build_candidates(
-        [make("c1", "korean_restaurant"), make("ok1", "pizza_restaurant")], FoodPreference()
+        [make("c1", "korean_restaurant"), make("ok1", "pizza_restaurant")]
     )
     cands[0].restaurant.name = "Tuong cooking class hoi an"
-    cands = build_candidates([cands[0].restaurant, cands[1].restaurant], FoodPreference())
+    cands = build_candidates([cands[0].restaurant, cands[1].restaurant])
     reasons = {c.restaurant.place_id: c.excluded_reason for c in cands}
     assert "쿠킹 클래스" in reasons["c1"] and reasons["ok1"] is None
 
 
 def test_hotel_excluded_with_reason():
-    cands = build_candidates([make("h", "resort_hotel"), make("r")], FoodPreference())
+    cands = build_candidates([make("h", "resort_hotel"), make("r")])
     reasons = {c.restaurant.place_id: c.excluded_reason for c in cands}
     assert "음식점이 아님" in reasons["h"] and reasons["r"] is None
