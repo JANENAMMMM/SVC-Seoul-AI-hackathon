@@ -71,3 +71,13 @@ def test_itinerary_is_only_proposed_until_approved(make_profile, monkeypatch):
     approved = hitl.approve_itinerary(None, fid, "child")
     assert store[fid]["status"] == "applied"
     assert approved.state.mode_overrides.get("dad-02") == "short"
+
+
+def test_human_review_distinguishes_cited_and_reviewed():
+    runs = [{"run_index": 1, "output": {"dimensions": {
+        "climb": {"evidence_ids": ["gps:x"], "rationale": "MD 보고(human:fb-1:0)는 웹으로 확인되지 않아 유지"},
+        "heat": {"evidence_ids": ["human:fb-1:1"], "rationale": "MD 보고 반영"},
+        "crowd": {"evidence_ids": ["rev:x"], "rationale": "리뷰 기준"}}}}]
+    out = hitl.human_review("fb-1", runs)
+    assert out["climb"]["verdict"] == "reviewed" and out["heat"]["verdict"] == "cited"
+    assert "crowd" not in out

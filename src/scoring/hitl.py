@@ -187,6 +187,25 @@ def human_evidence(fid, adjustments):
             for i, a in enumerate(adjustments)]
 
 
+def human_review(fid, runs):
+    """AI가 MD 의견을 어떻게 다뤘는지: 근거로 인용(cited) / 검토했지만 인용 안 함(reviewed) / 언급 없음.
+
+    차원별 rationale에서 의견 ID를 언급한 문장을 그대로 돌려준다(화면에 "AI가 이렇게 판단했다"로 표시).
+    """
+    tag = f"human:{fid}:"
+    out = {}
+    for r in runs:
+        for dim, d in (r["output"].get("dimensions") or {}).items():
+            if not isinstance(d, dict):
+                continue
+            cited = any(str(i).startswith(tag) for i in d.get("evidence_ids", []))
+            note = d.get("rationale") or ""
+            if cited or tag in note:
+                out[dim] = {"verdict": "cited" if cited else "reviewed", "run_index": r["run_index"],
+                            "rationale": note}
+    return out
+
+
 def rejudge(conn, fid, max_runs=3, judge_fn=None):
     """MD 주장을 human: 근거로 넣고 해당 장소만 재채점(스테이징, 게시 안 함). LLM: Sonnet 1~3회."""
     from .run_judge import aggregate_site, judge_site
@@ -203,10 +222,11 @@ def rejudge(conn, fid, max_runs=3, judge_fn=None):
         cited = sorted({i for r in runs for d in (r["output"].get("dimensions") or {}).values()
                         if isinstance(d, dict) for i in d.get("evidence_ids", []) if str(i).startswith("human:")})
         results[pid] = {"aggregate": json.loads(db.dumps(agg)), "run_ids": [r["run_id"] for r in runs],
-                        "human_cited": cited}
+                        "human_cited": cited, "human_review": human_review(fid, runs)}
         usage += [r.get("usage") for r in runs]
     after = {pid: {"composite": r["aggregate"]["composite"], "dimensions": r["aggregate"]["dimensions"],
-                   "status": r["aggregate"]["status"], "human_cited": r["human_cited"]}
+                   "status": r["aggregate"]["status"], "human_cited": r["human_cited"],
+                   "human_review": r["human_review"]}
              for pid, r in results.items()}
     conn.execute("update scoring_feedback set status='rejudged', after_json=%s, llm_usage=%s where id=%s",
                  (_jsonb({"results": results}), _jsonb({**(fb["llm_usage"] or {}), "rejudge": usage}), fid))
