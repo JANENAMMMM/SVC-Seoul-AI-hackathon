@@ -314,7 +314,7 @@ body.shownotes .notes{display:block}
         <tr><td><b>14</b></td><td><b>12</b></td><td><b>11</b></td><td><b>10</b></td><td><b>8</b></td></tr>
       </table>
       <p class="cap">오행산 + 영흥사 + 미케 해변 = 14 → 30대는 가능, 70대는 초과</p>
-      <p class="cap" style="margin-top:10px">엔진이 지금 쓰는 값은 이 표가 아니라, 보행 지속시간으로 정한 하루 피로 예산 9~17점(75세 이상 −1)입니다. 근거 없는 가정값이며 이 표와는 연결돼 있지 않습니다.</p>
+      <p class="cap" style="margin-top:10px">엔진이 지금 쓰는 값은 이 표가 아니라, 보행 지속시간으로 정한 하루 피로 예산 9~17점(75세 이상 −1 등)입니다. 근거 없는 가정값이며 이 표와는 연결돼 있지 않습니다.</p>
       <div class="src">14 × 연령별 보행 능력 비율 · 한국 성인 612명 보행 연구, 세션 RPE, 젖산역치 연구</div>
     </div>
   </div>
@@ -330,10 +330,10 @@ body.shownotes .notes{display:block}
       <table>
         <tr><th>단계</th><th>핵심 규칙</th></tr>
         <tr><td style="white-space:nowrap;padding-right:14px"><b>조건 합치기</b></td><td>가장 느린 사람 · 가장 짧은 보행 한도</td></tr>
-        <tr><td style="white-space:nowrap;padding-right:14px"><b>하루 구성</b></td><td>관광지 · 순서 · 식당을 함께 정함. 최대 3곳, 점수 합 ≤ <b>피로 예산</b> 9~17</td></tr>
-        <tr><td style="white-space:nowrap;padding-right:14px"><b>관람 방식</b></td><td>일반 · 짧게 · 전체 중 선택, 하루 난이도 상한 7</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>하루 구성</b></td><td>하루에 묶을 관광지와 식당을 함께 정함. 최대 3곳, 점수 합 ≤ <b>피로 예산</b> 9~17</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>관람 방식</b></td><td>일반 · 짧게 (전체는 직접 선택), 하루 난이도 상한 7</td></tr>
         <tr><td style="white-space:nowrap;padding-right:14px"><b>시간표</b></td><td>영업시간 · 휴무, 연속 보행 한도 후 25분 휴식, 꼭 갈 곳 유지</td></tr>
-        <tr><td style="white-space:nowrap;padding-right:14px"><b>식사 · 빈 시간</b></td><td>하루 2끼(저녁 17:30~), 30분 넘게 비면 체류 연장 → "자유 시간"</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>식사 · 빈 시간</b></td><td>하루 2끼(저녁 17:30~), 30분 이상 비면 체류 연장 → "자유 시간"</td></tr>
       </table>
       <p class="cap" style="margin-top:14px">전에는 권역별로 묶은 뒤 식당을 나중에 붙였고, 지금은 피로 예산 안에서 관광지와 식당을 한 번에 정합니다. AI는 요청을 수정 명령 9개 중 하나로 바꾸기만 하며, 바뀐 일정은 승인해야 반영됩니다.</p>
     </div>
@@ -342,7 +342,7 @@ body.shownotes .notes{display:block}
       <div class="src">일정 엔진 실행 결과 · 식당은 데모 데이터 · 이동시간은 직선거리 추정</div>
     </div>
   </div>
-  <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3-2(하루 구성)·§3-3, src/planner/compose.py, config.json(fatigue·free_time). 참고 아티팩트(엔진 설계 페이지)와 route_planner.md 일치 확인. 비용 함수=이동 분+0.5×대기 분+식당 점수 차이×10+날 사이 장소 수 차이×30+빈 날 800 등 가중치도 팀 가정값. 72건 합성 시나리오 비교이며 외부 검증은 아직 없음(한식 조건 충족 64/72, 계산 평균 0.35초·최대 2초). 피로 예산(9~17, 75세 이상 −1)·하루 최대 3곳·체류 범위는 근거 없는 가정값 — 8장 연령별 상한(14/12/11/10/8)과는 다른 값이며 서로 연동되지 않음. 날짜 배정이 쏠리던 문제는 해결(장소 수 차이 2 이상 30건→1건, 72건 비교), 빈 시간은 줄인 게 아니라 자유 시간 칸으로 표시(평균 10.7시간, 3일 기준). 화면 캡처는 변경 전 UI 기준이라 UI 확정 후 재캡처.</div>
+  <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3-2(하루 구성)·§3-3, src/planner/compose.py, config.json(fatigue·free_time). 참고 아티팩트(엔진 설계 페이지)와 route_planner.md 일치 확인. 비용 함수=이동 분+0.5×대기 분+식당 점수 차이×10+날 사이 장소 수 차이×30+빈 날 800 등 가중치도 팀 가정값. 표의 단계 구분은 발표용 단순화: 실제로는 관람 방식 조정(일반↔짧게)이 하루 구성 안에서 피로 예산에 맞춰 일어나고, 방문 순서와 식당 확정은 시간표 시뮬레이션이 다시 정함. 72건 합성 시나리오 비교이며 외부 검증은 아직 없음(한식 조건 충족 64/72, 계산 평균 0.35초·최대 2초). 피로 예산(9~17, 75세 이상 −1)·하루 최대 3곳·체류 범위는 근거 없는 가정값 — 8장 연령별 상한(14/12/11/10/8)과는 다른 값이며 서로 연동되지 않음. 날짜 배정이 쏠리던 문제는 해결(장소 수 차이 2 이상 30건→1건, 72건 비교), 빈 시간은 줄인 게 아니라 자유 시간 칸으로 표시(평균 10.7시간, 3일 기준).</div>
 </section>
 
 <!-- HITL (MD + 가족 한 장) -->
@@ -472,7 +472,7 @@ body.shownotes .notes{display:block}
         <tr><td>"보통 체력 50세 이상"을 가정한 설계 점수</td><td>가이드 · MD가 AI 점수를 보지 않고 10~15곳 평가, ±1점 일치율 공개</td></tr>
         <tr><td>연령별 체력 상한은 기준만 수립, 엔진은 가정값 피로 예산(9~17점) 사용</td><td>연령별 상한과 엔진 예산을 근거 있는 하나의 기준으로 통합, 체류 시간 가중</td></tr>
         <tr><td>이동 시간은 직선거리로 추정</td><td>실제 길찾기 연결</td></tr>
-        <tr><td>하루 안 빈 시간이 길고, 호이안 날은 12시간 가까이</td><td>오후로 옮기는 비용 항 추가, 장소 자동 구성</td></tr>
+        <tr><td>하루 안 빈 시간이 길고, 먼 곳이 낀 날은 하루가 길어짐(호이안 날 약 10시간)</td><td>오전·오후 장소 배분 개선, 장소 자동 구성</td></tr>
       </table>
     </div>
     <div class="col" style="justify-content:flex-end">
@@ -498,7 +498,7 @@ body.shownotes .notes{display:block}
 <!-- 부록 C -->
 <section class="slide full">
   <img src="assets/workflow_full_9c5719a.png" alt="부록 C">
-  <div class="notes"><b>부록 C (Q&amp;A용).</b> ScoringAI v2.2 전체 구조. 글자가 작아 Q&amp;A에서만 사용. 주의: 그림 속 그림 속 "28회 중 22회"는 재채점 실행 28회(장소당 평균 1.9회) 중 전 차원 통과 22회이고, 7장 "14/15"는 15곳 중 공개 가능 곳 수라 단위가 다름. "하루 최대 +2"는 보너스 상한이고 7은 최고 점수와 합친 하루 난이도 상한. "현재 한시장"은 검수 대기 중인 실제 사례(13장에서는 뺌).</div>
+  <div class="notes"><b>부록 C (Q&amp;A용).</b> ScoringAI v2.2 전체 구조. 글자가 작아 Q&amp;A에서만 사용. 주의: 그림 속 "28회 중 22회"는 재채점 실행 28회(장소당 평균 1.9회) 중 전 차원 통과 22회이고, 7장 "14/15"는 15곳 중 공개 가능 곳 수라 단위가 다름. "하루 최대 +2"는 보너스 상한이고 7은 최고 점수와 합친 하루 난이도 상한. "현재 한시장"은 검수 대기 중인 실제 사례(13장에서는 뺌).</div>
 </section>
 
 </div>
