@@ -3,6 +3,9 @@
 요청 필드는 Enterprise 등급까지만 쓴다. Atmosphere 필드(reviews, reviewSummary 등)를
 하나라도 넣으면 모든 요청이 가장 비싼 등급으로 계산되므로 여기서는 받지 않는다.
 문서: https://developers.google.com/maps/documentation/places/web-service/nearby-search
+
+저장 규칙: 응답은 메모리에서만 쓰고 파일·DB에 쓰지 않는다. 이 Restaurant 모델은 화면 표시와 계산용
+임시 값이고, 일정에 남기는 건 place_id뿐이다.
 """
 
 import os
@@ -17,7 +20,7 @@ from pydantic import BaseModel
 ENDPOINT = "https://places.googleapis.com/v1/places:searchNearby"
 MAX_RESULTS = 20  # Nearby Search 한 번에 받을 수 있는 최대 개수
 
-# 1단계 정리본 기준. id·displayName·location은 다음 단계(네이버 검색, 거리, 재사용)에 필요해 추가.
+# 1단계 정리본 기준. id·displayName·location은 다음 단계(거리 계산, 재조회)에 필요해 추가.
 # 등급: Pro = id, displayName, location, primaryType / Enterprise = 나머지
 FIELDS = (
     "id",
