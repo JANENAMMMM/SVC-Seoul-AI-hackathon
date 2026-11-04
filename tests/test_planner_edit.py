@@ -1,6 +1,7 @@
 import datetime
 
-from pydantic import TypeAdapter
+import pytest
+from pydantic import TypeAdapter, ValidationError
 
 from src.planner.edit import NO_LLM_MESSAGE, refine
 from src.planner.engine import build_itinerary
@@ -89,3 +90,13 @@ def test_refine_is_repeatable_from_the_returned_state(make_profile):
                    rest=Restaurants()).itinerary
     second = refine(first, cmds({"op": "set_pace", "pace": "slower"}), rest=Restaurants()).itinerary
     assert day_of(second)["dad-05"] == 2
+
+
+def test_unknown_place_is_rejected(make_profile):
+    with pytest.raises(ValueError, match="dad-99"):
+        build_itinerary(PlanRequest(travelers=[make_profile()], place_ids=["dad-99"], days=1), Restaurants())
+
+
+def test_invalid_command_shape_is_rejected():
+    with pytest.raises(ValidationError):
+        adapter.validate_python({"op": "fly_away"})

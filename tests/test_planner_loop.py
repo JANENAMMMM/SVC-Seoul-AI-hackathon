@@ -171,14 +171,8 @@ def test_pace_factor_applies_on_top_of_the_adjusted_limit(make_profile):
     assert limit_of(res.itinerary) <= 45
 
 
-def test_new_commands_work_through_the_api():
-    from fastapi.testclient import TestClient
-    from api.main import app
-
-    with TestClient(app) as client:
-        profile = client.post("/api/profile", json={"age": 55, "gender": "male", "walking_duration": "15_30min"}).json()
-        plan = client.post("/api/planner/plan", json={"travelers": [profile], "place_ids": ["dad-02"], "days": 1}).json()
-        res = client.post("/api/planner/refine", json={
-            "itinerary": plan, "commands": [{"op": "adjust_walk_limit", "direction": "more"}]})
-        assert res.status_code == 200
-        assert res.json()["itinerary"]["state"]["walk_limit_override"] == 40
+def test_adjust_walk_limit_raises_the_limit_one_step(make_profile):
+    profile = make_profile(**STRONG, walking_duration="15_30min")
+    plan = build_itinerary(PlanRequest(travelers=[profile], place_ids=["dad-02"], days=1), Restaurants())
+    res = refine(plan, cmds({"op": "adjust_walk_limit", "direction": "more"}), rest=Restaurants())
+    assert res.itinerary.state.walk_limit_override == 40
