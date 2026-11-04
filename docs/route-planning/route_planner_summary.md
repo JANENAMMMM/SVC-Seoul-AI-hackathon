@@ -17,7 +17,7 @@
 | 점심·저녁 식당 선택, 한식 빈도, 식당 고정·교체 | 날 사이 균형(한 곳만 있는 날), 식당에서 다음 장소로 바로 가는 이동 |
 | 식당 태그(`venue_type`, `ingredient_tags`)로 식사 장소·기피 재료 거름 (데모 식당 데이터, 돼지고기 기피 일정 1건으로 확인) | - |
 | 영업시간·휴무 반영, 난이도 상한(재은님 모듈) | 직접 입력한 기피 재료(`avoid_other`) 반영 |
-| 테스트 전체 249개 통과 (일정 120개) | `set_food_pref`, `avoid_ingredient`, `suggest_alternatives` 명령 |
+| 테스트 전체 257개 통과 (일정 128개) | `set_food_pref`, `avoid_ingredient`, `suggest_alternatives` 명령 |
 
 ## 엔진 호출
 
