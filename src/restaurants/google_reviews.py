@@ -6,6 +6,10 @@
 두 필드 모두 Enterprise + Atmosphere 등급이라 상위 몇 곳에만 호출한다.
 리뷰를 화면에 보여줄 때는 작성자 표기(author)와 링크를 함께 보여줘야 한다.
 문서: https://developers.google.com/maps/documentation/places/web-service/place-details
+
+저장·가공 규칙: 리뷰는 저장하지 않고 메모리에서만 쓴다. 가공하지 않고 원문 그대로 담는다
+(키워드 태그·경고 같은 파생 정보를 만들지 않는다). 일정에 남기는 건 place_id뿐이다.
+표시 규칙: 리뷰를 보여줄 때는 작성자를 항상 표시한다 (author, author_uri).
 """
 
 from typing import Any, Optional
