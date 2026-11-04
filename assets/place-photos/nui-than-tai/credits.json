@@ -1,0 +1,21 @@
+{
+  "place": "누이탄타이 온천",
+  "photos": [
+    {
+      "file": "01.jpg",
+      "title": "File:CVKSN Núi Thần Tài.jpg",
+      "author": "Linhvvn",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:CVKSN_N%C3%BAi_Th%E1%BA%A7n_T%C3%A0i.jpg"
+    },
+    {
+      "file": "02.jpg",
+      "title": "File:Công Viên Suối Khoáng Nóng Núi Thần Tài.jpg",
+      "author": "Laitanphuoc",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:C%C3%B4ng_Vi%C3%AAn_Su%E1%BB%91i_Kho%C3%A1ng_N%C3%B3ng_N%C3%BAi_Th%E1%BA%A7n_T%C3%A0i.jpg"
+    }
+  ]
+}
