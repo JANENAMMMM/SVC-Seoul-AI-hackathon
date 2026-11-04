@@ -141,7 +141,14 @@ def _diff_lines(before: Itinerary, after: Itinerary) -> list[str]:
 
 
 def refine(current: Itinerary, commands: list[EditCommand], feedback: str | None = None,
-           rest: Restaurants | None = None) -> RefineResponse:
+           rest: Restaurants | None = None, interpreter=None) -> RefineResponse:
+    """명령이 없고 피드백만 있으면 interpreter(자연어 -> 명령 변환)로 명령을 만든다. 없으면 안내만 돌려준다."""
+    notes = ""
+    if not commands and feedback and interpreter is not None:
+        result = interpreter.interpret(current, feedback)
+        commands, notes = result.commands, result.notes()
+        if not commands:
+            return RefineResponse(itinerary=current, clarification=notes or "적용할 수 있는 수정 명령을 찾지 못했습니다.")
     if not commands:
         message = NO_LLM_MESSAGE if feedback else "적용할 수정 명령이 없습니다."
         return RefineResponse(itinerary=current, clarification=message)
@@ -159,7 +166,7 @@ def refine(current: Itinerary, commands: list[EditCommand], feedback: str | None
         summary, problem = _apply(req, current, cmd, names)
         (problems if problem else summaries).append(problem or summary)
     if problems:
-        return RefineResponse(itinerary=current, clarification=" ".join(problems))
+        return RefineResponse(itinerary=current, clarification=" ".join(([notes] if notes else []) + problems))
 
     updated = build_itinerary(req, rest)
     for key, old_id in swaps:
@@ -169,4 +176,5 @@ def refine(current: Itinerary, commands: list[EditCommand], feedback: str | None
             return RefineResponse(itinerary=current, clarification=(
                 f"{day}일차 {MEAL_LABEL[meal]}에 대체할 다른 식당 후보를 찾지 못했습니다."))
     summary_text = "\n".join(summaries + _diff_lines(current, updated))
-    return RefineResponse(itinerary=updated, applied_commands=commands, change_summary=summary_text)
+    return RefineResponse(itinerary=updated, applied_commands=commands, change_summary=summary_text,
+                          clarification=notes or None)

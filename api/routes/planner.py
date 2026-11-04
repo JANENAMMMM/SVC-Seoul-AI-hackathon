@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from src.planner.edit import refine
 from src.planner.engine import build_itinerary
+from src.planner.feedback import FeedbackInterpreter
 from src.planner.schema import Itinerary, PlanRequest, RefineRequest, RefineResponse
 
 router = APIRouter(prefix="/api/planner", tags=["planner"])
@@ -20,6 +21,8 @@ def plan(request: PlanRequest) -> Itinerary:
 @router.post("/refine", response_model=RefineResponse)
 def refine_plan(body: RefineRequest) -> RefineResponse:
     try:
-        return refine(body.itinerary, body.commands, body.feedback)
+        # ANTHROPIC_API_KEY가 있을 때만 자연어 피드백을 명령으로 바꾼다. 없으면 이전처럼 안내만 돌려준다.
+        interpreter = FeedbackInterpreter() if FeedbackInterpreter.available() else None
+        return refine(body.itinerary, body.commands, body.feedback, interpreter=interpreter)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
