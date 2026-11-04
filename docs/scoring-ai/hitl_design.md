@@ -1,9 +1,11 @@
 # HITL 피드백 루프 (해커톤 버전) — 사람이 고치고, AI가 근거로 다시 판단한다
 
-> 2026-11-04 · 남재은 · 브랜치 `feat/scoring-hitl` · 그림: `python docs/scoring-ai/assets/gen_hitl.py`
+> 2026-11-04 · 남재은 · 브랜치 `feat/scoring-hitl` · 그림: `python docs/scoring-ai/assets/gen_hitl_slides.py` (발표용, 하나투어 보라 #5e2bb8)
 > 상용화 고도화안(전체 버전)은 [hitl_roadmap.md](hitl_roadmap.md). 전체 구현은 `archive/scoring-hitl-full` 브랜치에 보관.
 
-![HITL 피드백 루프](assets/hitl_loop.png)
+![MD 의견을 AI가 확인하고 다시 판단](assets/hitl_slide_1_md.png)
+
+![자녀·부모님 의견은 미리보기 후 승인](assets/hitl_slide_2_family.png)
 
 ## 원칙
 
