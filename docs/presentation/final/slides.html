@@ -302,25 +302,23 @@ body.shownotes .notes{display:block}
   <div class="sec"><b>02</b>해결 · 동선과 사람의 확인</div>
   <h1>동선은 <em>규칙</em>이 짜고, 현실과 다르면 <em>사람</em>이 고칩니다</h1>
   <div class="body" style="margin-top:28px;gap:40px">
-    <div class="col" style="flex:.7">
+    <div class="col" style="flex:1.05">
       <table>
-        <tr><th>규칙 (우선순위 순)</th></tr>
-        <tr><td><b>영업시간 · 휴무</b></td></tr>
-        <tr><td><b>하루 구성</b> 최대 3곳, 점수 합이 <b>피로 예산</b> 이내</td></tr>
-        <tr><td><b>연속 보행 한도</b> 12~90분, 닿으면 25분 휴식</td></tr>
-        <tr><td><b>꼭 갈 곳</b>은 끝까지 유지</td></tr>
-        <tr><td><b>하루 난이도 상한</b> 7</td></tr>
-        <tr><td><b>식사</b> 하루 2끼, 한식은 여행 전체 조건</td></tr>
-        <tr><td><b>이동</b> 최소화, 도보 10분 넘으면 택시</td></tr>
+        <tr><th>단계</th><th>핵심 규칙</th></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>조건 합치기</b></td><td>가장 느린 사람 · 가장 짧은 보행 한도</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>하루 구성</b></td><td>관광지 · 순서 · 식당을 함께 정함. 최대 3곳, 점수 합 ≤ <b>피로 예산</b> 9~17</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>관람 방식</b></td><td>일반 · 짧게 · 전체 중 선택, 하루 난이도 상한 7</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>시간표</b></td><td>영업시간 · 휴무, 연속 보행 한도 후 25분 휴식, 꼭 갈 곳 유지</td></tr>
+        <tr><td style="white-space:nowrap;padding-right:14px"><b>식사 · 빈 시간</b></td><td>하루 2끼(저녁 17:30~), 30분 넘게 비면 체류 연장 → "자유 시간"</td></tr>
       </table>
-      <p class="cap" style="margin-top:14px">관광지와 식당을 하루 단위로 한 번에 묶어 계산하고, 남는 시간은 "자유 시간 · 숙소 휴식"으로 표시합니다. AI는 요청을 수정 명령 9개 중 하나로 바꾸기만 하며, 바뀐 일정은 승인해야 반영됩니다.</p>
+      <p class="cap" style="margin-top:14px">전에는 권역별로 묶은 뒤 식당을 나중에 붙였고, 지금은 피로 예산 안에서 관광지와 식당을 한 번에 정합니다. AI는 요청을 수정 명령 9개 중 하나로 바꾸기만 하며, 바뀐 일정은 승인해야 반영됩니다.</p>
     </div>
     <div class="col" style="flex:1.9">
       <div class="shot"><img src="assets/03-customer-comparison.png" alt="고객 화면: 이 날 적용된 규칙과 변경안 승인"></div>
       <div class="src">현재 화면 (시연 데이터) — 그날 적용된 규칙과 변경 근거를 화면에 표시</div>
     </div>
   </div>
-  <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3-2(하루 구성)·§3-3, src/planner/compose.py, config.json(fatigue·free_time). 피로 예산(9~17, 75세 이상 −1)·하루 최대 3곳·체류 범위는 근거 없는 가정값 — 8장 연령별 상한(14/12/11/10/8)과는 다른 값이며 서로 연동되지 않음. 날짜 배정이 쏠리던 문제는 해결(장소 수 차이 2 이상 30건→1건, 72건 비교), 빈 시간은 줄인 게 아니라 자유 시간 칸으로 표시(평균 10.7시간, 3일 기준). 화면 캡처는 변경 전 UI 기준이라 UI 확정 후 재캡처.</div>
+  <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3-2(하루 구성)·§3-3, src/planner/compose.py, config.json(fatigue·free_time). 참고 아티팩트(엔진 설계 페이지)와 route_planner.md 일치 확인. 비용 함수=이동 분+0.5×대기 분+식당 점수 차이×10+날 사이 장소 수 차이×30+빈 날 800 등 가중치도 팀 가정값. 72건 합성 시나리오 비교이며 외부 검증은 아직 없음(한식 조건 충족 64/72, 계산 평균 0.35초·최대 2초). 피로 예산(9~17, 75세 이상 −1)·하루 최대 3곳·체류 범위는 근거 없는 가정값 — 8장 연령별 상한(14/12/11/10/8)과는 다른 값이며 서로 연동되지 않음. 날짜 배정이 쏠리던 문제는 해결(장소 수 차이 2 이상 30건→1건, 72건 비교), 빈 시간은 줄인 게 아니라 자유 시간 칸으로 표시(평균 10.7시간, 3일 기준). 화면 캡처는 변경 전 UI 기준이라 UI 확정 후 재캡처.</div>
 </section>
 
 <!-- HITL (MD + 가족 한 장) -->
@@ -440,6 +438,7 @@ body.shownotes .notes{display:block}
         <tr><td>"보통 체력 50세 이상"을 가정한 설계 점수</td><td>가이드 · MD가 AI 점수를 보지 않고 10~15곳 평가, ±1점 일치율 공개</td></tr>
         <tr><td>연령별 체력 상한은 기준만 수립, 엔진은 가정값 피로 예산(9~17점) 사용</td><td>연령별 상한과 엔진 예산을 근거 있는 하나의 기준으로 통합, 체류 시간 가중</td></tr>
         <tr><td>이동 시간은 직선거리로 추정</td><td>실제 길찾기 연결</td></tr>
+        <tr><td>하루 안 빈 시간이 길고, 호이안 날은 12시간 가까이</td><td>오후로 옮기는 비용 항 추가, 장소 자동 구성</td></tr>
       </table>
     </div>
     <div class="col" style="justify-content:flex-end">
