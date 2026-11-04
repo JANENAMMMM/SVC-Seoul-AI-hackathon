@@ -28,7 +28,9 @@ export type Stop = {
   walk_min?: number;
   minutes?: number;
   transport?: string;
-  note?: string;
+  note?: string | null;
+  reason?: string | null;
+  meal?: string | null;
   restaurant?: { name: string };
 };
 export type Day = {
