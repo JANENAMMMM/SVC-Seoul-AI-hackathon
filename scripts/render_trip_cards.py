@@ -18,8 +18,8 @@ def credit_for(photo: str) -> str:
     slug, name = photo.split("/")
     info = json.loads((PHOTOS / slug / "credits.json").read_text())
     p = next(x for x in info["photos"] if x["file"] == name)
-    author = p["author"] if len(p["author"]) <= 40 else p["author"][:38] + "…"
-    return f"{author} · {p['license']} · Wikimedia Commons"
+    author = p["author"] if len(p["author"]) <= 22 else p["author"][:20] + "…"
+    return f"{author} · {p['license']}"
 
 
 def main():
