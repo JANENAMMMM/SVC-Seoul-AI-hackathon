@@ -1,0 +1,118 @@
+반걸음 최종 발표 자료 작업 인계 (2026-11-05 00:35 KST 기준)
+================================================================
+이전 작업자: 남재은(JANENAMMMM)의 Claude Code 세션. 이 문서는 그 대화를 요약한 것이다.
+보고·답변은 항상 한국어로 한다.
+
+0. 한 줄 상태
+--------------
+13→15장 HTML 슬라이드(slides.html)와 PDF(slides.pdf)를 만들었다. develop에는 v0.1이 PR #28로 머지됐고,
+그 뒤의 디자인 개편(v0.2: 글자 축소·AI 느낌 제거, 그림을 테마에 맞춰 HTML로 다시 그림, HITL 2장→1장)은
+아직 커밋하지 않았다.
+
+1. 작업 위치와 규칙
+--------------------
+- 작업 폴더: C:\Users\janen\Documents\26-2\SVC Seoul AI 해커톤\wt-presentation (git worktree)
+- 브랜치: docs/final-presentation (develop dc20244까지 fast-forward 완료)
+- 결과물: docs/presentation/final/
+    slides.html   ← 원본. 브라우저로 열기. ← → 이동, N 발표자 메모(출처·멘토 근거), F 전체화면
+    slides.pdf    ← Edge headless로 인쇄해 생성 (아래 명령)
+    judging-criteria.md ← 주최측 심사기준·발표 규칙
+    assets/       ← UI 캡처 4장, 55초 리허설 영상(webm), 발표용 그림 PNG(현재 슬라이드에선 미사용)
+- develop에 새 UI가 올라오면: git fetch && git merge origin/develop (rebase 아님)
+- 커밋·PR 규칙: CONTRIBUTING.md (prefix: 한글 설명, develop으로 PR). PNG는 .gitignore(*.png) 때문에 git add -f 필요.
+- 커밋 끝에: Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- 제약: .env 비밀값 출력 금지, DB는 조회만, legacy/와 다른 팀원 코드 수정 금지. 실행하지 않은 것을 됐다고 쓰지 않기.
+
+PDF 재생성 (Git Bash):
+  cd ".../wt-presentation/docs/presentation/final"
+  "/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" --headless=new --disable-gpu \
+    --no-pdf-header-footer --virtual-time-budget=6000 \
+    --print-to-pdf="$(pwd -W)/slides.pdf" "file:///$(pwd -W | sed 's/ /%20/g')/slides.html"
+  (인쇄용 CSS가 slides.html 안에 있음: 1쪽 1장, 메모·영상 숨김, 영상 자리엔 캡처 이미지)
+
+2. 발표 규칙 (주최측)
+----------------------
+- 7분 발표, 직접 시연 없음 → PPT 속 영상만. 11/6(금) 경진대회, 11:30부터 리허설(영상 재생·포인터·2~3분 연습만).
+- 심사(100): 문제정의 20 / 창의성 20 / 고객·시장성 15 / 실현가능성·BM 15 / AI 활용 15 / 발표 완성도 15
+- 멘토 공통: 문제 → 핵심 원인 → 미해결 니즈 → 우리 해결. "현상 → 바로 솔루션" 금지.
+- 우선순위: ① 심사기준·멘토 피드백 ② 우리가 만든 것을 문제정의 흐름에 맞춰 어필.
+
+3. 확정된 결정
+---------------
+- 문제정의: 대전제 + 부전제. 부전제는 노션 "멘토" 페이지들의 초록 하이라이트에서만 뽑았다.
+    대전제: 트랙(효도여행)은 카테고리, 우리 문제는 "부모님 일정이 무리인지 판단할 기준이 자녀에게도 여행사에도 없다" (이도경 멘토)
+    부전제 ① MD는 하루 완주만 보고 개인 부담은 안 봄 (조윤곤 아이디어피드백, 화자 불명확 → "하나투어 관계자 멘토링"으로 표기)
+          ② 일정 배치는 가이드 역량 (발표10분 피드백, 멘토 이름 미상)
+          ③ Places 데이터로도 동선 현실성 없음 (같은 멘토)
+          ④ 피로도 측정이 피상적 (같은 멘토)
+- 수치·등급은 "코드 기준": src/scoring/verify.py GRADE_CUTS(3,5) → 하≤3·중≤5·상≥6. 바나힐·오행산=상.
+  develop의 docs/scoring-ai/README.md "7~10 상"은 낡은 문구(수정본은 score-display 브랜치 9c5719a, develop 미반영).
+- 하루 난이도 두 정의는 역할 분리:
+    배치 규칙 = 그날 최고점 + 6점 이상 연속 쌍당 +1, 상한 7 (src/scoring/package_difficulty.py, src/planner/engine.py) — 엔진 동작 중
+    사람 체력 상한 = 하루 점수 합계, 연령별 14/12/11/10/8 (이지원 노션 "[지원]사람 피로도 기준+관련 자료 조사") — 엔진 미연동, "기준 수립"으로만 표현
+- 사람 피로도를 "구현했다"고 말하지 않는다 (회의록에 과장하자는 메모가 있었으나 Q&A 위험).
+- 수익 구조(12장): 고객 무료, 여행사가 비용. ① 상품 부담 라벨·MD 검수 도구 ② 맞춤 상품 상담 연결. 단가는 미정("파일럿 후 상품 수 기준").
+- 디자인: 색은 디자인 시스템 보라(#5e2bb8) 유지. 한 장 한 메시지(제목=결론), 본문은 숫자·표·화면 하나, 설명은 발표자 메모.
+  로직 설명 장은 그림이 꽉 차도 됨. 원래 PNG 그림은 "밤티"라 테마에 맞춰 HTML로 다시 그림.
+
+4. 현재 슬라이드 (15장)
+------------------------
+ 1 표지
+ 2 문제: 무리일까? + 통계 3개 (71.4%, 63.3%, 23.1%)
+ 3 현장의 목소리: 멘토 인용 4개
+ 4 원인: 공통 기준표 없음 + 기존 대안 비교표
+ 5 관광지 난이도: 15곳 등급표 + 오행산 관람 방식별 5/6/7
+ 6 근거 수집 (HTML 표로 재작성): 출처 5+초기조사, 합계 523건, 리뷰 1,994
+ 7 AI 채점·검증 (HTML 5단계 흐름): 14/15 통과, AI끼리 일치 8/15
+ 8 하루 부담 두 가지 (배치 규칙 상한 7 / 연령별 체력 상한)
+ 9 동선 규칙 + 현재 고객 화면 캡처
+10 HITL 한 장 (MD 줄 / 자녀·부모님 줄, 사람→AI→사람)
+11 시연 영상 (assets/demo-rehearsal-55s.webm)
+12 고객: 부모님 공유 화면 + MD 패키지 분석 실제 API 결과(1일차 8→6, 최고 8→6, 평균 6.0→5.0)
+13 예외 처리 3가지
+14 비용·단계·수익 ($0.157/곳, 15곳 $2.36(누적 $5.52), 1,000곳 약 $160, 재채점 $0.065, 해석 $0.0003~0.0006)
+15 한계와 다음 단계
+
+5. 사용자에게 물어본 채 답을 못 받은 것
+-----------------------------------------
+- 7장 흐름 아래 빈 공간: (A) 오행산 실제 채점 결과 한 줄 넣기 / (B) 비워 두기
+- 원래 PNG 그림: (A) Q&A용 부록 슬라이드로 맨 뒤에 / (B) 제외
+- 2·3·4·8·13·14장 아래쪽 여백: 그대로 둘지, 화면·그림을 더 넣을지
+- 15장이면 7분이 빠듯함 → 대본 쓴 뒤 1분당 약 300음절 기준으로 시간 재조정 필요(지금 시간 배분은 근거 없는 추정이었음)
+
+6. 남은 일
+-----------
+- v0.2 변경(slides.html, slides.pdf, HANDOFF.txt) 커밋 → develop PR (사용자 요청 시)
+- UI 확정 후: 캡처 4장·영상 재촬영 (frontend/scripts/record-demo.mjs, 시연 데이터 모드, 유료 호출·DB 쓰기 없음), 영상 MP4 변환
+  앱 실행: frontend에서 npm ci && npm run build → 루트에서
+    PYTHONPATH=. .venv/Scripts/python.exe -m uvicorn api.main:app --host 127.0.0.1 --port 8131
+  (uv run 으로는 백그라운드 기동이 실패했음. .env 없이 시연 데이터 모드로 뜸)
+- 대본 작성, 예상 질문 대비(점수 신뢰성 / 다낭 외 확장 / 연령 상한 근거 / 하나투어와 차이 / AI 오류)
+- 시장 규모 숫자 미확보 (12장 고객 장)
+- 발표자 배정 미확인
+- score-display 9c5719a(그림·문서 등급 기준 갱신)를 develop에 넣을지는 미결
+
+7. 주의할 사건
+---------------
+- 2026-11-05 00:07경 wt-presentation/docs 폴더 전체가 frontend/docs로 옮겨진 일이 있었다(원인 불명, 작업자 명령 아님).
+  원래 위치로 되돌렸고 git 추적 파일 변경 0건 확인. 작업 전 git status를 꼭 확인할 것.
+- develop은 계속 UI 작업이 올라온다. 스냅샷 기준 커밋: e57c3af(UI) → dc20244(PR #28 머지).
+
+8. 주요 자료 위치
+------------------
+repo (develop):
+  docs/scoring-ai/README.md, CHANGELOG.md(v2.2), hitl_design.md, research/report_data_sources.md
+  docs/route-planning/route_planner.md, route_planner_summary.md
+  docs/ui-redesign.md (UI·API·55초 녹화 흐름)
+  docs/presentation/day1/pitch.md (1일차 문제정의·통계 출처)
+  api/scoring.py (POST /api/scoring/packages/evaluate), src/scoring/verify.py, src/planner/engine.py
+노션 (26-2 / SVC Seoul AI 여행 해커톤):
+  최종 회의 1            https://app.notion.com/p/40e0964450f280d0b43ff97e62cbd371
+  최종 발표자료 아이디어  https://app.notion.com/p/40e0964450f2807bbf14f1cfaab569b9
+  발표10분 피드백(멘토)   https://app.notion.com/p/40c0964450f2801ca429dd7adadbcf16
+  조윤곤 아이디어피드백   https://app.notion.com/p/40c0964450f280cc8a83dee32855b655
+  이도경 아이디어피드백   https://app.notion.com/p/40c0964450f28067a918e8730f27844a
+  조윤곤 멘토링내용       https://app.notion.com/p/40c0964450f280bdad58cf43e20d4a4c
+  이지원 사람 피로도 기준 https://app.notion.com/p/40e0964450f2807dbc5ace8247e1cd72
+  참가신청서 최종본       https://app.notion.com/p/4000964450f281f7a1b3cdd031138651
+  심사기준·발표 규칙      https://app.notion.com/p/40e0964450f281869e48c45a0b0af67f
