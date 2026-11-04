@@ -2,11 +2,11 @@
 
 부모님 프로필과 고른 관광지를 받아 **날짜별 일정표**(관광지·식사·이동·휴식)를 만들고,
 피드백을 받으면 **정해진 명령으로만** 일정을 다시 짜는 규칙 기반 엔진이다.
-LLM이 일정을 직접 쓰지 않는다. LLM이 필요한 부분(자연어 피드백 → 명령 변환)은 입력/출력 계약만 정해 두었다.
+LLM(Claude)은 일정을 직접 쓰지 않는다. 자연어 피드백을 이 엔진의 명령으로 바꾸는 일만 맡는다(8장).
 
 - 브랜치: `feat/route-planner`
 - 코드: `src/planner/`, `api/routes/planner.py`
-- 테스트: `tests/test_planner_*.py` (150개 통과)
+- 테스트: `tests/test_planner_*.py` (99개 통과, 전체 210개)
 - 담당: 지원(규칙 엔진·명령 적용기) / 희윤(식당 데이터·LLM 변환) / 재은(난이도 점수) / 천지(UI)
 
 ## 1. 전체 흐름
@@ -17,7 +17,7 @@ LLM이 일정을 직접 쓰지 않는다. LLM이 필요한 부분(자연어 피�
 일수/출발일 ─────┘   (가장 약한      (권역·편차)    (순서·이동·휴식·식사)   (슬롯별 선택)   (재은 모듈)
                       사람 기준)
 
-사용자 피드백 ─► (LLM) ─► EditCommand ─► 검증 ─► state 수정 ─► 같은 엔진으로 재생성 ─► 변경 요약
+사용자 피드백 ─► (Claude 변환) ─► EditCommand ─► 검증 ─► state 수정 ─► 같은 엔진으로 재생성 ─► 변경 요약
 ```
 
 서버는 아무것도 저장하지 않는다. 클라이언트가 이전 일정(`state` 포함)을 다시 보내면 그 위에서 수정한다.
@@ -109,13 +109,13 @@ LLM이 일정을 직접 쓰지 않는다. LLM이 필요한 부분(자연어 피�
 
 ## 4. 피드백 재생성
 
-자연어 피드백은 LLM(희윤 담당)이 아래 **닫힌 명령 집합**으로 바꿔서 보낸다. 엔진은 명령만 받는다.
+엔진은 아래 **닫힌 명령 집합**만 받는다. `/refine`에 `commands`를 직접 보내도 되고, `feedback`(자연어)만 보내면 서버가 Claude로 이 명령들로 바꿔서 적용한다(8장).
 
 ```json
 POST /api/planner/refine
 { "itinerary": { ... 이전 응답 ... },
   "commands": [ { "op": "swap_restaurant", "day": 2, "meal": "lunch" } ],
-  "feedback": "원문(선택)" }
+  "feedback": "자연어 원문(선택). commands가 없을 때만 명령으로 변환된다" }
 ```
 
 | `op` | 필드 | 동작 |
@@ -133,8 +133,9 @@ POST /api/planner/refine
 규칙
 - **전부 성공하거나 전부 실패**한다. 하나라도 잘못되면 일정은 그대로 두고 `clarification`에 되묻는 문장을 담아 돌려준다.
 - 응답: `itinerary`(새 일정), `applied_commands`, `change_summary`(무엇이 바뀌었는지), `clarification`.
-- 명령 없이 자연어만 오면 "LLM 변환이 연결되지 않았다"는 안내(`NO_LLM_MESSAGE`)를 돌려준다. → 희윤님 LLM 연결 지점.
-- 아직 없는 명령: `set_food_pref`, `avoid_ingredient`, `suggest_alternatives`.
+- 명령 없이 자연어만 오면 변환기가 명령으로 바꿔 적용한다. `ANTHROPIC_API_KEY`가 없으면 "LLM 변환이 연결되지 않았다"는 안내(`NO_LLM_MESSAGE`)를 돌려준다.
+- 변환 결과 중 명령으로 만들 수 없는 요청(`unsupported`)과 되묻는 질문은 `clarification`에 담긴다. 일부만 변환되면 가능한 명령은 적용되고 `clarification`에 나머지가 안내된다.
+- 아직 없는 명령: `set_food_pref`, `avoid_ingredient`, `suggest_alternatives`. 이런 요청은 변환 단계에서 `unsupported`로 안내된다.
 
 ## 5. 데이터 파일
 
@@ -186,3 +187,73 @@ uv run uvicorn api.main:app --reload
 
 현재 Python 3.10.0 환경에서는 pytest가 내부 오류로 종료되므로 `--python 3.11`을 붙여 실행한다.
 테스트는 `tests/conftest.py`의 합성 식당 데이터를 쓰기 때문에 실제 식당 JSON 없이도 돈다.
+
+## 8. 자연어 피드백 변환 (LLM)
+
+자연어 피드백을 4장의 닫힌 명령 집합으로 바꿔서 `/refine`에 넣는다. **LLM은 일정을 직접 쓰지 않고 명령만 만든다.** 일정은 같은 엔진이 다시 짠다.
+
+```text
+feedback ─► FeedbackInterpreter(Claude) ─► commands / unsupported / question
+                                              │
+                          commands ─► 4장의 검증·적용·재생성 (그대로)
+                          unsupported·question ─► clarification
+```
+
+### 동작
+
+| 조건 | 결과 |
+| --- | --- |
+| `commands`가 있음 | LLM을 부르지 않고 명령을 그대로 적용 (피드백 문장은 무시) |
+| `commands`가 없고 `feedback`만 있음, `ANTHROPIC_API_KEY` 있음 | LLM이 명령으로 변환한 뒤 적용 |
+| 같은 경우인데 키가 없음 | 이전처럼 `NO_LLM_MESSAGE` 안내 |
+| 변환된 명령이 하나라도 검증에 실패 (날짜 범위 밖, 없는 장소 등) | 일정 그대로, `clarification`에 이유 |
+| 일부만 명령으로 바꿀 수 있음 | 바꿀 수 있는 것은 적용하고, 나머지는 `clarification`에 안내 |
+| 명령이 하나도 안 나옴 (모호하거나 지원하지 않는 요청) | 일정 그대로, `clarification`에 질문 또는 사유 |
+| Claude 호출 실패·예산 초과 | 일정 그대로, "피드백을 해석하지 못했습니다" 안내 (서버 에러로 죽지 않음) |
+
+### LLM이 돌려주는 것
+
+도구 `record_commands`를 한 번 호출해서 세 가지를 돌려준다.
+
+| 필드 | 의미 |
+| --- | --- |
+| `commands` | 변환된 명령 (4장의 9개 중에서만) |
+| `unsupported` | 현재 명령으로 표현할 수 없는 요청. 억지로 다른 명령에 끼워 맞추지 않고 그대로 알려준다. 예: 특정 재료를 피하고 싶다, 비는 날을 채워 달라, 식당을 추천해 달라 |
+| `question` | 날짜·장소·끼니가 분명하지 않을 때 되묻는 한 문장 |
+
+- 도구 스키마는 `EditCommand` 모델에서 자동으로 만든다(`src/planner/feedback.py`의 `command_schema`). 명령이 추가되면 스키마도 따라간다.
+- LLM이 돌려준 명령도 pydantic으로 다시 검증하고, 형식이 틀린 명령은 `unsupported`로 옮긴다.
+
+### Claude에 보내는 정보
+
+- 보냄: 피드백 문장(최대 1,000자), 현재 일정 요약(날짜별 관광지 이름·id, 끼니별 식당 이름), 일정에 없는 관광지 목록(이름·id)
+- 보내지 않음: 식당 리뷰, 부모님 프로필 원문
+- 결과는 저장하지 않는다.
+
+### 모델과 비용
+
+- Claude Haiku 5.5, effort low, 요청당 호출 1회, 웹 검색 없음
+- 예산 상한은 인스턴스(요청)마다 $0.5, 넘으면 호출하지 않고 안내를 돌려준다
+- 실측: 문장 1개 호출 추정 약 $0.0003
+
+### 확인한 것
+
+- 실제 Claude 호출 1회로 확인: "첫째 날은 좀 덜 걷게 가볍게 해주세요" → `lighten_day`(1일차) → 엔진 재생성 → 1일차 난이도 4에서 3으로 내려감 (다낭 3일, 아버지 68세 1명 기준 입력)
+- 테스트 `tests/test_planner_feedback.py` 15개 (가짜 클라이언트, API 호출 없음): 도구 스키마, 응답 읽기, 잘못된 명령, 예산 초과, `refine` 연결, 키 없을 때 기존 안내 유지
+- 문장 한 개로만 시험했다. 다양한 표현의 변환 정확도는 아직 확인하지 않았다.
+
+### 알려진 한계
+
+- **현재 명령으로 못 하는 요청은 반영되지 않고 `unsupported`로만 안내된다.** 필요한 명령 후보: 재료 기피 추가(`avoid_ingredient`), 음식 취향 변경(`set_food_pref`), 대안 제안(`suggest_alternatives`), 날 사이 균형 맞추기. 엔진 변경이 필요해서 지원님과 협의한다.
+- 하루가 비는 문제(6장)는 명령으로 풀리지 않는다. "2일차에 한 곳 더 옮겨 주세요"처럼 장소를 지정하면 `move_place`로 처리된다.
+- 변환은 매번 조금 다를 수 있다. 결과를 보여줄 때는 `applied_commands`와 `change_summary`로 무엇이 적용됐는지 함께 보여준다.
+- `ANTHROPIC_API_KEY`는 루트 `.env`에서 읽는다. 키가 없으면 변환 없이 이전 동작을 유지한다.
+
+### 관련 파일
+
+| 파일 | 역할 |
+| --- | --- |
+| `src/planner/feedback.py` | 변환기 `FeedbackInterpreter`, 도구 스키마, 일정 요약 |
+| `src/planner/edit.py` | `refine(..., interpreter=None)` 에서 변환기를 호출 |
+| `api/routes/planner.py` | 키가 있을 때 변환기를 만들어 `refine`에 연결 |
+| `tests/test_planner_feedback.py` | 변환기 테스트 |
