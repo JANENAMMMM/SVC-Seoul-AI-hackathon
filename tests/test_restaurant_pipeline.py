@@ -232,7 +232,7 @@ def test_collect_end_to_end_without_storage(tmp_path, monkeypatch):
 
     attractions = [Attraction(id="han", name="한 시장", lat=16.0684, lng=108.2241)]
     run = lambda atts: collect(  # noqa: E731
-        atts, city="다낭", country="VN",
+        atts, city="다낭", country="VN", tags=False,  # 태그(Claude)는 tests/test_restaurant_tags.py에서
         google_search=fake_google, review_fetch=fake_reviews,
     )
 
