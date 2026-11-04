@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>여행지 소개 카드</title>
+<style>
+  /* 1080×1350. 전면 사진 + 하단 시트(전체 동선). 색은 design-system/tokens.json(하나투어 계열 보라 #5e2bb8) 기준. 본문 산세리프, 장소명만 세리프. */
+  :root { --ink:#1c1432; --cream:#faf9fc; --accent:#5e2bb8; --accent-soft:#f3edfc; --muted:#5b6070; --line:#dedbe5; }
+  * { box-sizing:border-box; margin:0; }
+  html, body { width:1080px; height:1350px; }
+  body { font-family:"Pretendard","Noto Sans CJK KR","Noto Sans KR",sans-serif; background:var(--ink); color:var(--ink); word-break:keep-all; }
+  .card { position:relative; width:1080px; height:1350px; overflow:hidden; }
+
+  .photo { position:absolute; left:0; top:0; width:1080px; height:840px; background:#222 center/cover no-repeat; }
+  .photo::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 42%, rgba(0,0,0,.88) 100%); }
+
+  .pill { position:absolute; top:44px; z-index:2; font-size:38px; font-weight:800; color:#fff; padding:12px 30px; border-radius:999px; background:rgba(0,0,0,.55); border:2px solid rgba(255,255,255,.55); }
+  .pill.l { left:48px; } .pill.r { right:48px; font-weight:700; }
+  .pill b { color:#fff; }
+
+  .title { position:absolute; z-index:2; left:56px; right:56px; top:470px; color:#fff; }
+  .time { display:inline-block; font-size:40px; font-weight:800; background:var(--cream); color:var(--accent); padding:6px 24px; border-radius:12px; }
+  .place { font-family:"Noto Serif CJK KR","Noto Serif KR",serif; font-size:104px; font-weight:900; line-height:1.12; margin-top:18px; letter-spacing:-2px; text-shadow:0 3px 18px rgba(0,0,0,.45); }
+  .desc { font-size:40px; font-weight:500; margin-top:14px; text-shadow:0 2px 10px rgba(0,0,0,.55); }
+
+  .sheet { position:absolute; z-index:3; left:0; right:0; top:800px; bottom:0; background:var(--cream); border-radius:44px 44px 0 0; padding:30px 52px 0; box-shadow:0 -10px 30px rgba(0,0,0,.25); }
+  .sheet-title { display:flex; align-items:center; gap:14px; font-size:30px; font-weight:800; color:var(--muted); letter-spacing:1px; }
+  .sheet-title::after { content:""; flex:1; height:2px; background:var(--line); }
+  .cols { display:grid; grid-template-columns:1fr 1fr; column-gap:36px; margin-top:12px; }
+  .col { position:relative; }
+  .col::before { content:""; position:absolute; left:19px; top:14px; bottom:14px; width:4px; background:var(--line); border-radius:2px; }
+  .dayh { position:relative; font-size:28px; font-weight:800; color:var(--accent); padding:8px 0 2px 52px; }
+  .stop { position:relative; display:flex; align-items:center; font-size:35px; font-weight:600; color:var(--muted); height:56px; padding-left:52px; border-radius:14px; white-space:nowrap; }
+  .stop::before { content:""; position:absolute; left:8px; top:50%; width:24px; height:24px; margin-top:-12px; border-radius:50%; background:var(--cream); border:5px solid var(--line); }
+  .stop.past { color:#7a7f8e; } .stop.past::before { background:var(--muted); border-color:var(--muted); }
+  .stop.cur { background:var(--accent); color:#fff; font-weight:800; margin-left:0; padding-left:52px; }
+  .stop.cur::before { background:#fff; border-color:#c9b3f0; left:6px; width:28px; height:28px; margin-top:-14px; }
+  .stop.cur .now { margin-left:auto; padding-right:14px; font-size:26px; color:#fff; }
+  .credit { position:absolute; z-index:2; right:20px; top:744px; font-size:19px; color:#fff; background:rgba(0,0,0,.6); padding:3px 12px; border-radius:8px; }
+  .vi { margin-left:18px; font-size:36px; font-weight:600; color:#fff; vertical-align:middle; text-shadow:0 2px 10px rgba(0,0,0,.6); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="photo" id="photo"></div>
+  <div class="pill l" id="pl"></div><div class="pill r" id="pr"></div>
+  <div class="title"><span class="time" id="time"></span><span class="vi" id="vi"></span><div class="place" id="place"></div><div class="desc" id="desc"></div></div>
+  <div class="sheet"><div class="sheet-title">전체 여행 동선</div><div class="cols" id="cols"></div></div>
+  <div class="credit" id="credit"></div>
+</div>
+<script>
+  // window.CARD = { day, order, time, place, place_vi, desc, photo, credit, route:[{day, name, state:'past'|'cur'|'next'}] }
+  const c = window.CARD || {};
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[m]));
+  $("photo").style.backgroundImage = c.photo ? `url("${c.photo}")` : "";
+  $("pl").innerHTML = `${c.day}일차 · <b>${c.order}번째</b>`;
+  const route = c.route || [], cur = route.findIndex((r) => r.state === "cur");
+  $("pr").textContent = `${cur + 1} / ${route.length}`;
+  $("time").textContent = c.time; $("vi").textContent = c.place_vi || ""; $("place").textContent = c.place; $("desc").textContent = c.desc;
+  $("credit").textContent = c.credit ? `사진: ${c.credit}` : "";
+
+  // 일차 단위로 묶어 두 단에 균형 있게 나눕니다.
+  const days = [];
+  route.forEach((r) => { let g = days.find((d) => d.day === r.day); if (!g) days.push(g = { day: r.day, stops: [] }); g.stops.push(r); });
+  const half = route.length / 2; let acc = 0; const colsData = [[], []];
+  days.forEach((d) => { const k = acc < half && colsData[0].length < days.length - 1 ? 0 : 1; colsData[k].push(d); acc += d.stops.length; });
+  $("cols").innerHTML = colsData.map((ds) => `<div class="col">${ds.map((d) =>
+    `<div class="dayh">${d.day}일차</div>` + d.stops.map((r) =>
+      `<div class="stop ${r.state === "next" ? "" : r.state}">${esc(r.name)}${r.state === "cur" ? '<span class="now">지금</span>' : ""}</div>`).join("")).join("")}</div>`).join("");
+
+  // 동선이 길어 시트를 넘치면 글씨를 줄입니다(최소 28px).
+  const sheet = document.querySelector(".sheet");
+  let fs = 35;
+  while (fs > 28 && [...document.querySelectorAll(".col")].some((el) => el.getBoundingClientRect().bottom > 1350 - 30)) {
+    fs -= 1; document.querySelectorAll(".stop").forEach((s) => { s.style.fontSize = fs + "px"; s.style.height = fs * 1.6 + "px"; });
+  }
+</script>
+</body>
+</html>
