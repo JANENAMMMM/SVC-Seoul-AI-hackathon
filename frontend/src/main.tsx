@@ -25,6 +25,33 @@ import "./style.css";
 type Trip = { id: string; owner_key: string; version: number };
 type Conditions = { name: string; avoid_tags: string[]; must_places: string[] };
 const tagOptions = ["계단·오르막", "긴 보행", "더위 노출", "혼잡"];
+/** src/scoring/verify.py의 GRADE_CUTS(3, 5)·WEIGHTS와 같은 값. 기준이 바뀌면 함께 고친다. */
+const GRADE_RANGE = { 하: "1~3", 중: "4~5", 상: "6 이상" } as const;
+
+function GradeLegend({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className={"grade-legend" + (compact ? " compact" : "")}>
+      <p>
+        <b>상·중·하</b>는 관광지 자체의 부담 정도예요(개인 체력이 아님).{" "}
+        {(["하", "중", "상"] as const).map((g) => (
+          <span key={g} className="range">
+            {g} {GRADE_RANGE[g]}
+          </span>
+        ))}
+      </p>
+      {!compact && (
+        <p className="muted">
+          오르막 3 · 보행 3 · 더위 2 · 혼잡 1의 가중 평균(1~10점)이고, 7점
+          이상인 항목은 주의 태그로 따로 표시해요.
+        </p>
+      )}
+      <p className="muted">
+        AI가 수집한 자료를 인용해 반복 채점하고, 운영자가 검수·승인해요.
+      </p>
+    </div>
+  );
+}
+
 function App() {
   const [demo, setDemo] = useState(
     !new URLSearchParams(location.search).has("live"),
@@ -547,10 +574,11 @@ function App() {
     );
   }
   const WALK_ANSWER: Record<string, string> = {
-    "15_30min": "15~30분",
     under_15min: "15분 미만",
-    "30min_1h": "30분~1시간",
-    over_1h: "1시간 이상",
+    "15_30min": "15~30분",
+    "30_60min": "30~60분",
+    "1_2hour": "1~2시간",
+    over_2hour: "2시간 이상",
   };
   function pinsOf(): Record<string, number> {
     const st = (
@@ -1619,7 +1647,8 @@ function App() {
                     <h2>다낭 평가 목록</h2>
                     <span className="tag">{places.length}곳</span>
                   </div>
-                  <p className="muted">표준 관람 기준 · 상 / 중 / 하</p>
+                  <p className="muted">표준 관람 기준</p>
+                  <GradeLegend />
                   <div className="place-list">
                     {places.map((p, i) => (
                       <button
@@ -1839,6 +1868,7 @@ function App() {
               · {conditions.avoid_tags.join(" · ") || "추가 주의 선택 없음"}
             </span>
             <button
+              className="inline-edit"
               onClick={() => {
                 setSetup(true);
                 setTab("conditions");
@@ -2031,19 +2061,6 @@ function App() {
                         </strong>
                       </div>
                     </div>
-                    <RouteMap
-                      day={shown}
-                      before={proposal ? current : undefined}
-                      places={places}
-                      selected={selected}
-                      onSelect={selection}
-                    />
-                    <div className="inline spread timeline-heading">
-                      <h3>{current.day}일차 · 하루의 흐름</h3>
-                      <span className="muted">
-                        관광지 안에서 걷는 시간도 포함
-                      </span>
-                    </div>
                     <section
                       className="rule-panel"
                       aria-label="이 날 적용된 규칙"
@@ -2057,11 +2074,25 @@ function App() {
                           </li>
                         ))}
                       </ul>
+                      <GradeLegend compact />
                       <p className="rule-note">
                         화면의 일정에서 확인되는 값만 요약했어요. 점수·보행
                         시간은 설계 기준 추정이며 현장 측정 결과가 아닙니다.
                       </p>
                     </section>
+                    <RouteMap
+                      day={shown}
+                      before={proposal ? current : undefined}
+                      places={places}
+                      selected={selected}
+                      onSelect={selection}
+                    />
+                    <div className="inline spread timeline-heading">
+                      <h3>{current.day}일차 · 하루의 흐름</h3>
+                      <span className="muted">
+                        관광지 안에서 걷는 시간도 포함
+                      </span>
+                    </div>
                     {timeline(shown)}
                     <details className="assumptions">
                       <summary>계산 기준·예상값·미배치 장소 확인</summary>
