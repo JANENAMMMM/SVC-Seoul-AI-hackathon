@@ -30,6 +30,7 @@ PARSE_MODEL = "claude-haiku-5-5"
 PARSE_EFFORT = "low"
 MAX_TEXT = 1000
 MODES = ("standard", "short", "full")
+REJUDGE_EFFORT = "medium"  # 2026-11-04 오행산 실험(high/medium/low) 후 결정. hitl_design.md 참고
 
 
 def _now():
@@ -200,13 +201,14 @@ def human_review(fid, runs):
                 continue
             cited = any(str(i).startswith(tag) for i in d.get("evidence_ids", []))
             note = d.get("rationale") or ""
-            if cited or tag in note:
+            # judge가 ID 없이 "MD의 보고"처럼 쓰는 경우도 있다(effort medium 실험) → 'MD' 언급도 검토로 본다
+            if cited or tag in note or "MD" in note:
                 out[dim] = {"verdict": "cited" if cited else "reviewed", "run_index": r["run_index"],
                             "rationale": note}
     return out
 
 
-def rejudge(conn, fid, max_runs=3, judge_fn=None):
+def rejudge(conn, fid, max_runs=3, judge_fn=None, effort=REJUDGE_EFFORT):
     """MD 주장을 human: 근거로 넣고 해당 장소만 재채점(스테이징, 게시 안 함). LLM: Sonnet 1~3회."""
     from .run_judge import aggregate_site, judge_site
 
@@ -217,6 +219,9 @@ def rejudge(conn, fid, max_runs=3, judge_fn=None):
     db.upsert(conn, "scoring_evidence", human_evidence(fid, adjustments))
     results, usage = {}, []
     for pid in sorted({a["place_id"] for a in adjustments}):
+        if judge_fn is None:
+            from .judge import judge as _judge
+            judge_fn = lambda site, c, run_index=1: _judge(site, c, run_index=run_index, effort=effort)  # noqa: E731
         runs = judge_site(conn, pid, max_runs=max_runs, out_dir=STAGING / fid, judge_fn=judge_fn)
         agg = aggregate_site(conn, pid, runs)
         cited = sorted({i for r in runs for d in (r["output"].get("dimensions") or {}).values()

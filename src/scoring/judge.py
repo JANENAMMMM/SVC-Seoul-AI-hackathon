@@ -162,7 +162,8 @@ def collect_web(block, web_seen, citations):
                 citations.setdefault(url, getattr(c, "cited_text", None))
 
 
-def judge(place_id, conn, run_index=1, client=None):
+def judge(place_id, conn, run_index=1, client=None, effort=None):
+    """effort=None: 모델 기본값(Sonnet 5.5는 high, v2.2 15곳 채점 기준). HITL 재채점은 medium을 넘긴다."""
     client = client or _client()
     tools = Tools(conn)
     messages = [{"role": "user", "content":
@@ -180,7 +181,8 @@ def judge(place_id, conn, run_index=1, client=None):
             cache_control={"type": "ephemeral"},
             tools=TOOLS + [WEB_SEARCH_TOOL],
             # Sonnet 5.5 rejects forced tool_choice (400); the over-limit case is steered by a text instruction
-            tool_choice={"type": "auto"})
+            tool_choice={"type": "auto"},
+            **({"output_config": {"effort": effort}} if effort else {}))
         u = resp.usage
         usage["input_tokens"] += u.input_tokens
         usage["output_tokens"] += u.output_tokens
@@ -238,6 +240,7 @@ def judge(place_id, conn, run_index=1, client=None):
             messages.append({"role": "user", "content": "submit_scores 도구로 JSON을 제출하세요."})
     queries = web_seen.pop("__queries__", [])
     return {"place_id": place_id, "run_index": run_index, "model": MODEL, "rubric_version": RUBRIC_VERSION,
+            "effort": effort or "default(high)",
             "output": output or {}, "tool_calls": n_calls, "usage": usage,
             "web_results": web_seen, "web_citations": web_cites, "web_queries": queries}
 
