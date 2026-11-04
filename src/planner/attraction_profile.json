@@ -1,0 +1,576 @@
+{
+  "_meta": {
+    "version": "0.3-draft",
+    "created": "2026-11-04",
+    "purpose": "일정 엔진용 관광지별 내부 보행·체류 기준 데이터",
+    "rules": [
+      "값은 재은님 수집 데이터(GPS 실측, 사실 데이터)에서만 가져왔다. 목업(fixtures.js) 값은 임의 가정이라 쓰지 않았다.",
+      "null은 아직 값이 없다는 뜻이다. 엔진이 임의로 채우지 않고 assumptions[]에 가정값으로 표시해야 한다.",
+      "walk_m·walk_min은 걷는 거리·시간이다(GPS·사실 데이터). 체류 시간은 stay_level 3단계로만 표시한다.",
+      "region은 좌표를 보고 묶은 값이다.",
+      "scores는 재은님 visit_modes_v2_1.json의 방식별(standard/short/full) 종합·보행량·오르막 점수(1~10)이다. 보행 부담 판단에 쓴다.",
+      "stay_level은 brief/half/long 3단계다(분 환산은 stay_config.json). 재은님 modes의 'short'(관람 방식)와 혼동하지 않도록 이름을 달리했다.",
+      "stay_source가 manual_*이면 그 값을 그대로 쓰고, 값이 없거나 새 관광지면 types 기준 기본값(stay_config.json)으로 계산한다 (src/planner/stay.py).",
+      "manual_estimate 값은 일반 관광 소요시간 기준 추정이라 신뢰도가 낮다. 팀 검수 전까지 assumptions에 노출한다."
+    ],
+    "confidence_levels": {
+      "high": "GPS 궤적 10개 이상 또는 복수 출처",
+      "medium": "사실 데이터 1건 또는 GPS 표본 5개 내외",
+      "low": "GPS 표본 3개 이하",
+      "none": "값 없음, 조사 필요"
+    },
+    "sources": {
+      "gps": "data/scoring/derived/gps_traces.json (OSM 공개 GPS 궤적, summary 중앙값)",
+      "fact": "data/scoring/derived/site_facts.json (초기 웹조사 사실 데이터)",
+      "types": "data/scoring/attractions.json의 google.type (일부 부정확: 구시가지 없음, 야시장 'Tour operator')"
+    }
+  },
+  "places": {
+    "dad-01": {
+      "name_ko": "바나힐 썬월드",
+      "region": "west_mountain",
+      "walk_m": 8860,
+      "walk_min": null,
+      "steps": null,
+      "source": [
+        "fact:ba_na_hills/internal_route_km"
+      ],
+      "confidence": "medium",
+      "notes": "8.86km는 공원 내부 전체 경로. 케이블카·이동 보조를 쓰면 실제 보행은 크게 줄어들어 mode별 값이 따로 필요하다. GPS 궤적 0건.",
+      "stay_level": "long",
+      "stay_note": "테마파크·케이블카 이동 포함, 하루 전체",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 6,
+          "walking": 6,
+          "climb": 5
+        },
+        "short": {
+          "total": 4,
+          "walking": 4,
+          "climb": 3
+        },
+        "full": {
+          "total": 7,
+          "walking": 8,
+          "climb": 7
+        }
+      },
+      "types": [
+        "Amusement park",
+        "Theme park"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-02": {
+      "name_ko": "오행산(마블마운틴)",
+      "region": "danang_edge",
+      "walk_m": 1700,
+      "walk_min": 87.5,
+      "steps": 156,
+      "source": [
+        "gps:dad-02 (n=5, usable)",
+        "fact:marble_mountains/internal_route_km=1.75",
+        "fact:marble_mountains/steps_count"
+      ],
+      "confidence": "medium",
+      "notes": "계단 156은 Thuy Son 정상까지 기준, 전체 관람 시 약 400계단 추정(블로그). 엘리베이터(편도 15,000동)로 100~156계단 생략 가능. 걸은 시간 87.5분은 중앙값.",
+      "stay_level": "half",
+      "stay_note": "GPS 걷는 시간 약 88분 + 사진·휴식, 약 2~2.5시간",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 7,
+          "walking": 6,
+          "climb": 8
+        },
+        "short": {
+          "total": 5,
+          "walking": 4,
+          "climb": 5
+        },
+        "full": {
+          "total": 7,
+          "walking": 7,
+          "climb": 9
+        }
+      },
+      "types": [
+        "Scenic spot",
+        "Tourist attraction"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-03": {
+      "name_ko": "호이안 구시가지",
+      "region": "hoian",
+      "walk_m": 2775,
+      "walk_min": 71.4,
+      "steps": 0,
+      "source": [
+        "gps:dad-03 (n=18, usable)",
+        "fact:hoi_an_ancient_town/steps_count"
+      ],
+      "confidence": "high",
+      "notes": "평지 위주. 일부 시간대 차량 통제(vehicle_free_hours).",
+      "stay_level": "long",
+      "stay_note": "GPS 걷는 시간 약 71분 + 식사·쇼핑, 반나절",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 4,
+          "walking": 5,
+          "climb": 1
+        },
+        "short": {
+          "total": 3,
+          "walking": 3,
+          "climb": 1
+        },
+        "full": {
+          "total": 5,
+          "walking": 6,
+          "climb": 2
+        }
+      },
+      "types": [],
+      "stay_source": "manual_estimate"
+    },
+    "dad-04": {
+      "name_ko": "영흥사(린응사, 손짜반도)",
+      "region": "danang_edge",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "source": [],
+      "confidence": "none",
+      "notes": "GPS 1건(0.917km, 7.7분)은 coverage 'none'이라 사용하지 않음. 조사 필요.",
+      "stay_level": "half",
+      "stay_note": "사원·대불상 관람, 약 1.5~2시간 (이동 별도)",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 4,
+          "walking": 3,
+          "climb": 3
+        },
+        "short": {
+          "total": 3,
+          "walking": 2,
+          "climb": 2
+        },
+        "full": {
+          "total": 4,
+          "walking": 4,
+          "climb": 4
+        }
+      },
+      "types": [
+        "Buddhist temple"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-05": {
+      "name_ko": "미케 해변",
+      "region": "downtown",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": 0,
+      "source": [
+        "fact:my_khe_beach/steps_count"
+      ],
+      "confidence": "none",
+      "notes": "계단 0만 확인됨. 해변 산책 거리는 정해진 구간이 없어 방문 시간 기준으로 정하는 게 나을 수 있음.",
+      "stay_level": "brief",
+      "stay_note": "해변 산책 중심, 약 1시간 (자유도 높음)",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 3,
+          "walking": 3,
+          "climb": 1
+        },
+        "short": {
+          "total": 3,
+          "walking": 2,
+          "climb": 1
+        },
+        "full": {
+          "total": 4,
+          "walking": 5,
+          "climb": 2
+        }
+      },
+      "types": [
+        "Beach"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-06": {
+      "name_ko": "용다리",
+      "region": "downtown",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": 0,
+      "source": [
+        "fact:dragon_bridge/steps_count"
+      ],
+      "confidence": "none",
+      "notes": "조사 필요. 불·물 쇼(주말 저녁) 여부에 따라 체류 시간이 달라짐.",
+      "stay_level": "brief",
+      "stay_note": "다리 관람, 약 30~60분 (주말 저녁 쇼는 별도)",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 2,
+          "walking": 2,
+          "climb": 1
+        },
+        "short": {
+          "total": 2,
+          "walking": 1,
+          "climb": 1
+        },
+        "full": {
+          "total": 3,
+          "walking": 3,
+          "climb": 2
+        }
+      },
+      "types": [
+        "Bridge",
+        "Tourist attraction"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-07": {
+      "name_ko": "한시장",
+      "region": "downtown",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "source": [],
+      "confidence": "none",
+      "notes": "조사 필요.",
+      "stay_level": "brief",
+      "stay_note": "시장 구경, 약 1시간",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 4,
+          "walking": 3,
+          "climb": 3
+        },
+        "short": {
+          "total": 3,
+          "walking": 2,
+          "climb": 1
+        },
+        "full": {
+          "total": 4,
+          "walking": 4,
+          "climb": 4
+        }
+      },
+      "types": [
+        "Traditional market",
+        "Market",
+        "Tourist attraction"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-08": {
+      "name_ko": "다낭 대성당(핑크성당)",
+      "region": "downtown",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "source": [],
+      "confidence": "none",
+      "notes": "조사 필요. 외관 관람 위주라 체류 시간이 짧은 편일 것으로 보이나 확인되지 않음.",
+      "stay_level": "brief",
+      "stay_note": "외관 관람 중심, 약 30~60분",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 2,
+          "walking": 2,
+          "climb": 1
+        },
+        "short": {
+          "total": 2,
+          "walking": 1,
+          "climb": 1
+        },
+        "full": {
+          "total": 3,
+          "walking": 3,
+          "climb": 2
+        }
+      },
+      "types": [
+        "Catholic cathedral",
+        "Catholic church",
+        "Church",
+        "Church of Christ"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-09": {
+      "name_ko": "참 조각 박물관",
+      "region": "downtown",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "source": [],
+      "confidence": "none",
+      "notes": "조사 필요.",
+      "stay_level": "brief",
+      "stay_note": "소규모 박물관, 약 1시간 (점수 검수 대기 중)",
+      "score_status": "needs_review",
+      "scores": {
+        "standard": {
+          "total": 2,
+          "walking": 2,
+          "climb": 1
+        },
+        "short": {
+          "total": 2,
+          "walking": 2,
+          "climb": 1
+        },
+        "full": {
+          "total": 2,
+          "walking": 3,
+          "climb": 2
+        }
+      },
+      "types": [
+        "Sculpture museum",
+        "Heritage museum",
+        "Tourist attraction"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-10": {
+      "name_ko": "아시아파크(썬휠)",
+      "region": "downtown",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "source": [],
+      "confidence": "none",
+      "notes": "조사 필요. 놀이공원이라 탑승 대기 시간에 따라 체류가 크게 달라짐.",
+      "stay_level": "half",
+      "stay_note": "놀이공원, 탑승 대기에 따라 2~3시간",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 3,
+          "walking": 4,
+          "climb": 2
+        },
+        "short": {
+          "total": 2,
+          "walking": 2,
+          "climb": 1
+        },
+        "full": {
+          "total": 4,
+          "walking": 5,
+          "climb": 3
+        }
+      },
+      "types": [
+        "Tourist attraction"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-11": {
+      "name_ko": "누이탄타이 온천공원",
+      "region": "west_mountain",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "source": [],
+      "confidence": "none",
+      "notes": "조사 필요. 온천·입욕 중심이라 보행보다 체류 시간이 핵심.",
+      "stay_level": "long",
+      "stay_note": "온천·입욕 중심, 반나절",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 5,
+          "walking": 5,
+          "climb": 4
+        },
+        "short": {
+          "total": 4,
+          "walking": 3,
+          "climb": 3
+        },
+        "full": {
+          "total": 6,
+          "walking": 6,
+          "climb": 6
+        }
+      },
+      "types": [
+        "Onsen",
+        "Day-use onsen",
+        "Tourist attraction",
+        "Water park"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-12": {
+      "name_ko": "미선 유적지",
+      "region": "myson",
+      "walk_m": 3851,
+      "walk_min": 88.8,
+      "steps": null,
+      "source": [
+        "gps:dad-12 (n=3, weak)"
+      ],
+      "confidence": "low",
+      "notes": "GPS 표본 3개라 신뢰도 낮음. 입구 셔틀·내부 이동 방식에 따라 실제 보행이 달라질 수 있음.",
+      "stay_level": "half",
+      "stay_note": "유적지 관람 약 2~3시간 (왕복 이동 별도, GPS 걷는 시간 약 89분)",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 5,
+          "walking": 5,
+          "climb": 3
+        },
+        "short": {
+          "total": 4,
+          "walking": 4,
+          "climb": 2
+        },
+        "full": {
+          "total": 6,
+          "walking": 7,
+          "climb": 4
+        }
+      },
+      "types": [
+        "Historical landmark"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-13": {
+      "name_ko": "하이반 고개",
+      "region": "hai_van",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "transit_km": 20,
+      "source": [
+        "fact:hai_van_pass/route_length_km"
+      ],
+      "confidence": "none",
+      "notes": "20km는 고개 도로 구간 길이(차량 이동)이고 보행 거리가 아님. 정차 전망 포인트 체류 시간만 따로 필요.",
+      "stay_level": "brief",
+      "stay_note": "전망 포인트 정차, 약 30~60분 (도로 20km 이동 별도)",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 3,
+          "walking": 3,
+          "climb": 3
+        },
+        "short": {
+          "total": 3,
+          "walking": 2,
+          "climb": 2
+        },
+        "full": {
+          "total": 4,
+          "walking": 4,
+          "climb": 5
+        }
+      },
+      "types": [
+        "Mountain pass"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-14": {
+      "name_ko": "호이안 야시장",
+      "region": "hoian",
+      "walk_m": 1143,
+      "walk_min": 42.2,
+      "steps": 0,
+      "source": [
+        "gps:dad-14 (n=14, usable)",
+        "fact:hoi_an_night_market/steps_count"
+      ],
+      "confidence": "high",
+      "notes": "저녁 시간대 방문이 일반적이나 영업시간은 별도 데이터 필요.",
+      "stay_level": "half",
+      "stay_note": "저녁 야시장 구경·식사, 약 1.5~2시간",
+      "score_status": "ok",
+      "scores": {
+        "standard": {
+          "total": 3,
+          "walking": 4,
+          "climb": 1
+        },
+        "short": {
+          "total": 3,
+          "walking": 3,
+          "climb": 1
+        },
+        "full": {
+          "total": 4,
+          "walking": 5,
+          "climb": 2
+        }
+      },
+      "types": [
+        "Tour operator"
+      ],
+      "stay_source": "manual_estimate"
+    },
+    "dad-15": {
+      "name_ko": "껌탄 코코넛 마을(바구니배)",
+      "region": "hoian",
+      "walk_m": null,
+      "walk_min": null,
+      "steps": null,
+      "boat_min": 45,
+      "source": [
+        "fact:cam_thanh_coconut/boat_duration_min"
+      ],
+      "confidence": "medium",
+      "notes": "바구니배 탑승 45분만 확인됨. GPS 1건(0.14km, 2.7분)은 coverage 'none'이라 사용하지 않음.",
+      "stay_level": "half",
+      "stay_note": "바구니배 45분 + 이동·대기, 약 2시간 (점수 검수 대기 중)",
+      "score_status": "needs_review",
+      "scores": {
+        "standard": {
+          "total": 3,
+          "walking": 2,
+          "climb": 2
+        },
+        "short": {
+          "total": 3,
+          "walking": 2,
+          "climb": 1
+        },
+        "full": {
+          "total": 4,
+          "walking": 3,
+          "climb": 3
+        }
+      },
+      "types": [
+        "Tourist attraction",
+        "Boat tour agency"
+      ],
+      "stay_source": "manual_estimate"
+    }
+  }
+}
