@@ -283,17 +283,18 @@ body.shownotes .notes{display:block}
       </table>
     </div>
     <div class="col rule strong">
-      <div class="label">사람 체력 상한 · 기준 수립</div>
+      <div class="label">사람 체력 상한 · 기준 수립 (엔진은 별도 예산)</div>
       <p>하루 관광지 점수의 <b style="color:var(--ink)">합계</b>가 연령별 상한을 넘지 않게 합니다.</p>
       <table style="margin-top:18px">
         <tr><th>20~40대</th><th>50대</th><th>60대</th><th>70대</th><th>80세 이상</th></tr>
         <tr><td><b>14</b></td><td><b>12</b></td><td><b>11</b></td><td><b>10</b></td><td><b>8</b></td></tr>
       </table>
       <p class="cap">오행산 + 영흥사 + 미케 해변 = 14 → 30대는 가능, 70대는 초과</p>
+      <p class="cap" style="margin-top:10px">엔진이 지금 쓰는 값은 이 표가 아니라, 보행 지속시간으로 정한 하루 피로 예산 9~17점(75세 이상 −1)입니다. 근거 없는 가정값이며 이 표와는 연결돼 있지 않습니다.</p>
       <div class="src">14 × 연령별 보행 능력 비율 · 한국 성인 612명 보행 연구, 세션 RPE, 젖산역치 연구</div>
     </div>
   </div>
-  <div class="notes"><b>멘토:</b> E·G. <b>코드:</b> src/scoring/package_difficulty.py, src/planner/engine.py(max_day_difficulty=7). 체력 상한은 이지원 노션 — 엔진 미연동이므로 "기준 수립"으로만. 예상 질문: 논문은 강도×시간 → 다음 단계 체류 시간 가중.</div>
+  <div class="notes"><b>멘토:</b> E·G. <b>코드:</b> src/scoring/package_difficulty.py, src/planner/engine.py(max_day_difficulty=7). 연속 6점 이상 쌍마다 +1은 보너스 최대 +2, 합친 값이 7을 넘으면 가장 힘든 곳부터 짧은 관람으로 변경. 체력 상한은 이지원 노션 — 엔진은 연령별 상한이 아니라 config.json fatigue 예산(9~17, 가정값)을 하드 제약으로 사용 — 둘이 연동돼 있다고 말하지 않기. 예상 질문: 논문은 강도×시간 → 다음 단계 체류 시간 가중.</div>
 </section>
 
 <!-- 8 -->
@@ -437,7 +438,7 @@ body.shownotes .notes{display:block}
       <table>
         <tr><th>지금</th><th>다음</th></tr>
         <tr><td>"보통 체력 50세 이상"을 가정한 설계 점수</td><td>가이드 · MD가 AI 점수를 보지 않고 10~15곳 평가, ±1점 일치율 공개</td></tr>
-        <tr><td>연령별 체력 상한은 기준까지 수립</td><td>엔진 하루 상한과 연결, 체류 시간 가중</td></tr>
+        <tr><td>연령별 체력 상한은 기준만 수립, 엔진은 가정값 피로 예산(9~17점) 사용</td><td>연령별 상한과 엔진 예산을 근거 있는 하나의 기준으로 통합, 체류 시간 가중</td></tr>
         <tr><td>이동 시간은 직선거리로 추정</td><td>실제 길찾기 연결</td></tr>
       </table>
     </div>
@@ -464,7 +465,7 @@ body.shownotes .notes{display:block}
 <!-- 부록 C -->
 <section class="slide full">
   <img src="assets/workflow_full_9c5719a.png" alt="부록 C">
-  <div class="notes"><b>부록 C (Q&amp;A용).</b> ScoringAI v2.2 전체 구조. 글자가 작아 Q&amp;A에서만 사용. 주의: 그림 속 "28회 중 22회 통과"는 7장 "14/15"와 단위가 다름, "현재 한시장" 사례 포함, "하루 최대 +2"는 보너스 상한.</div>
+  <div class="notes"><b>부록 C (Q&amp;A용).</b> ScoringAI v2.2 전체 구조. 글자가 작아 Q&amp;A에서만 사용. 주의: 그림 속 그림 속 "28회 중 22회"는 재채점 실행 28회(장소당 평균 1.9회) 중 전 차원 통과 22회이고, 7장 "14/15"는 15곳 중 공개 가능 곳 수라 단위가 다름. "하루 최대 +2"는 보너스 상한이고 7은 최고 점수와 합친 하루 난이도 상한. "현재 한시장"은 검수 대기 중인 실제 사례(13장에서는 뺌).</div>
 </section>
 
 </div>
