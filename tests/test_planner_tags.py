@@ -36,7 +36,7 @@ ITEMS = [
 
 def test_without_preferences_every_tagged_restaurant_is_allowed(make_profile, tmp_path):
     _, picks = _chosen(make_profile(), _file(tmp_path, ITEMS))
-    assert picks and picks[0].place_id == "dad-05-pork"
+    assert "dad-05-pork" in {p.place_id for p in picks}  # 하루 두 끼 중 가장 점수 높은 식당이 선택된다
 
 
 def test_avoided_ingredient_tag_excludes_the_restaurant(make_profile, tmp_path):
@@ -54,7 +54,7 @@ def test_restaurant_only_venue_excludes_street_food(make_profile, tmp_path):
 def test_unknown_venue_type_is_not_filtered(make_profile, tmp_path):
     rest = _file(tmp_path, [("a", 4.9, {"venue_type": "unknown"}), ("b", 4.5, {})])
     _, picks = _chosen(make_profile(venues=["restaurant"]), rest)
-    assert picks[0].place_id == "dad-05-a"
+    assert "dad-05-a" in {p.place_id for p in picks}  # 장소 유형을 모르는 식당도 거르지 않는다
 
 
 def test_old_data_without_tags_keeps_working_and_warns(make_profile, tmp_path):
@@ -72,7 +72,7 @@ def test_tagged_data_warns_that_missing_tag_is_not_proof(make_profile, tmp_path)
 
 def test_pick_exposes_tag_fields_for_explanations(make_profile, tmp_path):
     _, picks = _chosen(make_profile(), _file(tmp_path, ITEMS))
-    first = picks[0]
+    first = next(p for p in picks if p.place_id == "dad-05-pork")
     assert first.ingredient_tags == ["pork"] and first.tag_confidence == "high" and first.tag_evidence
 
 

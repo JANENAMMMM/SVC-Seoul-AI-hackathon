@@ -26,6 +26,27 @@ def _pick(r: dict, anchor: tuple[float, float], hours_unknown: bool, leg: tuple[
     )
 
 
+def restaurant_ok(r: dict, profile: MergedProfile, cfg: dict) -> bool:
+    """프로필과 평점으로 정해지는 기본 조건: 제외 유형, 해산물 기피, 재료·장소 태그, 평점·리뷰 수."""
+    if r.get("primary_type") in cfg["excluded_types"]:
+        return False
+    if "seafood" in profile.avoid_ingredients and r.get("primary_type") in cfg["seafood_types"]:
+        return False
+    if not tags_allow(r, profile):
+        return False
+    rating, count = r.get("rating"), r.get("rating_count")
+    return not (rating is None or rating < cfg["min_rating"] or (count or 0) < cfg["min_rating_count"])
+
+
+def restaurant_score(r: dict, dist_km: float, profile: MergedProfile, cfg: dict) -> float:
+    """점수 − 거리 감점 ± 현지 음식 선호 보정."""
+    score = (r.get("score") or r.get("rating")) - cfg["distance_penalty_per_km"] * dist_km
+    if r.get("is_local"):
+        score += {"adventurous": cfg["local_pref_bonus"], "familiar": -cfg["local_pref_bonus"]}.get(
+            profile.local_food, 0.0)
+    return score
+
+
 def pinned_restaurant(rest: Restaurants, attraction_id: str) -> RestaurantPick | None:
     pid = rest.pinned.get(attraction_id)
     if not pid:
@@ -66,14 +87,7 @@ def choose_restaurant(rest: Restaurants, anchor: tuple[float, float], start: int
     for radius in cfg["search_radius_km"]:
         best, best_score, best_move = None, None, None
         for pid, r in rest.by_id.items():
-            if pid in used or r.get("primary_type") in cfg["excluded_types"]:
-                continue
-            if "seafood" in profile.avoid_ingredients and r.get("primary_type") in cfg["seafood_types"]:
-                continue
-            if not tags_allow(r, profile):
-                continue
-            rating, count = r.get("rating"), r.get("rating_count")
-            if rating is None or rating < cfg["min_rating"] or (count or 0) < cfg["min_rating_count"]:
+            if pid in used or not restaurant_ok(r, profile, cfg):
                 continue
             if need_korean and not is_korean(r):
                 continue
@@ -87,10 +101,7 @@ def choose_restaurant(rest: Restaurants, anchor: tuple[float, float], start: int
             eat_start = start + move[0]
             if hours is not None and earliest_start(intervals_for(hours, weekday), eat_start, end - start) != eat_start:
                 continue
-            score = (r.get("score") or rating) - cfg["distance_penalty_per_km"] * dist
-            if r.get("is_local"):
-                score += {"adventurous": cfg["local_pref_bonus"], "familiar": -cfg["local_pref_bonus"]}.get(
-                    profile.local_food, 0.0)
+            score = restaurant_score(r, dist, profile, cfg)
             if best_score is None or score > best_score:
                 best, best_score, best_move = r, score, move
         if best:

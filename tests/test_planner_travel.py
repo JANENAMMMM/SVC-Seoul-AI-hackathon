@@ -7,6 +7,8 @@ from src.planner.sources import Restaurants, load_places, load_settings
 
 IDS = [f"dad-{i:02d}" for i in (1, 2, 3, 5, 6, 7, 8, 14)]
 TRAVEL = load_settings()["travel"]
+DINNER_EARLIEST = load_settings()["meal"]["dinner_earliest"]  # "HH:MM"
+_DE_MIN = int(DINNER_EARLIEST[:2]) * 60 + int(DINNER_EARLIEST[3:])
 
 
 def plan(profile, restaurants=None, ids=IDS, days=4):
@@ -59,9 +61,11 @@ def test_restaurant_trip_is_added_around_the_meal(make_profile, restaurants):
                 continue
             go, back = d.stops[i - 1], d.stops[i + 1]
             assert go.type == "move" and go.note == f"→ {s.restaurant.name}" and go.end == s.start
-            assert back.type == "move" and back.start == s.end
-            assert go.minutes == back.minutes == s.restaurant.travel_min <= 10
-            assert go.transport == back.transport == s.restaurant.transport
+            assert go.minutes == s.restaurant.travel_min <= 10 and go.transport == s.restaurant.transport
+            # 식사 뒤에는 이동·자유 시간·복귀가 이어지거나, 식당이 다음 장소 바로 옆이면 관광이 바로 이어진다.
+            assert back.type in ("move", "rest", "base", "attraction")
+            if back.type == "move":
+                assert back.start >= s.end
             checked += 1
     assert checked >= 3
 
@@ -78,7 +82,7 @@ def test_meal_stops_stay_after_the_earliest_meal_times(make_profile, restaurants
         for s in d.stops:
             if s.type == "meal":
                 h, m = map(int, s.start.split(":"))
-                assert h * 60 + m >= (720 if s.meal == "lunch" else 1080)
+                assert h * 60 + m >= (720 if s.meal == "lunch" else _DE_MIN)
 
 
 def test_places_load_for_distance_sanity():
@@ -117,7 +121,7 @@ def test_banahills_day_always_gets_a_dinner_in_the_city(make_profile, restaurant
         assert meals[0].fixed and not meals[1].fixed and meals[1].restaurant is not None
         i = day.stops.index(meals[1])
         assert any(s.type == "move" and s.note == "→ 다낭 시내" for s in day.stops[:i])
-        assert day.stops[-1].type == "base" and meals[1].start >= "18:00"
+        assert day.stops[-1].type == "base" and meals[1].start >= DINNER_EARLIEST
 
 
 def test_every_far_from_city_day_gets_a_dinner_even_when_it_ends_early(make_profile, restaurants):
@@ -131,12 +135,12 @@ def test_every_far_from_city_day_gets_a_dinner_even_when_it_ends_early(make_prof
         assert "dinner" in [s.meal for s in day.stops if s.type == "meal"], name
 
 
-def test_near_city_day_that_ends_early_has_no_dinner(make_profile, restaurants):
+def test_near_city_day_that_ends_early_still_gets_two_meals(make_profile, restaurants):  # 하루 항상 2끼
     from src.planner.schema import DayWindow
     req = PlanRequest(travelers=[make_profile()], place_ids=["dad-07"], days=1,
                       start_date=datetime.date(2026, 12, 7), day_window=DayWindow(start="08:00", end="21:00"))
     day = build_itinerary(req, restaurants).days[0]
-    assert [s.meal for s in day.stops if s.type == "meal"] == ["lunch"]
+    assert [s.meal for s in day.stops if s.type == "meal"] == ["lunch", "dinner"]
 
 
 def test_low_stamina_note_names_the_short_course_instead_of_generic_wording(make_profile):

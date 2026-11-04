@@ -22,6 +22,7 @@ class MergedProfile:
     avoid_other: list[str]
     notes: list[str] = field(default_factory=list)
     venues: set[str] = field(default_factory=lambda: {"restaurant", "street_food"})
+    fatigue_budget: int = 9  # 하루 관광지 점수 합 상한 (부모님 프로필로 결정)
 
 
 _ALL_VENUES = {"restaurant", "street_food"}
@@ -74,7 +75,28 @@ def merge_profiles(travelers: list[ParentProfile], state: PlanState, settings: d
     avoid = {i for t in travelers for i in t.avoid_ingredients}
     other = sorted({w for t in travelers for w in t.avoid_other})
     venues = _merge_venues(travelers, notes)
-    return MergedProfile(speed, limit, base, korean, local, avoid, other, notes, venues)
+    return MergedProfile(speed, limit, base, korean, local, avoid, other, notes, venues,
+                         _fatigue_budget(travelers, state, settings))
+
+
+def _fatigue_budget(travelers: list[ParentProfile], state: PlanState, settings: dict) -> int:
+    """하루 관광지 점수 합 상한. 보행 지속시간으로 기본값을 정하고 나이·걷기 속도로 낮춘다. 여러 명이면 가장 낮은 값."""
+    cfg = settings["fatigue"]
+
+    def penalty(t: ParentProfile) -> int:
+        p = cfg["age_penalty"] if t.age >= cfg["age_at_or_above"] else 0
+        speed = t.walking_speed.base_speed_mps if t.walking_speed else None
+        return p + (cfg["speed_penalty"] if speed is not None and speed < cfg["speed_below_mps"] else 0)
+
+    if state.walk_limit_override:  # adjust_walk_limit 명령: 가장 가까운 단계의 예산을 쓴다
+        limits = settings["walk"]["limits_by_duration"]
+        duration = min(limits, key=lambda k: abs(limits[k] - state.walk_limit_override))
+        budget = cfg["budget_by_duration"][duration] - max(penalty(t) for t in travelers)
+    else:
+        budget = min(cfg["budget_by_duration"][t.walking_duration or cfg["default_duration"]] - penalty(t)
+                     for t in travelers)
+    budget = max(cfg["min_budget"], budget)
+    return max(cfg["min_budget"], round(budget * settings["pace"][state.pace]["capacity_factor"]))
 
 
 def upgrade_korean_need(current: str) -> str:
