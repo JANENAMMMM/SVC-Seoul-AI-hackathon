@@ -162,7 +162,7 @@ POST /api/planner/refine
 | `pinned` | 관광지 내부 고정 식당(바나힐 뷔페) |
 | `venue_type` | `restaurant` / `street_food` / `unknown` (신규, 합의됨) |
 | `ingredient_tags` | `pork/seafood/dairy/nuts` 중 리뷰로 확인된 것. **없으면 `[]`** (신규) |
-| `tag_confidence`, `tag_evidence` | 신뢰도와 근거. 거르는 데는 쓰지 않고 사용자 설명용으로 전달 (신규) |
+| `tag_confidence`, `tag_evidence` | 신뢰도(`high` / `medium` / `low`)와 근거(리뷰 원문 발췌 목록 또는 `대표 타입: …`). 거르는 데는 쓰지 않고 사용자 설명용으로 전달 (신규). 근거는 리뷰 원문이라 화면에 보일 때는 식당 수집 문서의 리뷰 표시 규칙(작성자 표시)을 따른다 |
 
 신규 필드가 없는 옛 JSON도 그대로 동작하고, 이때는 `assumptions`에 안내가 붙는다.
 
