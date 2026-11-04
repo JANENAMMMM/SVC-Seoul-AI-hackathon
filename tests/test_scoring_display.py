@@ -14,7 +14,7 @@ def test_cautions_surface_hard_dimension_hidden_by_average():
 def test_places_api_exposes_grade_and_cautions():
     places = {p["place_id"]: p for p in TestClient(app).get("/api/scoring/places").json()}
     std = places["dad-02"]["modes"]["standard"]
-    assert std["score"] == 6 and std["grade"] == "중"
+    assert std["score"] == 6 and std["grade"] == "상"
     assert "계단·오르막" in std["cautions"]
     detail = TestClient(app).get("/api/scoring/places/dad-02").json()
     assert detail["modes"]["standard"]["cautions"] == std["cautions"]
