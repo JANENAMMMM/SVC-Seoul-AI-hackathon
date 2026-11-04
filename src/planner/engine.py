@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 
 from src.planner.geo import travel_leg, travel_minutes
 from src.planner.hours import earliest_start, has_weekday_closure, hhmm_to_min, intervals_for, min_to_hhmm
-from src.planner.meals import choose_restaurant, pinned_restaurant, use_pinned_restaurant
+from src.planner.meals import choose_restaurant, is_korean, pinned_restaurant, use_pinned_restaurant
 from src.planner.profile_merge import MergedProfile, merge_profiles
 from src.planner.schema import (DayPlan, Itinerary, PackageScore, PlanRequest, PlanState, Stop, Unscheduled)
 from src.planner.sources import Place, Restaurants, load_places, load_restaurants, load_settings
@@ -37,6 +37,7 @@ class Ctx:
     catalog: dict
     weights: dict
     assumptions: list[str] = field(default_factory=list)
+    korean_meals: set | None = None   # 하루 구성(compose)이 한식으로 정한 (day_idx, 'lunch'|'dinner'). None이면 기존 규칙
 
     def weekday(self, day_idx: int) -> int | None:
         return None if self.start_weekday is None else (self.start_weekday + day_idx) % 7
@@ -383,9 +384,7 @@ def simulate(order: list[str], modes: dict[str, str], day_idx: int, ctx: Ctx) ->
     if order:
         if not st["lunch"]:
             add_meal("lunch", lunch_e, st["loc"], st["loc_id"])
-        far_min = meal["dinner_always_if_base_travel_min_at_least"]
-        always_dinner = any(ctx.travel(ctx.base, ctx.places[p].coord) >= far_min for p in order)
-        if (st["act_end"] >= dinner_after or always_dinner or _needs_korean(ctx, day_idx)) and not st["dinner"]:
+        if not st["dinner"]:  # 하루 두 끼: 저녁은 항상 넣는다
             last = ctx.places[st["loc_id"]]
             if last.cluster in ("west", "banahills"):
                 add_move(ctx.base, "→ 다낭 시내")
@@ -440,7 +439,7 @@ def fill_restaurants(day_idx: int, sim: SimResult, ctx: Ctx, used: set[str]) -> 
     allow = ctx.settings["meal"]["travel_allowance_min"]
     metas = [(i, a) for i, a in enumerate(sim.anchors) if a]
     korean_slot = None
-    if _needs_korean(ctx, day_idx) and metas:
+    if ctx.korean_meals is None and _needs_korean(ctx, day_idx) and metas:
         flexible = [(i, a) for i, a in metas if not a["in_site"]]
         dinners = [i for i, a in flexible if a["kind"] == "dinner"]
         if dinners or flexible:
@@ -463,7 +462,7 @@ def fill_restaurants(day_idx: int, sim: SimResult, ctx: Ctx, used: set[str]) -> 
                 used.add(pick.place_id)
                 picks[i] = (pick, True)
                 continue
-        want_korean = i == korean_slot
+        want_korean = (day_idx, a["kind"]) in ctx.korean_meals if ctx.korean_meals is not None else i == korean_slot
         eat_start, eat_end = a["start"], a["start"] + a["eat"]
         pinned_id = ctx.state.meal_pins.get(f"{day_idx + 1}:{a['kind']}")
         pick = None
@@ -597,13 +596,33 @@ def build_itinerary(request: PlanRequest, rest: Restaurants | None = None) -> It
     place_ids = list(dict.fromkeys(request.place_ids))
     n_days = request.days
 
-    assignment, unscheduled = assign_days(place_ids, n_days, ctx)
+    comp = None
+    try:  # 피로 예산 기반 하루 구성. 다루지 못하는 입력은 기존 상자 방식으로 넘긴다
+        from src.planner.compose import ComposeUnsupported, compose_days
+        comp = compose_days(ctx, place_ids, n_days, select_modes)
+    except ComposeUnsupported:
+        comp = None
+    if comp is not None:
+        assignment, unscheduled = comp.assignment, comp.unscheduled
+        ctx.state = ctx.state.model_copy(update={"meal_pins": {**comp.meal_pins, **ctx.state.meal_pins}})
+        ctx.korean_meals = set()   # 이미 고정된 식당이 있는 끼니는 그 식당의 한식 여부를 따른다(고정한 날을 바꾸지 않음)
+        for d, plan in comp.plans.items():
+            for kind, meal in (("lunch", plan.lunch), ("dinner", plan.dinner)):
+                pin = ctx.state.meal_pins.get(f"{d}:{kind}")
+                ko = is_korean(ctx.rest.by_id[pin]) if pin and pin in ctx.rest.by_id else bool(meal and meal["ko"])
+                if ko:
+                    ctx.korean_meals.add((d - 1, kind))
+        for note in comp.notes:
+            ctx.note(note)
+    else:
+        assignment, unscheduled = assign_days(place_ids, n_days, ctx)
     sims: dict[int, SimResult] = {}
     modes_by_day: dict[int, dict] = {}
     dropped: list[Unscheduled] = []
     for day in range(1, n_days + 1):
         pids = assignment[day]
-        modes_by_day[day] = select_modes(pids, ctx) if pids else {}
+        planned = comp.modes.get(day) if comp is not None else None
+        modes_by_day[day] = planned if planned and set(planned) == set(pids) else (select_modes(pids, ctx) if pids else {})
         sims[day], lost = schedule_day(day - 1, pids, modes_by_day[day], ctx)
         dropped.extend(lost)
         assignment[day] = [p for p, _ in sims[day].placements] or []

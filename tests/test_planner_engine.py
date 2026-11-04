@@ -5,8 +5,9 @@ import pytest
 from src.planner.engine import build_itinerary
 from src.planner.hours import earliest_start, hhmm_to_min, intervals_for
 from src.planner.schema import PlanRequest
-from src.planner.sources import Restaurants, load_places
+from src.planner.sources import Restaurants, load_places, load_settings
 
+DINNER_EARLIEST = hhmm_to_min(load_settings()["meal"]["dinner_earliest"])
 MONDAY = datetime.date(2026, 12, 7)
 SUNDAY = datetime.date(2026, 12, 6)
 EIGHT = [f"dad-{i:02d}" for i in (1, 2, 3, 5, 6, 7, 8, 14)]
@@ -66,7 +67,7 @@ def test_meal_time_windows(make_profile, restaurants):
     it = plan(make_profile(), restaurants=restaurants)
     for _, s in meals(it):
         start = hhmm_to_min(s.start)
-        assert start >= (720 if s.meal == "lunch" else 1080), (s.meal, s.start)
+        assert start >= (720 if s.meal == "lunch" else DINNER_EARLIEST), (s.meal, s.start)
 
 
 def test_restaurants_are_unique_and_valid(make_profile, restaurants):
@@ -107,11 +108,12 @@ def test_korean_slot_uses_is_korean_flag_from_data(make_profile, restaurants):
     assert pick.is_korean and pick.place_id.endswith("-kor")
 
 
-def test_every_two_three_days_means_days_1_and_3(make_profile, restaurants):
+def test_every_two_three_days_needs_korean_on_at_least_half_the_days(make_profile, restaurants):
+    # 한식은 여행 전체 조건이다: 2~3일에 한 번 = ceil(일수/2)일 이상. 어느 날이어도 된다(한식당이 있는 날로 옮길 수 있음).
     it = plan(make_profile(korean_need="every_2_3_days"), restaurants=restaurants)
     has_korean = {d.day: any(s.type == "meal" and s.restaurant and s.restaurant.place_id.endswith("-kor")
                              for s in d.stops) for d in it.days}
-    assert has_korean[1] and has_korean[3] and not has_korean[2]
+    assert sum(has_korean.values()) >= (len(it.days) + 1) // 2, has_korean
 
 
 def test_continuous_walk_limit_follows_profile(make_profile):
@@ -143,10 +145,12 @@ def test_closed_place_on_single_day_is_reported(make_profile):
     assert "영업시간" in it.unscheduled[0].reason
 
 
-def test_evening_market_shares_a_day_with_old_town(make_profile):
+def test_evening_market_opens_after_17_and_every_requested_day_is_used(make_profile):
+    # 일정 일수만큼 모든 날을 쓴다. 이전에는 야시장을 구시가지와 같은 날로 묶었지만, 이제는 장소 2곳·2일이면
+    # 하루에 한 곳씩 간다(야시장만 있는 날은 개장 시각 전까지 빈 시간이 생긴다).
     it = plan(make_profile(), place_ids=["dad-03", "dad-14"], days=2)
     day_of = {s.place_id: d.day for d in it.days for s in attraction_stops(d)}
-    assert day_of["dad-03"] == day_of["dad-14"]
+    assert set(day_of.values()) == {1, 2}
     market = next(s for d in it.days for s in attraction_stops(d) if s.place_id == "dad-14")
     assert hhmm_to_min(market.start) >= 17 * 60
 
