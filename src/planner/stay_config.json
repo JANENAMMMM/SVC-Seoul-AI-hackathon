@@ -1,0 +1,36 @@
+{
+  "levels": {
+    "brief": { "minutes": 60, "meaning": "약 1시간 이하" },
+    "half": { "minutes": 120, "meaning": "약 2시간" },
+    "long": { "minutes": 240, "meaning": "반나절 이상 (바나힐은 하루 전체)" }
+  },
+  "level_order": ["brief", "half", "long"],
+  "type_defaults": {
+    "Amusement park": "long",
+    "Theme park": "long",
+    "Water park": "long",
+    "Onsen": "long",
+    "Day-use onsen": "long",
+    "Historical landmark": "half",
+    "Scenic spot": "half",
+    "Buddhist temple": "half",
+    "Boat tour agency": "half",
+    "Beach": "brief",
+    "Bridge": "brief",
+    "Traditional market": "brief",
+    "Market": "brief",
+    "Catholic cathedral": "brief",
+    "Catholic church": "brief",
+    "Church": "brief",
+    "Sculpture museum": "brief",
+    "Heritage museum": "brief",
+    "Museum": "brief",
+    "Mountain pass": "brief"
+  },
+  "ignored_types": ["Tourist attraction", "Tour operator"],
+  "fallback_level": "half",
+  "walk_adjustment": {
+    "walk_min_at_least": 90,
+    "raise_levels": 1
+  }
+}
