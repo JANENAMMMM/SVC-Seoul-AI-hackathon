@@ -68,6 +68,18 @@ body.shownotes .notes{display:block}
 .cover .team{display:flex;gap:40px;margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
 .cover .team div{font-size:13px;color:var(--sub);line-height:1.6}
 .cover .team b{display:block;color:var(--ink);font-size:14px}
+.pcard{border:1px solid var(--line);border-radius:6px;padding:14px 18px;background:#fff}
+.pcard .ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:4px}
+.pcard .ph b{font-size:20px;color:var(--brand)}
+.pcard .ph span{font-size:12px;color:var(--sub);flex:1}
+.pcard .ph i{font-style:normal;font-size:12px;color:var(--mute);border:1px solid var(--line);border-radius:10px;padding:1px 8px}
+.pr-row{display:flex;align-items:center;gap:12px;font-size:16px;padding:7px 0;border-bottom:1px solid var(--line);color:var(--ink)}
+.pr-row b{width:50px;font-variant-numeric:tabular-nums;color:var(--brand)}
+.pr-row .pn{flex:1}
+.pr-row .pm{font-size:12px;color:var(--mute);min-width:62px;text-align:right}
+.pr-row.pr{color:var(--sub);background:#f7f4fc}
+.pk{font-size:11px;margin-left:8px;color:var(--brand);border:1px solid var(--brand);border-radius:9px;padding:0 6px}
+.pcard .pcap{font-size:11px;color:var(--mute);margin-top:6px}
 .print-only{display:none}
 .slide.full{padding:0}
 .slide.full>img{width:100%;height:100%;object-fit:contain;display:block}
@@ -101,6 +113,18 @@ body.shownotes .notes{display:block}
 .lane:first-of-type{border-top:2px solid var(--ink)}
 .lane .lh{font-size:13px;font-weight:700;color:var(--ink);padding-top:2px}
 .lane .lh small{display:block;font-size:11px;font-weight:500;color:var(--mute);margin-top:4px}
+.dcs{display:flex;gap:10px;flex:1;min-height:0}
+.dc{flex:1;min-width:0;border-top:2px solid var(--ink);padding-top:8px;font-size:11px;line-height:1.35}
+.dc .dh{display:flex;justify-content:space-between;align-items:baseline}
+.dc .dh b{font-size:15px}.dc .dh span{font-weight:700;color:var(--brand);font-size:12px}
+.dc .ds{color:var(--mute);margin:2px 0 6px}
+.dc .st{display:flex;flex-wrap:wrap;gap:0 5px;padding:3px 0;border-top:1px solid var(--line)}
+.dc .tm{color:var(--mute);font-variant-numeric:tabular-nums;min-width:100%}
+.dc .st b{font-size:12px}.dc .st i{font-style:normal;color:var(--brand);font-weight:700}
+.dc .ml .nm{color:var(--sub);display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dc .ml .kr{background:var(--brand-soft);padding:0 4px;border-radius:3px}
+.dc .rs{background:var(--brand-soft);color:var(--sub);padding:3px 4px}
+.dc .mv{color:var(--mute);padding:1px 0 1px 8px;border-left:2px solid var(--line);margin:1px 0}
 .lane .ar{color:#c9c3d3;font-size:16px;padding-top:24px;text-align:center}
 .lane h4{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
 .lane p{font-size:13px;line-height:1.55}
@@ -302,7 +326,7 @@ body.shownotes .notes{display:block}
   <div class="sec"><b>02</b>해결 · 동선과 사람의 확인</div>
   <h1>동선은 <em>규칙</em>이 짜고, 현실과 다르면 <em>사람</em>이 고칩니다</h1>
   <div class="body" style="margin-top:28px;gap:40px">
-    <div class="col" style="flex:1.05">
+    <div class="col" style="flex:.9">
       <table>
         <tr><th>단계</th><th>핵심 규칙</th></tr>
         <tr><td style="white-space:nowrap;padding-right:14px"><b>조건 합치기</b></td><td>가장 느린 사람 · 가장 짧은 보행 한도</td></tr>
@@ -313,9 +337,9 @@ body.shownotes .notes{display:block}
       </table>
       <p class="cap" style="margin-top:14px">전에는 권역별로 묶은 뒤 식당을 나중에 붙였고, 지금은 피로 예산 안에서 관광지와 식당을 한 번에 정합니다. AI는 요청을 수정 명령 9개 중 하나로 바꾸기만 하며, 바뀐 일정은 승인해야 반영됩니다.</p>
     </div>
-    <div class="col" style="flex:1.9">
-      <div class="shot"><img src="assets/03-customer-comparison.png" alt="고객 화면: 이 날 적용된 규칙과 변경안 승인"></div>
-      <div class="src">현재 화면 (시연 데이터) — 그날 적용된 규칙과 변경 근거를 화면에 표시</div>
+    <div class="col" style="flex:2.2">
+      <div class="dcs"><div class="dc"><div class="dh"><b>1일차</b><span>난이도 6</span></div><div class="ds">도보 합계 83분 · 연속 최대 40분</div><div class="mv">택시 10분</div><div class="st"><span class="tm">09:10–10:10</span><b>용다리</b></div><div class="mv">택시 17분</div><div class="st"><span class="tm">10:27–12:27</span><b>오행산(마블마운틴)</b></div><div class="mv">도보 8분</div><div class="st ml"><span class="tm">12:35</span><span class="nm">점심 · Hung68</span></div><div class="st rs"><span class="tm">13:35–14:46</span><span>자유 시간 · 숙소 휴식 71분</span></div><div class="mv">택시 14분</div><div class="st"><span class="tm">15:00–17:00</span><b>아시아파크(썬휠)</b></div><div class="mv">택시 10분</div><div class="st ml"><span class="tm">17:30</span><span class="nm">저녁 · 두끼 다낭 2 thang 9 (2호점) dookki danang 2thang9</span><i class="kr">한식</i></div><div class="mv">택시 10분</div></div><div class="dc"><div class="dh"><b>2일차</b><span>난이도 4</span></div><div class="ds">도보 합계 55분 · 연속 최대 39분</div><div class="mv">택시 53분</div><div class="st"><span class="tm">09:53–14:53</span><b>호이안 구시가지</b><i>점심 전·후</i></div><div class="st ml"><span class="tm">12:00</span><span class="nm">점심 · MẸT Hội An - Vietnamese cuisine &amp; Vegetarian options 7</span></div><div class="mv">택시 52분</div><div class="st"><span class="tm">15:45–16:45</span><b>참 조각 박물관</b></div><div class="mv">택시 10분</div><div class="st"><span class="tm">16:55–17:55</span><b>한시장</b></div><div class="st ml"><span class="tm">17:55</span><span class="nm">저녁 · 피자 4P&#x27;s 다낭 인도차이나점</span></div></div><div class="dc"><div class="dh"><b>3일차</b><span>난이도 4</span></div><div class="ds">도보 합계 35분 · 연속 최대 25분</div><div class="mv">택시 39분</div><div class="st"><span class="tm">09:39–10:39</span><b>하이반 고개</b></div><div class="mv">택시 42분</div><div class="st"><span class="tm">11:21–13:21</span><b>영흥사(린응사, 손짜반도)</b></div><div class="mv">택시 10분</div><div class="st ml"><span class="tm">13:31</span><span class="nm">점심 · Son Tra Retreat</span></div><div class="mv">택시 13분</div><div class="st"><span class="tm">14:44–16:14</span><b>다낭 대성당(핑크성당)</b></div><div class="st rs"><span class="tm">16:14–17:30</span><span>자유 시간 · 숙소 휴식 76분</span></div><div class="st ml"><span class="tm">17:30</span><span class="nm">저녁 · 복짬뽕</span><i class="kr">한식</i></div></div></div>
+      <div class="src">일정 엔진 실행 결과 · 식당은 데모 데이터 · 이동시간은 직선거리 추정</div>
     </div>
   </div>
   <div class="notes"><b>멘토:</b> F("이런 문제는 이렇게 해결하겠다") · D · 노션 "동선 로직 설명". <b>출처:</b> route_planner.md §3-2(하루 구성)·§3-3, src/planner/compose.py, config.json(fatigue·free_time). 참고 아티팩트(엔진 설계 페이지)와 route_planner.md 일치 확인. 비용 함수=이동 분+0.5×대기 분+식당 점수 차이×10+날 사이 장소 수 차이×30+빈 날 800 등 가중치도 팀 가정값. 72건 합성 시나리오 비교이며 외부 검증은 아직 없음(한식 조건 충족 64/72, 계산 평균 0.35초·최대 2초). 피로 예산(9~17, 75세 이상 −1)·하루 최대 3곳·체류 범위는 근거 없는 가정값 — 8장 연령별 상한(14/12/11/10/8)과는 다른 값이며 서로 연동되지 않음. 날짜 배정이 쏠리던 문제는 해결(장소 수 차이 2 이상 30건→1건, 72건 비교), 빈 시간은 줄인 게 아니라 자유 시간 칸으로 표시(평균 10.7시간, 3일 기준). 화면 캡처는 변경 전 UI 기준이라 UI 확정 후 재캡처.</div>
@@ -366,8 +390,18 @@ body.shownotes .notes{display:block}
   <div class="body">
     <div class="col">
       <div class="label">자녀 → 부모님</div>
-      <div class="shot"><img src="assets/04-parent.png" alt="부모님 공유 화면" style="object-position:center 20%"></div>
+      <div class="pcard">
+        <div class="ph"><b>1일차</b><span>난이도 6 · 걷기 83분 · 한 번에 최대 40분</span><i>2일차</i><i>3일차</i></div>
+        <div class="pr-row"><b>09:10</b><span class="pn">용다리</span><span class="pm">택시 10분</span></div>
+<div class="pr-row"><b>10:27</b><span class="pn">오행산(마블마운틴)</span><span class="pm">택시 17분</span></div>
+<div class="pr-row"><b>12:35</b><span class="pn">점심 · Hung68</span><span class="pm">도보 8분</span></div>
+<div class="pr-row pr"><b>13:35</b><span class="pn">자유 시간 · 숙소 휴식</span><span class="pm"></span></div>
+<div class="pr-row"><b>15:00</b><span class="pn">아시아파크(썬휠)</span><span class="pm">택시 14분</span></div>
+<div class="pr-row"><b>17:30</b><span class="pn">저녁 · 두끼 다낭 2호점<span class="pk">한식</span></span><span class="pm">택시 10분</span></div>
+        <div class="pcap">시각 · 장소 · 앞 장소에서 오는 길</div>
+      </div>
       <p class="cap">조정·승인한 일정을 큰 글씨로 공유하고 의견을 받습니다</p>
+      <div class="src">일정 엔진 실행 결과 · 식당은 데모 데이터</div>
     </div>
     <div class="col">
       <div class="label">여행사 MD · 가이드</div>
