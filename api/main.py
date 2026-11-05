@@ -1,15 +1,15 @@
 """반걸음 FastAPI. 실행: uv run uvicorn api.main:app --reload"""
-from fastapi import FastAPI
+from pathlib import Path
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from api.hitl import router as hitl_router
 from api.routes.profile import router as profile_router
 from api.scoring import router as scoring_router
-from api.ui import router as ui_router, md_allowed
-from fastapi import Request
-from fastapi.responses import JSONResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
-from pathlib import Path
+from api.ui import md_allowed, router as ui_router
 
 app = FastAPI(title="반걸음 API", version="0.1.0")
 app.add_middleware(
