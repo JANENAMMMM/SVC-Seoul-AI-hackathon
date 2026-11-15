@@ -6,7 +6,6 @@ from src.restaurants import google_reviews
 from src.restaurants.collect import Attraction, collect, review_info
 from src.restaurants.google_places import OpeningPeriod, Restaurant
 from src.restaurants.google_reviews import PlaceReviews, Review, parse_details
-from src.restaurants.preferences import FoodPreference
 from src.restaurants.ranking import (
     bayesian_rating,
     build_candidates,
@@ -84,46 +83,39 @@ def test_distance():
     assert 1100 < distance_m(16.0, 108.0, 16.01, 108.0) < 1120  # 위도 0.01도 ≈ 1.11km
 
 
-def test_filters_seafood_and_closed():
-    pref = FoodPreference(avoid_ingredients=["seafood"])
+def test_filters_closed_but_keeps_seafood():
     closed_lunch_dinner = [OpeningPeriod(open_day=d, open_time="06:00", close_day=d, close_time="10:00") for d in range(7)]
     cands = build_candidates(
-        [make("sea", "seafood_restaurant"), make("early", hours=closed_lunch_dinner), make("ok")], pref
+        [make("sea", "seafood_restaurant"), make("early", hours=closed_lunch_dinner), make("ok")]
     )
     reasons = {c.restaurant.place_id: c.excluded_reason for c in cands}
-    assert reasons["sea"] and "해산물" in reasons["sea"]
+    assert reasons["sea"] is None  # 해산물은 프로필에 따라 일정 엔진이 거른다
     assert reasons["early"] and "문을 닫" in reasons["early"]
     assert reasons["ok"] is None
 
 
 def test_unknown_hours_kept_and_flagged():
-    cands = build_candidates([make("x", hours=[])], FoodPreference())
+    cands = build_candidates([make("x", hours=[])])
     assert cands[0].excluded_reason is None and cands[0].hours_unknown
 
 
 def test_duplicates_removed():
-    cands = build_candidates([make("a"), make("a")], FoodPreference())
+    cands = build_candidates([make("a"), make("a")])
     assert len(cands) == 1
 
 
-def test_local_food_familiar_lowers_local_score():
+def test_score_has_no_local_food_adjustment():
+    # 같은 평점이면 현지 음식이어도 점수가 같다 (선호 보정은 일정 엔진에서)
     rs = [make("vn", "vietnamese_restaurant"), make("cn", "chinese_restaurant")]
-    familiar = {c.restaurant.place_id: c.score for c in build_candidates(rs, FoodPreference(local_food="familiar"), country="VN")}
-    assert familiar["vn"] < familiar["cn"]
-    adventurous = {c.restaurant.place_id: c.score for c in build_candidates(rs, FoodPreference(local_food="adventurous"), country="VN")}
-    assert adventurous["vn"] > adventurous["cn"]
+    scores = {c.restaurant.place_id: c.score for c in build_candidates(rs, country="VN")}
+    assert scores["vn"] == scores["cn"]
 
 
-def test_top5_includes_korean_when_needed():
-    rs = [make(f"vn{i}", rating=4.8 - i * 0.05) for i in range(6)] + [make("kr", "korean_restaurant", rating=4.0)]
-    pref = FoodPreference(korean_need="daily")
-    top = select_top(build_candidates(rs, pref), pref)
+def test_top5_always_includes_korean():
+    rs = [make(f"vn{i}", rating=4.8 - i * 0.03) for i in range(7)] + [make("kr", "korean_restaurant", rating=4.0)]
+    top = select_top(build_candidates(rs))
     assert len(top) == 5
     assert top[-1].restaurant.place_id == "kr"
-
-    no_need = FoodPreference(korean_need="none")
-    top = select_top(build_candidates(rs, no_need), no_need)
-    assert all(not c.cuisine.is_korean for c in top)
 
 
 # ── 4단계: Google 리뷰 ───────────────────────────────────────
@@ -239,9 +231,8 @@ def test_collect_end_to_end_without_storage(tmp_path, monkeypatch):
         )
 
     attractions = [Attraction(id="han", name="한 시장", lat=16.0684, lng=108.2241)]
-    pref = FoodPreference(korean_need="daily", local_food="familiar")
     run = lambda atts: collect(  # noqa: E731
-        atts, pref, city="다낭", country="VN",
+        atts, city="다낭", country="VN", tags=False,  # 태그(Claude)는 tests/test_restaurant_tags.py에서
         google_search=fake_google, review_fetch=fake_reviews,
     )
 

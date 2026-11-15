@@ -1,0 +1,178 @@
+{
+  "_note": "일정 엔진 파라미터. 값은 대부분 팀 확정 전 가정값이라 한곳에 모았다. 수정 시 이 파일만 바꾼다.",
+  "base_point": {
+    "lat": 16.0680836,
+    "lng": 108.224069,
+    "name": "다낭 시내 기준점(한시장 인근)"
+  },
+  "day_window": {
+    "start": "09:00",
+    "end": "21:00"
+  },
+  "travel": {
+    "road_factor": 1.3,
+    "avg_speed_kmh": 35,
+    "min_minutes": 10,
+    "same_place_km": 0.3,
+    "walk_road_factor": 1.2,
+    "walk_max_min": 10
+  },
+  "meal": {
+    "duration_min": 60,
+    "lunch_earliest": "12:00",
+    "lunch_latest_start": "14:00",
+    "dinner_earliest": "17:30",
+    "dinner_latest_start": "20:00",
+    "dinner_if_activity_ends_after": "15:00",
+    "dinner_always_if_base_travel_min_at_least": 45,
+    "lunch_split_if_ends_after": "13:30",
+    "travel_allowance_min": 10
+  },
+  "walk": {
+    "reference_speed_mps": 1.1,
+    "default_speed_mps": 0.8,
+    "default_limit_min": 20,
+    "limits_by_duration": {
+      "under_15min": 12,
+      "15_30min": 20,
+      "30_60min": 40,
+      "1_2hour": 60,
+      "over_2hour": 90
+    },
+    "rest_min": 25,
+    "score_to_walk_min": {
+      "1": 5,
+      "2": 10,
+      "3": 15,
+      "4": 20,
+      "5": 30,
+      "6": 40,
+      "7": 50,
+      "8": 60,
+      "9": 75,
+      "10": 90
+    },
+    "low_stamina": {
+      "limit_min_at_most": 20,
+      "speed_mps_below": 1.0,
+      "auto_short_walking_score_at_least": 6
+    }
+  },
+  "difficulty": {
+    "max_day_difficulty": 7
+  },
+  "fatigue": {
+    "_note": "하루 피로 예산 F = 그날 관광지 점수(스코어링 AI)의 합 상한. 값은 근거 없는 가정값이며 하루 2~3곳이 들어가도록 맞췄다.",
+    "budget_by_duration": {"under_15min": 9, "15_30min": 11, "30_60min": 13, "1_2hour": 15, "over_2hour": 17},
+    "default_duration": "15_30min",
+    "age_at_or_above": 75,
+    "age_penalty": 1,
+    "speed_below_mps": 1.0,
+    "speed_penalty": 1,
+    "min_budget": 5,
+    "max_places_per_day": 3,
+    "max_places_per_day_explicit": 4
+  },
+  "free_time": {
+    "_note": "빈 시간 처리. 체류 범위는 장소의 기본 체류시간(분)별 [최소, 최대]이며 근거 없는 가정값이다. 최대까지 늘려도 남는 시간은 자유 시간 칸으로 표시한다.",
+    "min_gap_min": 30,
+    "label": "자유 시간 · 숙소 휴식",
+    "stay_range": {"60": [45, 90], "120": [90, 150], "240": [180, 300]}
+  },
+  "compose": {
+    "_note": "하루 구성 탐색 설정. 비용 = 이동 분 + 0.5*대기 분 + 식당 점수 차이*restaurant_lambda + 식당 후보 없음 가산.",
+    "restaurant_lambda": 10,
+    "placeholder_penalty": 30,
+    "balance_weight": 30,
+    "empty_day_penalty": 800,
+    "repeat_penalty": 60,
+    "node_limit": 60000,
+    "top_restaurants": 3,
+    "top_korean": 2,
+    "variants_per_subset": 5
+  },
+  "capacity": {
+    "spread_ratio": 0.55,
+    "per_place_travel_min": 15
+  },
+  "korean_interval_days": {
+    "daily": 1,
+    "every_2_3_days": 2
+  },
+  "pace": {
+    "slower": {
+      "walk_limit_factor": 0.75,
+      "capacity_factor": 0.85
+    },
+    "normal": {
+      "walk_limit_factor": 1.0,
+      "capacity_factor": 1.0
+    },
+    "faster": {
+      "walk_limit_factor": 1.25,
+      "capacity_factor": 1.15
+    }
+  },
+  "weights": {
+    "travel": 1.0,
+    "wait": 0.5,
+    "late_end": 0.3,
+    "consecutive_demanding": 20.0,
+    "pinned_meal_miss": 80.0
+  },
+  "clusters": {
+    "region_to_cluster": {
+      "downtown": "city",
+      "danang_edge": "city",
+      "hai_van": "city",
+      "hoian": "south",
+      "myson": "south",
+      "west_mountain": "west"
+    },
+    "solo_places": [
+      "dad-01",
+      "dad-11"
+    ],
+    "order": [
+      "city",
+      "south",
+      "west",
+      "banahills"
+    ],
+    "place_cluster_override": {
+      "dad-01": "banahills"
+    },
+    "evening_open_at_or_after": "15:00"
+  },
+  "in_site_meal_places": [
+    "dad-01"
+  ],
+  "restaurant": {
+    "search_radius_km": [
+      3.0,
+      6.0
+    ],
+    "min_rating": 3.8,
+    "min_rating_count": 30,
+    "excluded_types": [
+      "hotel",
+      "resort_hotel",
+      "lodging",
+      "grocery_store",
+      "fast_food_restaurant",
+      "snack_bar",
+      "bar",
+      "cafe",
+      "coffee_shop",
+      "bakery"
+    ],
+    "seafood_types": [
+      "seafood_restaurant",
+      "oyster_bar_restaurant",
+      "sushi_restaurant",
+      "fish_and_chips_restaurant"
+    ],
+    "local_pref_bonus": 0.15,
+    "distance_penalty_per_km": 0.08
+  }
+}

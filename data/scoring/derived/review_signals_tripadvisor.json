@@ -1,0 +1,1965 @@
+{
+ "source": "Tripadvisor via Apify maxcopell~tripadvisor-reviews, maxItemsPerQuery=150",
+ "patterns": {
+  "walking": "\\b(walk(ing|ed)?|hik(e|ing)|on foot|lots of walking|long walk)\\b",
+  "stairs_climb": "\\b(stairs?|steps|staircase|climb(ing|ed)?|steep|uphill)\\b",
+  "heat_sun": "\\b(hot|heat|humid|sun(ny|burn|screen)?|sweat(y|ing)?|no shade|shade)\\b",
+  "queue_crowd": "\\b(queues?|queu(ing|eing)|lines?\\b(?! of)|wait(ed|ing)? (for|in)|crowd(s|ed)?|busy|packed)\\b",
+  "rest_seating": "\\b(bench(es)?|seat(s|ing)?|sit down|rest (area|stop)|places? to sit|toilets?|restrooms?)\\b",
+  "surface": "\\b(uneven|slippery|rocky|cobble|gravel|muddy|sand(y)?|rough path|terrain)\\b",
+  "accessibility_elderly": "\\b(wheelchair|elderly|older people|seniors?|mobility|disabled|disabilit(y|ies)|accessib(le|ility)|bad knees?|parents|grandparents?|pram|stroller)\\b",
+  "relief": "\\b(cable ?car|elevator|lift|shuttle|escalator|golf cart|buggy|electric car|easy (walk|access))\\b"
+ },
+ "attractions": {
+  "dad-01": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d2255351-Reviews-Ba_Na_Hills-Da_Nang.html",
+   "n": 150,
+   "n_family": 59,
+   "dims": {
+    "walking": {
+     "hits": 24,
+     "share": 0.16,
+     "ci95": [
+      0.11,
+      0.227
+     ],
+     "family_hits": 11,
+     "family_share": 0.186,
+     "family_ci95": [
+      0.107,
+      0.304
+     ],
+     "evidence": [
+      "… sunny and warm to cloudy and drizzly quickly. Wear comfortable shoes and expect a lot of walking and stairs.  Verdict: It's not a life-changing experience, but it's a worthwhile stop if you",
+      "…tes, four different employees raised their voices, laughed in our faces, and dismissively walked away. To enter, we were pressured to pay an extra 1,000,000 VND strictly in cash because thei",
+      "The place was amazingly beautiful it’s like walking into a theme park. There are plenty if things to walk, look around and take picture. The creativity was beyond expectation"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 8,
+     "share": 0.053,
+     "ci95": [
+      0.027,
+      0.102
+     ],
+     "family_hits": 4,
+     "family_share": 0.068,
+     "family_ci95": [
+      0.027,
+      0.162
+     ],
+     "evidence": [
+      "…sal Studios, and its biggest weakness is accessibility. Most areas can only be reached by stairs. Some have escalators, but I didn't see many elevators. I'm able-bodied and managed to see mo",
+      "Assuming we went to the bridge by hand.   An immense structure with stairs, streets, buildings from Europe, lifts, attractions, toboggan runs, life entertainment. Etc. Etc. And you can find",
+      "… didn’t have a stroller. Most of the areas are stroller friendly but there are parts with steep slopes and stairs.  Its all is fairly touristy, but worth it.  We made our way back at around"
+     ]
+    },
+    "heat_sun": {
+     "hits": 19,
+     "share": 0.127,
+     "ci95": [
+      0.083,
+      0.189
+     ],
+     "family_hits": 10,
+     "family_share": 0.169,
+     "family_ci95": [
+      0.095,
+      0.285
+     ],
+     "evidence": [
+      "…ober and weather was awesome there chilly with fog even in mid-day, good respite from the hot weather of Danang. They give complementary beer or croissant along with the ticket. Alpine rides",
+      "… other big amusement parks.  Tips: Be prepared for sudden weather changes. It can go from sunny and warm to cloudy and drizzly quickly. Wear comfortable shoes and expect a lot of walking and",
+      "…re is mesmerizing, and the weather itself changes mystically over a few hours from bright sun to thick fog and tropical downpour.  A must-see!"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 57,
+     "share": 0.38,
+     "ci95": [
+      0.306,
+      0.46
+     ],
+     "family_hits": 22,
+     "family_share": 0.373,
+     "family_ci95": [
+      0.261,
+      0.5
+     ],
+     "evidence": [
+      "…ain rail or cable car, and with so many cable car stations, it was hard to work out which line to take for which area. Clearer signage and more staff would help a lot.  What worked: The cabl",
+      "…t the attractions and scenery make it worth visiting. I recommend arriving early to avoid crowds and have more time to explore. The visit can take around 5–7 hours. It can get quite crowded,",
+      "…forests, and beautiful scenery below. As we went higher, it felt like we were leaving the busy world behind and entering a completely different place.  The Golden Bridge was definitely a hig"
+     ]
+    },
+    "rest_seating": {
+     "hits": 6,
+     "share": 0.04,
+     "ci95": [
+      0.018,
+      0.085
+     ],
+     "family_hits": 2,
+     "family_share": 0.034,
+     "family_ci95": [
+      0.009,
+      0.115
+     ],
+     "evidence": [
+      "…ere was an obsession over cleanliness. There was enough shaded space to sit and plenty of restrooms and restaurants. Staff are helpful and guide us to wherever we want to go.  I haven't had",
+      "…sque place.  The spot is amazing though, the air was fresh and pure. Very good amenities (toilets, information, employees with a basic English). They were already building a gigantic casinos",
+      "…n-Viet/Chinese people.  Do expect other people around you to take your spot, whether it’s seating or waiting in line. If you don’t hold your ground, they will take your spot. Family/group ch"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.061
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 2,
+     "family_share": 0.034,
+     "family_ci95": [
+      0.009,
+      0.115
+     ],
+     "evidence": [
+      "Beautiful setting, but not accessible for everyone!  This park is a great visit, but it isn't a Disney or Universal Studios, and its biggest weakness is accessibility. Most areas can only be",
+      "…s a lot of walking if you want to cover everything, we didn’t plan to so we didn’t have a stroller. Most of the areas are stroller friendly but there are parts with steep slopes and stairs."
+     ]
+    },
+    "relief": {
+     "hits": 58,
+     "share": 0.387,
+     "ci95": [
+      0.312,
+      0.467
+     ],
+     "family_hits": 21,
+     "family_share": 0.356,
+     "family_ci95": [
+      0.246,
+      0.483
+     ],
+     "evidence": [
+      "…ok two Alpine rides, getting two rides was 180k per person compared to 100k for one ride. Cable car ride was good on the way to the top, with nice views.. views get a bit blocked due to fog",
+      "… theme park. Located amidst beautiful greenery on Bana Hills, you approach the park via a cable car. One of the most beautiful cable car experience overlooking lush green forest and waterfal",
+      "…ts to guide us or answer questions. Some sections can only be reached by mountain rail or cable car, and with so many cable car stations, it was hard to work out which line to take for which"
+     ]
+    }
+   }
+  },
+  "dad-02": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d454980-Reviews-The_Marble_Mountains-Da_Nang.html",
+   "n": 150,
+   "n_family": 41,
+   "dims": {
+    "walking": {
+     "hits": 42,
+     "share": 0.28,
+     "ci95": [
+      0.214,
+      0.357
+     ],
+     "family_hits": 6,
+     "family_share": 0.146,
+     "family_ci95": [
+      0.069,
+      0.284
+     ],
+     "evidence": [
+      "This is highly recommended for people who are active love  walking  this place are amazing but need a lot of walking and  dint forget to bring water if you are planning to visit this place.",
+      "…osted by hawkers from the moment you step out of your Grab. Indifferent ticket personnel. Walked through busy construction zone to get to elevator that was hard to find due to construction.",
+      "… I stayed at one of the hotels along Non Nuoc beach and it took me just about 15 minutes’ walk to get to the entrance from my hotel. If you’re coming from the main tourist belt in Da Nang ci"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 91,
+     "share": 0.607,
+     "ci95": [
+      0.527,
+      0.681
+     ],
+     "family_hits": 22,
+     "family_share": 0.537,
+     "family_ci95": [
+      0.387,
+      0.679
+     ],
+     "evidence": [
+      "Great spot, wonderful views. Hope you like steps as there are a few. Take water as you will need, but there is also place to purchase once up there. Quite humid. Caves are memorable,",
+      "…le clothing.  I would also recommend wearing enclosed shoes, as some areas require you to climb up and down very steep sections. Good footwear will make exploring the caves and pathways much",
+      "…ees thanked me for. The downside: even early, the caves are hot and humid, and the marble steps are slippery, so wear proper sneakers. We skipped the Am Phu hell cave at the bottom since it"
+     ]
+    },
+    "heat_sun": {
+     "hits": 43,
+     "share": 0.287,
+     "ci95": [
+      0.22,
+      0.364
+     ],
+     "family_hits": 14,
+     "family_share": 0.341,
+     "family_ci95": [
+      0.216,
+      0.495
+     ],
+     "evidence": [
+      "…ew. Take water as you will need, but there is also place to purchase once up there. Quite humid. Caves are memorable,",
+      "…es that made the visit a memorable experience.  We visited around midday, so it was quite humid. If you’re planning a visit, be prepared to get wet! Water constantly drips from the cave ceil",
+      "…he glass elevator, which my knees thanked me for. The downside: even early, the caves are hot and humid, and the marble steps are slippery, so wear proper sneakers. We skipped the Am Phu hel"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 30,
+     "share": 0.2,
+     "ci95": [
+      0.144,
+      0.271
+     ],
+     "family_hits": 4,
+     "family_share": 0.098,
+     "family_ci95": [
+      0.039,
+      0.225
+     ],
+     "evidence": [
+      "… skipped the Am Phu hell cave at the bottom since it needs a separate ticket. By 9 AM the crowds were pouring in, so the early start is not optional, it is the whole trick.",
+      "…s from the moment you step out of your Grab. Indifferent ticket personnel. Walked through busy construction zone to get to elevator that was hard to find due to construction. Ticket person t",
+      "Biggest tip is to go as soon as the gates open at 7am to avoid the crowds. Because not only do you get better photos, but the stairs are super skinny and dangerous it would be impossible to"
+     ]
+    },
+    "rest_seating": {
+     "hits": 3,
+     "share": 0.02,
+     "ci95": [
+      0.007,
+      0.057
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.086
+     ],
+     "evidence": [
+      "… the stairs, after a maximum of 5min with little effort you are up. One also has upstairs toilets and drinks sales, beautiful views and several caves.   Don't go over Heaven Gate, 1-2 idiots",
+      "…took the lift up and went down on foot. This beautiful place has delighted us very much.  Toilet facilities are available and you can also buy something to drink.  The Marbel Mountains are d",
+      "…d some very challenging climbs (am phu cave for one) so good shoes are a must! There is a rest stop enroute to one of the pagodas offering drinks and much needed shade. Being a hat and plent"
+     ]
+    },
+    "surface": {
+     "hits": 26,
+     "share": 0.173,
+     "ci95": [
+      0.121,
+      0.242
+     ],
+     "family_hits": 6,
+     "family_share": 0.146,
+     "family_ci95": [
+      0.069,
+      0.284
+     ],
+     "evidence": [
+      "…d me for. The downside: even early, the caves are hot and humid, and the marble steps are slippery, so wear proper sneakers. We skipped the Am Phu hell cave at the bottom since it needs a se",
+      "… hard to follow. There were other places than those numbered on map - wth?   Steps slimy, uneven, slippery. Most ppl who I passed were also confused with layout and where things were.   Mill",
+      "…r reviewers have said, yes, many marble stone steps/broken rocks to climb and they can be slippery (shoe soles with good grip will help) but then again, I also saw others in flip flops or Cr"
+     ]
+    },
+    "accessibility_elderly": {
+     "hits": 9,
+     "share": 0.06,
+     "ci95": [
+      0.032,
+      0.11
+     ],
+     "family_hits": 1,
+     "family_share": 0.024,
+     "family_ci95": [
+      0.004,
+      0.126
+     ],
+     "evidence": [
+      "…d dangerous it would be impossible to do it with crowds. Would not recommend this for the elderly or young kids. One slip up and you’re gone.   We didn’t go with a guide. Would’ve like some",
+      "…ed into the karst rock. You will find, among other things, a temple, a cave, and a pagoda accessible by stairs or an elevator. For the more adventurous, other stairs provide access to a pano",
+      "…hing and sturdy shoes and you should be good to go. Though the hike is pretty simple, but seniors and persons with mobility issues might find it challenging. In that case, it is better to ta"
+     ]
+    },
+    "relief": {
+     "hits": 67,
+     "share": 0.447,
+     "ci95": [
+      0.369,
+      0.527
+     ],
+     "family_hits": 15,
+     "family_share": 0.366,
+     "family_ci95": [
+      0.236,
+      0.519
+     ],
+     "evidence": [
+      "…the ceiling onto a giant Buddha statue. Entrance was 40,000 VND plus 15,000 for the glass elevator, which my knees thanked me for. The downside: even early, the caves are hot and humid, and",
+      "… your Grab. Indifferent ticket personnel. Walked through busy construction zone to get to elevator that was hard to find due to construction. Ticket person trying to upsell us for more than",
+      "I bought my ticket at gate 1, 40.000dong for the hole thing( elevator not included) If u are in normal shape, skip the elevator, it’s not that many steps👍🏻  I arrived at 9 in the morning, no"
+     ]
+    }
+   }
+  },
+  "dad-03": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298082-d4507121-Reviews-Hoi_An_Ancient_Town-Hoi_An_Quang_Nam_Province.html",
+   "n": 150,
+   "n_family": 42,
+   "dims": {
+    "walking": {
+     "hits": 30,
+     "share": 0.2,
+     "ci95": [
+      0.144,
+      0.271
+     ],
+     "family_hits": 5,
+     "family_share": 0.119,
+     "family_ci95": [
+      0.052,
+      0.25
+     ],
+     "evidence": [
+      "No need to book a tour. Can just get a Grab car ride to and fro. Really nice to walk around but be prepared to be harassed by lantern boats tour operators and when leaving the ancient town b",
+      "This place has this completely different vibe from the rest of Vietnam, and once you walk through those streets, you understand why it's a UNESCO World Heritage Site. The first thing you not",
+      "A beautiful and charming town full of history and culture. Walking through the lantern-lit streets at night was unforgettable. The local food is delicious, and the atmosphere is peaceful and"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.084
+     ],
+     "evidence": []
+    },
+    "heat_sun": {
+     "hits": 10,
+     "share": 0.067,
+     "ci95": [
+      0.037,
+      0.118
+     ],
+     "family_hits": 3,
+     "family_share": 0.071,
+     "family_ci95": [
+      0.025,
+      0.19
+     ],
+     "evidence": [
+      "…tell you to move aside.   We went there for an entire day . Noon time less crowd but very hot and humid and mid evening time when there are lanterns being lit . It is very crowded.  We had t",
+      "…s the thing that really makes Hoi An special: at night it transforms completely. When the sun goes down and the lanterns come out, the whole town lights up in these soft, glowing colors. Tho",
+      "Hoi An is a party. Yes, it's touristy, perhaps a bit kitschy, but when the sun goes down and thousands of lanterns light up, it becomes enchanting. The peeling shutters, the shops, the woks"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 32,
+     "share": 0.213,
+     "ci95": [
+      0.155,
+      0.286
+     ],
+     "family_hits": 9,
+     "family_share": 0.214,
+     "family_ci95": [
+      0.117,
+      0.359
+     ],
+     "evidence": [
+      "…yell at you or tell you to move aside.   We went there for an entire day . Noon time less crowd but very hot and humid and mid evening time when there are lanterns being lit . It is very cro",
+      "My first time here, so crowded in the evening, but there were plenty of activities to experience. You must come here 😆",
+      "Crowded and colourful loads of good things to buy and taste. Vibrant music and excellent coconut coffee. Surprised to hear good jazz music. Love the vibe and atmosphere. This is a good place"
+     ]
+    },
+    "rest_seating": {
+     "hits": 3,
+     "share": 0.02,
+     "ci95": [
+      0.007,
+      0.057
+     ],
+     "family_hits": 1,
+     "family_share": 0.024,
+     "family_ci95": [
+      0.004,
+      0.123
+     ],
+     "evidence": [
+      "…treet food vendors, and the quality is genuinely good. You can get everything from proper sit down meals to grabbing something quick while you walk. The local specialties like white rose dum",
+      "…river and back street shops finding a little cafe which had air conditioning and upstairs seating. We found an excellent vegan restaurant for early dinner before heading out to see the boats",
+      "…mend the Hoi An Remembrance Show.  Buy you tickets on line, and do not go for an upgraded seat.  When you get there you will find that everything is general seating, so arrive well in advanc"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.084
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 3,
+     "share": 0.02,
+     "ci95": [
+      0.007,
+      0.057
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.084
+     ],
+     "evidence": [
+      "…t an open-air market...they write to accept credit cards but they don't. No reduction for disabled people  Trap for tourists  In the market almost always the price has quadrupled. In sites m",
+      "…brightly lit - however, again, the river was awash with boats, and the streets lined with elderly ladies selling little floating candles for the river, with the same selling techniques as ea",
+      "…tion is at the back of the museum. Happy Smile Quilling is an enterprise designed to give disabled persons a means for supporting themselves through a unique craft.  The artists make beautif"
+     ]
+    },
+    "relief": {
+     "hits": 3,
+     "share": 0.02,
+     "ci95": [
+      0.007,
+      0.057
+     ],
+     "family_hits": 1,
+     "family_share": 0.024,
+     "family_ci95": [
+      0.004,
+      0.123
+     ],
+     "evidence": [
+      "…always a great way to go there is via Grab . There will drop you in the old town near the golf cart/ buggy tour cart. My suggestion take your time - reach there at around 3pm or 4pm and stro",
+      "…merous solicitations from vendors that get annoying very quickly. Barely out of our hotel shuttle, a very insistent vendor pestered us for 10 minutes...",
+      "We were staying at the Pullman and they have a shuttle that fetches us to Hoi An. It's good that they only alighted there in the late afternoon as late evenings is when the town seems to com"
+     ]
+    }
+   }
+  },
+  "dad-04": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g17786366-d7118743-Reviews-Linh_Ung_Pagoda-Son_Tra_Peninsula_Da_Nang.html",
+   "n": 150,
+   "n_family": 28,
+   "dims": {
+    "walking": {
+     "hits": 10,
+     "share": 0.067,
+     "ci95": [
+      0.037,
+      0.118
+     ],
+     "family_hits": 1,
+     "family_share": 0.036,
+     "family_ci95": [
+      0.006,
+      0.177
+     ],
+     "evidence": [
+      "…tself already sets up for a calm way: there are beautiful views and fresh air. Before the walk, I arranged with the same driver who would drive it back, they wait quietly in the parking lot.",
+      "…little monkeys jumping up and down the trees, adding some fun to the tranquil atmosphere. Walking on the stone steps of the temple, I felt inner peace and treasured the present time even mor",
+      "…iew up close. We went on a cloudy day and the view of da nang was still nice, and we then walked from there into monkey mountain more and within a few mins saw several monkeys. Well worth a"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 7,
+     "share": 0.047,
+     "ci95": [
+      0.023,
+      0.093
+     ],
+     "family_hits": 1,
+     "family_share": 0.036,
+     "family_ci95": [
+      0.006,
+      0.177
+     ],
+     "evidence": [
+      "…g up and down the trees, adding some fun to the tranquil atmosphere. Walking on the stone steps of the temple, I felt inner peace and treasured the present time even more. This visit taught",
+      "Beautiful gardens, pagoda & statues. Easy walking, but some steps. Approx 15 mins drive from Da Nang. Great views across the city and bay. Free entry.",
+      "…eral attractions to see here: Temples, Shrines, Statues of Buddhas, flower gardens, etc.  Steps are few, very manageable. Free, clean toilet facilities are also here."
+     ]
+    },
+    "heat_sun": {
+     "hits": 7,
+     "share": 0.047,
+     "ci95": [
+      0.023,
+      0.093
+     ],
+     "family_hits": 2,
+     "family_share": 0.071,
+     "family_ci95": [
+      0.02,
+      0.226
+     ],
+     "evidence": [
+      "…on a hill with beautiful scenery and fresh air. The golden statues of Buddha gleam in the sun and make one feel a divine power. There were plenty of tourists around, all taking pictures or p",
+      "…the morning to avoid the tourist busses that start arriving around 9-ish and to avoid the heat.  This is a working temple so please dress appropriately, be respectful and DO NOT feed the mon",
+      "…ha with its enormous size caps of the journey.  ideal for photo ops amidst the sweltering heat . A bonus is the upmost city scenery."
+     ]
+    },
+    "queue_crowd": {
+     "hits": 12,
+     "share": 0.08,
+     "ci95": [
+      0.046,
+      0.135
+     ],
+     "family_hits": 4,
+     "family_share": 0.143,
+     "family_ci95": [
+      0.057,
+      0.315
+     ],
+     "evidence": [
+      "…the top is very beautiful. As with the other attractions, due to the temperatures and the crowds, the advice is to go there early in the morning, and then continue towards other attractions,",
+      "…now which way to look first.  The Lady Buddha is very impressive up close albeit a little crowded with other tourists but that’s a small price to pay to marvel on this sight.  Through out th",
+      "…cent temple and pagoda. Nice views of Da Nang. This is a top attraction and it gets super busy as they bring in bus load after bus load of tourists, in spite of this, I personally wouldn’t l"
+     ]
+    },
+    "rest_seating": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.121
+     ],
+     "evidence": [
+      "…de, but it is a place to go together. Inside there is a gorge with a beautiful garden and bench, and the tower itself and the design are impressive. Entrance is free. There are many monkeys",
+      "…es, Statues of Buddhas, flower gardens, etc.  Steps are few, very manageable. Free, clean toilet facilities are also here."
+     ]
+    },
+    "surface": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.036,
+     "family_ci95": [
+      0.006,
+      0.177
+     ],
+     "evidence": [
+      "… a beautiful island. Known for its beautiful natural landscapes, blue sea water and white sandy beaches, Mountain Tea Peninsula is a great place to relax and relax. The greatest characterist"
+     ]
+    },
+    "accessibility_elderly": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.121
+     ],
+     "evidence": []
+    },
+    "relief": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.121
+     ],
+     "evidence": []
+    }
+   }
+  },
+  "dad-05": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d7687457-Reviews-My_Khe_Beach-Da_Nang.html",
+   "n": 150,
+   "n_family": 31,
+   "dims": {
+    "walking": {
+     "hits": 37,
+     "share": 0.247,
+     "ci95": [
+      0.185,
+      0.321
+     ],
+     "family_hits": 7,
+     "family_share": 0.226,
+     "family_ci95": [
+      0.114,
+      0.398
+     ],
+     "evidence": [
+      "… warm and inviting. I loved the beutiful mountain views in the distance, especially while walking along the long promenade. Sunset was my favorite time to visit because the beach had a very",
+      "…sea and beautiful mountain views.In the evening at sunset is a special atmosphere.You can walk along the endless promenade and you will not be bored.Many dance,all have fun. Very beautiful v",
+      "…ith plenty of underground currents. It has saviors. Definitely worth a visit!!  Excellent walk and evening too!!"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      -0.0,
+      0.11
+     ],
+     "evidence": [
+      "… skis which were deployed for the job. Due to pain in my knees due to injury, I could not climb on the jet ski and was literally dragged by the guy to the shore.  This was a horrible experie"
+     ]
+    },
+    "heat_sun": {
+     "hits": 21,
+     "share": 0.14,
+     "ci95": [
+      0.093,
+      0.205
+     ],
+     "family_hits": 3,
+     "family_share": 0.097,
+     "family_ci95": [
+      0.033,
+      0.249
+     ],
+     "evidence": [
+      "The beach was clean and not too busy recommend you get beach shoes, as the sand was hot. I'd go in the morning or late afternoon.",
+      "…de, with fine sand, with a gentle entrance into the water. Many areas with palm trees and shade at the edge, so you can easily shelter from the sun. Many beach bars. I did not see showers an",
+      "…an rent a cottage or a chair, or simply lie down on the sand to soak in the warmth of the sun. Some choose to swim, others meditate, and many just smile as they savor the moment.  For me, th"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 20,
+     "share": 0.133,
+     "ci95": [
+      0.088,
+      0.197
+     ],
+     "family_hits": 2,
+     "family_share": 0.065,
+     "family_ci95": [
+      0.018,
+      0.207
+     ],
+     "evidence": [
+      "The beach was clean and not too busy recommend you get beach shoes, as the sand was hot. I'd go in the morning or late afternoon.",
+      "…ch. It was so easy to pick up a beach towel from the concierge desk, bravely traverse the busy road and find a spot on the sandy beach to lounge away the day. There is a long promenade paral",
+      "…beach, stretching for miles great to walk along in the sun or relax on. It does get quite busy during the day. We were only in the area for around an hour as it was a stop on our transfer, b"
+     ]
+    },
+    "rest_seating": {
+     "hits": 9,
+     "share": 0.06,
+     "ci95": [
+      0.032,
+      0.11
+     ],
+     "family_hits": 2,
+     "family_share": 0.065,
+     "family_ci95": [
+      0.018,
+      0.207
+     ],
+     "evidence": [
+      "…ul, white sandy beach - A beautiful Promenade, with  beautiful landscaping - A few public toilets - Lifeguards are usually on duty - Clean  Available Activities:  - Eating - Drinking - Medit",
+      "Sunbeds old 40k, coconut water 40k, shower 5k, no toilet and changing room",
+      "…sks so you are never in danger of dying of thirst or hunger here. And there are many park benches to sit down & rest weary legs as well as sufficient, rudimentary toilets which are useful if"
+     ]
+    },
+    "surface": {
+     "hits": 77,
+     "share": 0.513,
+     "ci95": [
+      0.434,
+      0.592
+     ],
+     "family_hits": 10,
+     "family_share": 0.323,
+     "family_ci95": [
+      0.186,
+      0.499
+     ],
+     "evidence": [
+      "…on work life balance and spending quality time with their families.  - A beautiful, white sandy beach - A beautiful Promenade, with  beautiful landscaping - A few public toilets - Lifeguards",
+      "The beach was clean and not too busy recommend you get beach shoes, as the sand was hot. I'd go in the morning or late afternoon.",
+      "A very beautiful beach. Long, wide, with fine sand, with a gentle entrance into the water. Many areas with palm trees and shade at the edge, so you can easily shelter from the sun. Many beac"
+     ]
+    },
+    "accessibility_elderly": {
+     "hits": 4,
+     "share": 0.027,
+     "ci95": [
+      0.01,
+      0.067
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      -0.0,
+      0.11
+     ],
+     "evidence": [
+      "…ime of the day - busy with local runners, swimmers, walkers, surfers and groups of mainly older people practicing Tai Che or similar exercise activities. By the time that the westerners got",
+      "…oons tend to be livelier. My Khe Beach's proximity to Da Nang city center makes it easily accessible, offering a perfect balance of urban convenience and coastal relaxation.",
+      "A very relaxing beach, not crowded, safe and quite enjoyable.  As a person with a walking disability I was able to get to the water.  The sunrises along the beach are a moment in life you wi"
+     ]
+    },
+    "relief": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      -0.0,
+      0.11
+     ],
+     "evidence": [
+      "Located in the centre of Da Nang.. easy access, enough caffe to sit. Swimming is not allowed everywhere. Very nice sea with plenty of underground currents. It has saviors. Definitely worth a",
+      "… fishermen cast their nets at dawn.  Located in the heart of Da Nang, My Khe Beach offers easy access to a plethora of restaurants serving fresh seafood and traditional Vietnamese cuisine. T"
+     ]
+    }
+   }
+  },
+  "dad-06": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d6612108-Reviews-Dragon_Bridge-Da_Nang.html",
+   "n": 150,
+   "n_family": 47,
+   "dims": {
+    "walking": {
+     "hits": 15,
+     "share": 0.1,
+     "ci95": [
+      0.062,
+      0.158
+     ],
+     "family_hits": 6,
+     "family_share": 0.128,
+     "family_ci95": [
+      0.06,
+      0.252
+     ],
+     "evidence": [
+      "You can go see it, the show is short, but not very impressive either. Walking along the waterfront itself or through the market near the bridge plus this show is all part of the journey quit",
+      "…sands of people leaving simultaneously, traffic was at a standstill. We eventually had to walk several blocks away from the bridge just to escape the bottleneck and find a driver willing to",
+      "…, which was fun to watch and drew a big crowd.  The area around the bridge is great for a walk, with nice views of the Han River and plenty of places to grab food or a drink nearby. It's not"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.076
+     ],
+     "evidence": [
+      "… head and the water spray, and the crowd getting wet below.  You will have to go down the stairs below to get a further back shot to encompass all I described above... the next night..."
+     ]
+    },
+    "heat_sun": {
+     "hits": 7,
+     "share": 0.047,
+     "ci95": [
+      0.023,
+      0.093
+     ],
+     "family_hits": 2,
+     "family_share": 0.043,
+     "family_ci95": [
+      0.012,
+      0.142
+     ],
+     "evidence": [
+      "…l gathering around below the bridge when as the time draws to 9pm. The shows are held Fri-Sun at 9pm.",
+      "…agon’ changes its colour on a continuous loop but the fire breathing ‘spectacle’ (Fri/Sat/Sun) is more Puff the magic dragon than Godzilla… After the fire show my partner looked at one anoth",
+      "…venient. Watching at the bridge right next to the dragon head is not advised, as it’s too hot from fire and too wet from water that the dragon head exudes. There are many pickpockets around"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 36,
+     "share": 0.24,
+     "ci95": [
+      0.179,
+      0.314
+     ],
+     "family_hits": 13,
+     "family_share": 0.277,
+     "family_ci95": [
+      0.169,
+      0.418
+     ],
+     "evidence": [
+      "… landmark to visit. Fire and Water shows are only Friday and Saturday from 9pm. Get quiet crowded during shows.",
+      "…ng and watching. When that dragon finally started spitting fire from its mouth, the whole crowd lost it. It's ridiculous and awesome at the same time. The dragon shoots both real fire and je",
+      "…8.30pm and if you were to go it pays to get there no later than that time because you are packed in like sardines and it is hard to move. When the event started the Dragon just spitted out f"
+     ]
+    },
+    "rest_seating": {
+     "hits": 4,
+     "share": 0.027,
+     "ci95": [
+      0.01,
+      0.067
+     ],
+     "family_hits": 2,
+     "family_share": 0.043,
+     "family_ci95": [
+      0.012,
+      0.142
+     ],
+     "evidence": [
+      "… ball bar which i will review separately.   Went to the bar 2 hours earlier to get a good seat. Great view secured.   9 pm came with great anticipation and at 9:02 we paid our bill as “the s",
+      "…Dragon bridge is worth going there. Just be ready that its a wet market so its not like a sit down dinner but the seafood is cheap, delicious and lobsters are just big and wow!  So come with",
+      "…f show not wroth the wait or the fact that you have to stand all the while as there is no seating anywhere around. Also if it happens to be raining then you might as well just go back to you"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.076
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.076
+     ],
+     "evidence": []
+    },
+    "relief": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.021,
+     "family_ci95": [
+      0.004,
+      0.111
+     ],
+     "evidence": [
+      "…g the city for the first time.  The bridge is perfectly placed for a riverside walk, with easy access to cafés, night markets, and viewpoints along both sides of the river. Whether you cross"
+     ]
+    }
+   }
+  },
+  "dad-07": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d5599000-Reviews-Han_Market-Da_Nang.html",
+   "n": 150,
+   "n_family": 38,
+   "dims": {
+    "walking": {
+     "hits": 20,
+     "share": 0.133,
+     "ci95": [
+      0.088,
+      0.197
+     ],
+     "family_hits": 6,
+     "family_share": 0.158,
+     "family_ci95": [
+      0.074,
+      0.304
+     ],
+     "evidence": [
+      "…I am looking the shoes, then they introduce me and  I ask how much, the said 350k. Then I walk around and see other patterns. Then another younger girl said she can gave me 250k. Then the ol",
+      "…iny stools, whilst every modicum of space is invaded by people asking \"how much\" and then walking away, you too might be as inhospitable as most of these people seem to be. I fully understan",
+      "… haggle for their vietnamese traditional woman costume by getting 1 for 750k each just to walk 2 shop away and starting price is 350k. Some shopkeeper( shoe seller) drag us to their shop and"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.026,
+     "family_ci95": [
+      0.005,
+      0.135
+     ],
+     "evidence": [
+      "… you buy a product, you must negotiate the price. There aren't many places to rest at the stairs going up and down."
+     ]
+    },
+    "heat_sun": {
+     "hits": 17,
+     "share": 0.113,
+     "ci95": [
+      0.072,
+      0.174
+     ],
+     "family_hits": 3,
+     "family_share": 0.079,
+     "family_ci95": [
+      0.027,
+      0.208
+     ],
+     "evidence": [
+      "…hing tempted me. As someone’s who sews myself I found the fabric area interesting. It was hot and sweaty….. take a fan!!",
+      "Soooo crowded. Everyone is very sweaty and the sales people are a bit aggressive by Canadian standards. The shoppers in groups of 5 or 6 block the ailes so you cant see anything and are very",
+      "… Can be really rude. Most are nice and polite. Haggle haggle haggle pls. And the place is HOT.Bring portable fan."
+     ]
+    },
+    "queue_crowd": {
+     "hits": 36,
+     "share": 0.24,
+     "ci95": [
+      0.179,
+      0.314
+     ],
+     "family_hits": 9,
+     "family_share": 0.237,
+     "family_ci95": [
+      0.13,
+      0.392
+     ],
+     "evidence": [
+      "A busy bustling local market which is aimed mostly at tourists. There is fresh food on the lower levels….. all very interesting! I bought 2 very nice ‘real’ Hermes scarves for 14 Australian",
+      "Soooo crowded. Everyone is very sweaty and the sales people are a bit aggressive by Canadian standards. The shoppers in groups of 5 or 6 block the ailes so you cant see anything and are very",
+      "Crowds just like I saw on YouTube. Food and souvenirs are available on the first floor, while ao dai shops are available on the second floor and bespoke ao dai can be made in a short time. S"
+     ]
+    },
+    "rest_seating": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.026,
+     "family_ci95": [
+      0.005,
+      0.135
+     ],
+     "evidence": [
+      "…han this. Also, inside Han Market there’s no air conditioning and you need to pay for the toilets which aren’t as clean as we’re used to (buy a meal/drink at a nearby cafe and use the facili"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.092
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 1,
+     "family_share": 0.026,
+     "family_ci95": [
+      0.005,
+      0.135
+     ],
+     "evidence": [
+      "…f the city.  The Han market is not the biggest local market in the city but it’s the most accessible and easy to reach as it’s located just next to the river. There are also plenty of massag",
+      "… those with good physical strength. Not recommended if you are going with children or the elderly. There are several local markets in Da Nang other than Han Market, but Han Market is the onl"
+     ]
+    },
+    "relief": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.092
+     ],
+     "evidence": []
+    }
+   }
+  },
+  "dad-08": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d12273530-Reviews-Da_Nang_Catheral-Da_Nang.html",
+   "n": 150,
+   "n_family": 22,
+   "dims": {
+    "walking": {
+     "hits": 6,
+     "share": 0.04,
+     "ci95": [
+      0.018,
+      0.085
+     ],
+     "family_hits": 2,
+     "family_share": 0.091,
+     "family_ci95": [
+      0.025,
+      0.278
+     ],
+     "evidence": [
+      "…ing itself, there are also several statues around the compound, so it’s worth the time to walk around the place to soak in the peace and serenity of the place.",
+      "…utside during Mass, so it is best to check the time before visiting. Most visitors take a walk outside the church, enjoy the appearance of the church and take pictures. There is an altar beh",
+      "…blocked off to the public.  All the gates are closed and tourists are not allowed to even walk around the church.  You can see it through the fence, one side of it anyway.  Reminds me of the"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.045,
+     "family_ci95": [
+      0.008,
+      0.218
+     ],
+     "evidence": [
+      "…Grotto, and you approach the Cathedral which seems to be closed like many here said. But, climb the left side ramp leading up, or the stairs to the right. You'll find an open door on the Chu"
+     ]
+    },
+    "heat_sun": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.149
+     ],
+     "evidence": [
+      "Very beautiful but very hot! Take your umbrella and water, it’s better to visit the cathedral in the morning around eight or nine o’clock when the sun is not so strong.",
+      "… i went there again,there is a souvenir store attached,i bought some drinks first,cuz too hot there.after taking pics,i went out and found a coconut stall,i bought one to drink,very fresh co"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 6,
+     "share": 0.04,
+     "ci95": [
+      0.018,
+      0.085
+     ],
+     "family_hits": 2,
+     "family_share": 0.091,
+     "family_ci95": [
+      0.025,
+      0.278
+     ],
+     "evidence": [
+      "It's a beautiful church standing in the busy street of the city, just about 200~300m away from the Han Cho. It was built beautiful and this year it's celebrating it's 100th anniversary.  Fro",
+      "Sometimes it closes and have to go inside from behind. It's crowded at high season but at this pandemic time, not many tourists come here. Light pink and unique, very suitable for photograph",
+      "Crowded with buses of tourists from around the world, no place to park your car. Our driver dropped us and went somewhere to wait for us. When we were done with photographing, we called our"
+     ]
+    },
+    "rest_seating": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.045,
+     "family_ci95": [
+      0.008,
+      0.218
+     ],
+     "evidence": [
+      "…c architectural design. Nice thing is that no charging fee except for those utilizing the restroom."
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.149
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.045,
+     "family_ci95": [
+      0.008,
+      0.218
+     ],
+     "evidence": [
+      "…ink in colour and fully functional, in which it is frequently used for activities and not accessible by visitors. We could only see its external and took pictures. When there are on-going ac"
+     ]
+    },
+    "relief": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.149
+     ],
+     "evidence": []
+    }
+   }
+  },
+  "dad-09": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d454979-Reviews-Da_Nang_Museum_of_Cham_Sculpture-Da_Nang.html",
+   "n": 150,
+   "n_family": 13,
+   "dims": {
+    "walking": {
+     "hits": 5,
+     "share": 0.033,
+     "ci95": [
+      0.014,
+      0.076
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.228
+     ],
+     "evidence": [
+      "… were still many buses parked in front and of course the area was flooded to the curb.  I walked down to the Long An Temple to the right and it was so much easier to catch my Grab back to th",
+      "…wing to house these glorious examples of Cham culture. It took us about an hour to slowly walk through , it is not a huge selection , but most impressive.",
+      "… are breathtakingly beautiful, it was a fabulous culture.  easy to reach, open EARLY, can walk from the Han Mkt to the Museum, if you have enough energy to do both"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.228
+     ],
+     "evidence": []
+    },
+    "heat_sun": {
+     "hits": 6,
+     "share": 0.04,
+     "ci95": [
+      0.018,
+      0.085
+     ],
+     "family_hits": 1,
+     "family_share": 0.077,
+     "family_ci95": [
+      0.014,
+      0.333
+     ],
+     "evidence": [
+      "…ch nearly a century ago. Therefore, it does not have air conditioning, which made it very hot during summer. Arriving early to avoid the heat is always advisable.  By logging into the museum",
+      "…nd visiting the museum in the early morning; there is no air conditioning, and the midday heat of Danang may be excessive.  Recommended.",
+      "…le museum felt disorganised and dilapidated. There were no air-conditioning inside, super hot and stuffy - I'm most certain that you will get a heatstroke if you stayed inside the museum for"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.228
+     ],
+     "evidence": [
+      "…rything.  On the second floor were displays on culture, clothing, pottery, etc and wasn’t crowded at all.    When I left there were still many buses parked in front and of course the area wa"
+     ]
+    },
+    "rest_seating": {
+     "hits": 4,
+     "share": 0.027,
+     "ci95": [
+      0.01,
+      0.067
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.228
+     ],
+     "evidence": [
+      "Free bright museum with many exhibits of Cham culture. English explanation available. Toilets available. Cafe available. Don't take credit cards at the cafe.",
+      "…he museum was clean, with livable spaces, with few people, sometimes just us, and a clean toilet.",
+      "…tographs of excavation sites, areas where the diggings took place, etc.   There are clean restrooms inside the museum and benches near the Exit. Highly recommended to visit to see the Cham a"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.228
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.077,
+     "family_ci95": [
+      0.014,
+      0.333
+     ],
+     "evidence": [
+      "…om the ancient temple site of My Son,and also the former capital of Tra Kieu, both easily accessible from both Hoi An and Danang. It traces the history and culture of the the Cham people, an"
+     ]
+    },
+    "relief": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.228
+     ],
+     "evidence": []
+    }
+   }
+  },
+  "dad-10": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d8291301-Reviews-Asia_Park-Da_Nang.html",
+   "n": 150,
+   "n_family": 54,
+   "dims": {
+    "walking": {
+     "hits": 3,
+     "share": 0.02,
+     "ci95": [
+      0.007,
+      0.057
+     ],
+     "family_hits": 2,
+     "family_share": 0.037,
+     "family_ci95": [
+      0.01,
+      0.125
+     ],
+     "evidence": [
+      "…figured we would explore the park to see what was open. Not much as we found out.   As we walked around the well kept grounds it became obvious that there really wasn't much happening and on",
+      "… of 6 cost about $34ish USD. And don’t bother eating at the park. The Lotte Mart is 5 min walk away and has decent food options. Bottom line- lower your expectations and you’ll have a really",
+      "…a's Uber) and it was D77K from the beach. We had a good laugh, there are performers which walk around and do a show every hour or so and they were very talented. It's waaay better than Ba Na"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.066
+     ],
+     "evidence": []
+    },
+    "heat_sun": {
+     "hits": 28,
+     "share": 0.187,
+     "ci95": [
+      0.132,
+      0.257
+     ],
+     "family_hits": 14,
+     "family_share": 0.259,
+     "family_ci95": [
+      0.161,
+      0.389
+     ],
+     "evidence": [
+      "Sun world, well what a joke that name is due to being so high this is always covered in cloud so visibility is always poor, Our experience at the Golden Bridge was frustrating and overpriced",
+      "…les and total chaos, possibly dangerous ..but alot of fun!). Entry also includes the big (hot ) ferris wheel (press the little button in the roof and fans come on but it’s still pretty warm!",
+      "…rantee that. And, we arrived there at the most popular time - around 5 PM, just after the heat, before sunset. Around third of the attractions were closed, however the rest was open and work"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 35,
+     "share": 0.233,
+     "ci95": [
+      0.173,
+      0.307
+     ],
+     "family_hits": 15,
+     "family_share": 0.278,
+     "family_ci95": [
+      0.176,
+      0.409
+     ],
+     "evidence": [
+      "…e turning up for 15% cheaper).   But for a trip with young kids, it was fantastic as zero queues and enough open for them to think it was a brilliant night. They seem to cycle staff between",
+      "It's hard to complain about very very very light crowds, but for sure there couldn't have been 200 people on the park on a sunday..  Unlimited tickets to everything was only 10 bux US..  I d",
+      "…e are a lot more fun rides here. And most importantly, most of the time you don't need to wait in a long line to play. Perfect and Really worth visiting!"
+     ]
+    },
+    "rest_seating": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.066
+     ],
+     "evidence": [
+      "…he attractions partially not working), the presence of sufficient recreation areas, clean toilets, and a hall with slot machines (it was fun!). The rocking boat reminded me of the Green Isla",
+      "…g dinner - big choice of the great food! Dinner starts at 17.00 and there is an option to seat inside the air con room (which was good as it was very hot day). Really enjoyed the experience"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.066
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 1,
+     "family_share": 0.019,
+     "family_ci95": [
+      0.003,
+      0.098
+     ],
+     "evidence": [
+      "…e had a enjoyable evening and the kids had a great time. Would recommend for couples, and parents with children, young or old as there are rides here to suit both age groups. We would return"
+     ]
+    },
+    "relief": {
+     "hits": 5,
+     "share": 0.033,
+     "ci95": [
+      0.014,
+      0.076
+     ],
+     "family_hits": 4,
+     "family_share": 0.074,
+     "family_ci95": [
+      0.029,
+      0.176
+     ],
+     "evidence": [
+      "… the gateway toward up mountain of Bana Hill The French Village and The Golden Bridge via cable car station.Per cable wagon can take up to 10 paxs approximately 15-20min ride.This Sun World",
+      "… top of a hill and cramming thousands of people into one relatively small space with loud elevator music in continual rotation at every corner. Where do we even begin with the commentary on",
+      "The highlights of the Sun World (aka Bana Hills) is cable car rides throughout the journey. You need at least half a day or so to explore the place. May be those with young children is a wor"
+     ]
+    }
+   }
+  },
+  "dad-11": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g298085-d12569677-Reviews-Cong_Vien_Suoi_Khoang_Nong_Nui_Than_Tai-Da_Nang.html",
+   "n": 54,
+   "n_family": 27,
+   "dims": {
+    "walking": {
+     "hits": 4,
+     "share": 0.074,
+     "ci95": [
+      0.029,
+      0.176
+     ],
+     "family_hits": 1,
+     "family_share": 0.037,
+     "family_ci95": [
+      0.007,
+      0.183
+     ],
+     "evidence": [
+      "…d like an older amusement park with fake dinosaurs making roaring sounds. We continued to walk to the \"hot spring\" pool.  It was tiny shallow and just a kiddie pool basically so we didn't sw",
+      "…available. I heard that in the tower, standard-met Japanese onsen comes first time. A few walk from springs, a waterpark is equipped with swimming pools, long slides from mountain, and sth e",
+      "…ice. We paid 350,000vnd for a standard ticket, which included the water parks, foot bath, walk around the parks and gardens, hot spring bath, jacuzzi pool and 9D and 12D cinema. They have va"
+     ]
+    },
+    "stairs_climb": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.066
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.125
+     ],
+     "evidence": []
+    },
+    "heat_sun": {
+     "hits": 18,
+     "share": 0.333,
+     "ci95": [
+      0.222,
+      0.466
+     ],
+     "family_hits": 7,
+     "family_share": 0.259,
+     "family_ci95": [
+      0.132,
+      0.447
+     ],
+     "evidence": [
+      "Amazing experience! Has amazing hot spring and massage facilities. Highly recommended.",
+      "…od experience services. Beautiful scenery, with many interesting tourist attractions. The hot spring is very relaxing and refreshing. In the summer, there will be more interesting animal cir",
+      "…ational park. There are so many activities for you to do, such as a water park, a natural hot spring park, a Jurassic park, mud bath, visiting a temple, etc. We went there on a weekday; it w"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 9,
+     "share": 0.167,
+     "ci95": [
+      0.09,
+      0.287
+     ],
+     "family_hits": 4,
+     "family_share": 0.148,
+     "family_ci95": [
+      0.059,
+      0.325
+     ],
+     "evidence": [
+      "…rth the money! We went early to had the pools to ourselves. Used a driver from Danang who waited for us. Spent 5 hours there.",
+      "…assic park, mud bath, visiting a temple, etc. We went there on a weekday; it was not that busy. This park is good for families with children. The park employees were very nice and profession",
+      "…ng relaxation, though planning ahead for transportation and peak times is key to avoiding crowds."
+     ]
+    },
+    "rest_seating": {
+     "hits": 2,
+     "share": 0.037,
+     "ci95": [
+      0.01,
+      0.125
+     ],
+     "family_hits": 2,
+     "family_share": 0.074,
+     "family_ci95": [
+      0.021,
+      0.234
+     ],
+     "evidence": [
+      "…k was good, hot springs were refreshing and water park was awesome. Highlight is that the toilets are clean and area well maintained with pleasant staffs",
+      "…me snacks and water. Some people bring fruits, bread and sandwiches. There are areas with benches and tables where you can sit and eat, but you might see people sleeping on the benches inste"
+     ]
+    },
+    "surface": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.066
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.125
+     ],
+     "evidence": []
+    },
+    "accessibility_elderly": {
+     "hits": 2,
+     "share": 0.037,
+     "ci95": [
+      0.01,
+      0.125
+     ],
+     "family_hits": 1,
+     "family_share": 0.037,
+     "family_ci95": [
+      0.007,
+      0.183
+     ],
+     "evidence": [
+      "…u can go to privacy areas and enjoy the time. At the hot spring, there is one kid ask his parents for peeing, and his dad told him to pee right in the spot. The foot sauna near by has trash",
+      "…e that they are still busy expanding so maybe in the future there will be more slides for older people but for young kids theres over enough to do. I went there with a grab taxi for 300k and"
+     ]
+    },
+    "relief": {
+     "hits": 3,
+     "share": 0.056,
+     "ci95": [
+      0.019,
+      0.151
+     ],
+     "family_hits": 1,
+     "family_share": 0.037,
+     "family_ci95": [
+      0.007,
+      0.183
+     ],
+     "evidence": [
+      "…gs, a waterpark is equipped with swimming pools, long slides from mountain, and sth else. Buggy transfer is free, anywhere.",
+      "…ing on their list of 9D nor 12D films on their schedule were being shown. Only a 5-minute buggy show which hung often and we sat on stools that were on an overly-vibrating platform.  3. With",
+      "…e mats so first come first serve. It was a bit confusing and unorganized.  They have free shuttle buses to take you to various parts of the park as it can be too far to walk to. However each"
+     ]
+    }
+   }
+  },
+  "dad-12": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g16806420-d317894-Reviews-My_Son_Sanctuary-Duy_Phu_Duy_Xuyen_District_Quang_Nam_Province.html",
+   "n": 150,
+   "n_family": 29,
+   "dims": {
+    "walking": {
+     "hits": 43,
+     "share": 0.287,
+     "ci95": [
+      0.22,
+      0.364
+     ],
+     "family_hits": 5,
+     "family_share": 0.172,
+     "family_ci95": [
+      0.076,
+      0.345
+     ],
+     "evidence": [
+      "We had a wonderful walk through My Son Sanctuary. Vietnam is very humid, but beautiful. The ancient ruins of the Cham people, once the imperial city during the Cham dynasty. We leant about t",
+      "… are easy to follow. The free buggy for transferring service makes the trip easy. Enjoyed hiking in the jungle and appreciated the performances people put on for tourists.",
+      "…side, there are shuttles for the first part of the route, then it is necessary to proceed on foot.  Recommended early in the morning; check the show times."
+     ]
+    },
+    "stairs_climb": {
+     "hits": 0,
+     "share": 0.0,
+     "ci95": [
+      0.0,
+      0.025
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.117
+     ],
+     "evidence": []
+    },
+    "heat_sun": {
+     "hits": 34,
+     "share": 0.227,
+     "ci95": [
+      0.167,
+      0.3
+     ],
+     "family_hits": 8,
+     "family_share": 0.276,
+     "family_ci95": [
+      0.147,
+      0.457
+     ],
+     "evidence": [
+      "…experiences. Early it's quiet, cool, atmospheric. By mid-morning it's packed and brutally hot. Some of the site is genuinely just piles of bricks (bomb damage), but arriving early makes it w",
+      "…early morning tour. Enjoy coffee before visiting. Many new knowdlege and experiences. Not hot and not busy but you need wake up a little bit early.... Enjoy brunk with local noddle with name",
+      "We had a wonderful walk through My Son Sanctuary. Vietnam is very humid, but beautiful. The ancient ruins of the Cham people, once the imperial city during the Cham dynasty. We leant about t"
+     ]
+    },
+    "queue_crowd": {
+     "hits": 23,
+     "share": 0.153,
+     "ci95": [
+      0.104,
+      0.22
+     ],
+     "family_hits": 6,
+     "family_share": 0.207,
+     "family_ci95": [
+      0.098,
+      0.384
+     ],
+     "evidence": [
+      "…ounded by green mountains and forests. There were quite a few tourists, especially during busy hours, but I still enjoyed my visit. The staff were friendly and helpful.  In my opinion, My So",
+      "…ompletely different experiences. Early it's quiet, cool, atmospheric. By mid-morning it's packed and brutally hot. Some of the site is genuinely just piles of bricks (bomb damage), but arriv",
+      "…g tour. Enjoy coffee before visiting. Many new knowdlege and experiences. Not hot and not busy but you need wake up a little bit early.... Enjoy brunk with local noddle with name is My Quang"
+     ]
+    },
+    "rest_seating": {
+     "hits": 7,
+     "share": 0.047,
+     "ci95": [
+      0.023,
+      0.093
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.117
+     ],
+     "evidence": [
+      "…ng the main paths through the site, and there are several food and drink options and good toilet facilities along the way. The information about each group of temples is provided on boards b",
+      "We came here as part of an organised tour in December 2024. The entrance complex has some toilets alongside the ticket hall. There was plenty of parking for cars and buses of all sizes. I've",
+      "… over an hours drive outside Hoi An and you are initially dropped at a ticket office with toilets, a cafe and shop. You pay here (or your guide does) and you take a small complimentary buggy"
+     ]
+    },
+    "surface": {
+     "hits": 2,
+     "share": 0.013,
+     "ci95": [
+      0.004,
+      0.047
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.117
+     ],
+     "evidence": [
+      "…t quieter!   It had rained earlier that morning, so some of the paths / stones were a bit slippery - something to bear in mind. Someone in our group did slip and hurt their ankle, so please",
+      "…ries, but also the craters, remains of the bombs. Be careful, on the paths, the edges are slippery with rain!  We spent a whole morning there, then stopped for soup, just before the exit.  I"
+     ]
+    },
+    "accessibility_elderly": {
+     "hits": 4,
+     "share": 0.027,
+     "ci95": [
+      0.01,
+      0.067
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.117
+     ],
+     "evidence": [
+      "… see the destruction done by the Americans.... they are specialists  No reduction for the disabled",
+      "… There is walking involved and some of the areas possibly aren't too good for people with mobility issues.  Well worth a visit but best done with a guide who can give history and context.  I",
+      "…evious visited Siem Reap on the same trip.  Visiting requires a fair amount of walking so mobility-challenged visitors will probably want to give it a pass.  The sights and sounds of the sur"
+     ]
+    },
+    "relief": {
+     "hits": 25,
+     "share": 0.167,
+     "ci95": [
+      0.116,
+      0.234
+     ],
+     "family_hits": 3,
+     "family_share": 0.103,
+     "family_ci95": [
+      0.036,
+      0.264
+     ],
+     "evidence": [
+      "…eritage site outside Danang. One hour's drive, English signs are easy to follow. The free buggy for transferring service makes the trip easy. Enjoyed hiking in the jungle and appreciated the",
+      "… UNESCO World Heritage Site for good reason, with excellent facilities. The free electric shuttle buses are great for accessing the main paths through the site, and there are several food an",
+      "…ally enjoyed the visit. First of all, the site is very well laid out, notably with a free shuttle to take you as close as possible to the monuments. The place is also very well maintained wi"
+     ]
+    }
+   }
+  },
+  "dad-13": {
+   "url": "https://www.tripadvisor.com/Attraction_Review-g11923533-d455407-Reviews-Hai_Van_Pass-Lang_Co_Phu_Loc_District_Thua_Thien_Hue_Province.html",
+   "n": 150,
+   "n_family": 16,
+   "dims": {
+    "walking": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.194
+     ],
+     "evidence": [
+      "…ide took us to a sandstone museum and then onto marble mountain.  Make sure your happy to walk up lots of stairs to get to the top of the mountain there is a lift."
+     ]
+    },
+    "stairs_climb": {
+     "hits": 5,
+     "share": 0.033,
+     "ci95": [
+      0.014,
+      0.076
+     ],
+     "family_hits": 1,
+     "family_share": 0.062,
+     "family_ci95": [
+      0.011,
+      0.283
+     ],
+     "evidence": [
+      "…aceful surroundings made the trip even more enjoyable. Some parts of the trail were quite steep and challenging, but that made the experience more exciting. My favorite part was getting away",
+      "… construction vehicles using the pass, the vehicles are so heavy they go so slowly up the steep hills and around the bends but our journey was great and we didn't experience this.",
+      "… in a nice tour car, with our guide. We stopped for Oysters with peanuts, before the long climb. We stopped a few times to take photos, as there are many places you can pull over. It is so h"
+     ]
+    },
+    "heat_sun": {
+     "hits": 8,
+     "share": 0.053,
+     "ci95": [
+      0.027,
+      0.102
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.194
+     ],
+     "evidence": [
+      "…in clouds, which is why it is also called the Sea of Clouds, but I was very lucky and the sun was shining. During the journey, there were spectacular views of dense jungle, beautiful bays an",
+      "…ncluding that of beaches and the city of Da Nang.  It was a bit cold and windy here, so a hot cup of Vietnamese coffee hit the spot.",
+      "… over the pass was amazing. The views from the pass were fab and we took advantage of the shade the cafe offered before continuing."
+     ]
+    },
+    "queue_crowd": {
+     "hits": 10,
+     "share": 0.067,
+     "ci95": [
+      0.037,
+      0.118
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.194
+     ],
+     "evidence": [
+      "…ive is gorgeous but motorbike driving experience is recommended as you do go through some busy places before the start of the pass and unfortunately we did see an accident between a bike and",
+      "…o send our bags. The roads from Hoi An - Da Nang are fine but through Da Nang it got very busy and you need to have some road motorbike experience. The pass itself had some beautiful views,",
+      "…g mountain roads of Ho Chi Minh trail closer to the Laos border, Hai Van Pass felt really crowded and not impressing. Especially the highest point where people have used to take cool photos,"
+     ]
+    },
+    "rest_seating": {
+     "hits": 5,
+     "share": 0.033,
+     "ci95": [
+      0.014,
+      0.076
+     ],
+     "family_hits": 1,
+     "family_share": 0.062,
+     "family_ci95": [
+      0.011,
+      0.283
+     ],
+     "evidence": [
+      "…nt and kind although still pushy.   Also note that anything they claim as ‘free’ like the toilets, will have hidden fees.  We were not prepared for any of this despite research so i wanted t",
+      "…ders in the valley alongside the road. Its a little daunting as you cross the road to the rest stop shops and bathrooms.",
+      "…but, be very careful here. Our guide told us to buy something from the woman who owns the toilet if you use her facilities. I bought a snack for 30000 Vietnam dong. As I was looking for cash"
+     ]
+    },
+    "surface": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.194
+     ],
+     "evidence": [
+      "…ring the journey, there were spectacular views of dense jungle, beautiful bays and lonely sandy beaches towards the South China Sea. At the top there are still remains of old bunkers from th"
+     ]
+    },
+    "accessibility_elderly": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.194
+     ],
+     "evidence": [
+      "…ch but it is still used for scenic views and cost. At the top, there’s a fortress but not accessible."
+     ]
+    },
+    "relief": {
+     "hits": 1,
+     "share": 0.007,
+     "ci95": [
+      0.001,
+      0.037
+     ],
+     "family_hits": 0,
+     "family_share": 0.0,
+     "family_ci95": [
+      0.0,
+      0.194
+     ],
+     "evidence": [
+      "…ke sure your happy to walk up lots of stairs to get to the top of the mountain there is a lift."
+     ]
+    }
+   }
+  }
+ }
+}

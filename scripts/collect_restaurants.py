@@ -3,11 +3,12 @@
 예시 (루트에서):
     uv run python scripts/collect_restaurants.py \
         --attractions scripts/examples/attractions_danang.json \
-        --prefs scripts/examples/food_prefs_example.json \
         --city 다낭 --country VN --limit 1
 
 필요한 환경변수: GOOGLE_API_KEY
-호출 수(관광지 1곳): 반경 검색 1~2회 + 리뷰 조회 최대 5회. 실행할 때마다 다시 호출한다.
+호출 수(관광지 1곳): 반경 검색 1~2회 + 리뷰 조회 최대 5회, Claude 태그 1회(--no-tags로 생략). 실행할 때마다 다시 호출한다.
+
+저장 규칙: 결과는 화면에만 출력하고 저장하지 않는다. 일정에 남기는 건 place_id뿐이다.
 """
 
 import argparse
@@ -19,13 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.restaurants.collect import Attraction, collect  # noqa: E402
-from src.restaurants.preferences import FoodPreference  # noqa: E402
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="관광지 주변 추천 식당 수집 (저장 없음)")
     parser.add_argument("--attractions", type=Path, required=True, help="관광지 목록 JSON")
-    parser.add_argument("--prefs", type=Path, required=True, help="부모님 음식 취향 JSON")
     parser.add_argument("--city", required=True, help="도시명 (예: 다낭)")
     parser.add_argument("--country", help="ISO 국가 코드 (예: VN). 현지 음식 판단에 사용")
     parser.add_argument("--radius", type=float, default=1000, help="반경 m (기본 1000)")
@@ -33,21 +32,21 @@ def main() -> None:
     parser.add_argument(
         "--no-reviews", action="store_true", help="리뷰 단계 건너뛰기 (Atmosphere 등급 호출 안 함)"
     )
+    parser.add_argument("--no-tags", action="store_true", help="식당 태그(Claude) 건너뛰기")
     args = parser.parse_args()
 
     attractions = [
         Attraction.model_validate(a)
         for a in json.loads(args.attractions.read_text(encoding="utf-8"))
     ][: args.limit]
-    pref = FoodPreference.model_validate_json(args.prefs.read_text(encoding="utf-8"))
 
     result = collect(
         attractions,
-        pref,
         city=args.city,
         country=args.country,
         radius_m=args.radius,
         with_reviews=not args.no_reviews,
+        tags=not args.no_tags,
     )
 
     for a in result.attractions:

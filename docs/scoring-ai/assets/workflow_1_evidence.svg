@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="Pretendard, 'Noto Sans KR', 'Malgun Gothic', sans-serif">
+<defs>
+<marker id="m-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#868E96"/></marker>
+<marker id="m-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3B6FD8"/></marker>
+<marker id="m-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7B4FD6"/></marker>
+<marker id="m-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2F9E54"/></marker>
+<marker id="m-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E07B1A"/></marker>
+<marker id="m-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D63B3B"/></marker>
+<marker id="m-dark" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#495057"/></marker>
+</defs>
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<text x="80" y="100.0" font-size="44" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">근거는 어디서 와서 DB에 어떻게 쌓이나</tspan></text>
+<text x="195.0" y="162.0" font-size="24" fill="#5C636A" font-weight="400" text-anchor="middle"><tspan font-weight="700">출처</tspan></text>
+<text x="580.0" y="162.0" font-size="24" fill="#5C636A" font-weight="400" text-anchor="middle"><tspan font-weight="700">어떻게 수집</tspan></text>
+<text x="1090.0" y="162.0" font-size="24" fill="#5C636A" font-weight="400" text-anchor="middle"><tspan font-weight="700">어떻게 정제</tspan></text>
+<text x="1630.0" y="162.0" font-size="24" fill="#5C636A" font-weight="400" text-anchor="middle"><tspan font-weight="700">저장 (테이블 · 건수)</tspan></text>
+<rect x="60" y="182" width="270" height="126" rx="14" fill="#F1F3F5" stroke="#868E96" stroke-width="2"/>
+<text x="78" y="252.0" font-size="24" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">GPS 궤적</tspan></text>
+<path d="M334,245.0 H374" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="380" y="182" width="400" height="126" rx="14" fill="#F8F9FA" stroke="#ADB5BD" stroke-width="2"/>
+<text x="398" y="238.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">OpenStreetMap 공개 GPS 궤적</text>
+<text x="398" y="266.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">+ Open-Meteo 고도</text>
+<path d="M784,245.0 H824" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="830" y="182" width="520" height="126" rx="14" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2"/>
+<text x="848" y="238.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">관광지 구역만 잘라 거리·시간·오르막 중앙값</text>
+<text x="848" y="266.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">· 궤적 5개 미만은 C등급</text>
+<path d="M1354,245.0 H1394" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="1400" y="182" width="460" height="126" rx="14" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2"/>
+<text x="1418" y="252.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_evidence</tspan> <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">gps</tspan> <tspan font-weight="700">36</tspan> (3곳)</text>
+<rect x="60" y="320" width="270" height="126" rx="14" fill="#F1F3F5" stroke="#868E96" stroke-width="2"/>
+<text x="78" y="390.0" font-size="24" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">지도 (OSM)</tspan></text>
+<path d="M334,383.0 H374" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="380" y="320" width="400" height="126" rx="14" fill="#F8F9FA" stroke="#ADB5BD" stroke-width="2"/>
+<text x="398" y="390.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">Overpass로 반경 300m 질의</text>
+<path d="M784,383.0 H824" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="830" y="320" width="520" height="126" rx="14" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2"/>
+<text x="848" y="376.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">보행로 길이·계단·벤치·화장실 수</text>
+<text x="848" y="404.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">· "경계 아님" 메모</text>
+<path d="M1354,383.0 H1394" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="1400" y="320" width="460" height="126" rx="14" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2"/>
+<text x="1418" y="390.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_evidence</tspan> <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">osm</tspan> <tspan font-weight="700">35</tspan></text>
+<rect x="60" y="458" width="270" height="126" rx="14" fill="#F1F3F5" stroke="#868E96" stroke-width="2"/>
+<text x="78" y="528.0" font-size="24" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">Tripadvisor 리뷰</tspan></text>
+<path d="M334,521.0 H374" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="380" y="458" width="400" height="126" rx="14" fill="#F8F9FA" stroke="#ADB5BD" stroke-width="2"/>
+<text x="398" y="528.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">Apify로 13곳 × 약 150건</text>
+<path d="M784,521.0 H824" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="830" y="458" width="520" height="126" rx="14" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2"/>
+<text x="848" y="514.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">원문 저장 + 정규식으로 계단·더위·혼잡</text>
+<text x="848" y="542.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">언급 비율(95% 신뢰구간)</text>
+<path d="M1354,521.0 H1394" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="1400" y="458" width="460" height="126" rx="14" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2"/>
+<text x="1418" y="514.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_reviews</tspan> <tspan font-weight="700">1,854</tspan></text>
+<text x="1418" y="542.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_evidence</tspan> <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">rev</tspan> <tspan font-weight="700">104</tspan></text>
+<rect x="60" y="596" width="270" height="126" rx="14" fill="#F1F3F5" stroke="#868E96" stroke-width="2"/>
+<text x="78" y="666.0" font-size="24" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">Google 지도</tspan></text>
+<path d="M334,659.0 H374" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="380" y="596" width="400" height="126" rx="14" fill="#F8F9FA" stroke="#ADB5BD" stroke-width="2"/>
+<text x="398" y="652.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">SerpApi로 장소·리뷰 주제·</text>
+<text x="398" y="680.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">리뷰(장소당 5건)</text>
+<path d="M784,659.0 H824" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="830" y="596" width="520" height="126" rx="14" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2"/>
+<text x="848" y="652.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">장소 식별 · 주제 키워드를 차원에 배정</text>
+<text x="848" y="680.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">(온천 'hot' 같은 오탐 표시)</text>
+<path d="M1354,659.0 H1394" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="1400" y="596" width="460" height="126" rx="14" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2"/>
+<text x="1418" y="638.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_places</tspan> <tspan font-weight="700">15</tspan></text>
+<text x="1418" y="666.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_evidence</tspan> <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">topic</tspan> <tspan font-weight="700">250</tspan></text>
+<text x="1418" y="694.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_reviews</tspan> <tspan font-weight="700">140</tspan></text>
+<rect x="60" y="734" width="270" height="126" rx="14" fill="#F1F3F5" stroke="#868E96" stroke-width="2"/>
+<text x="78" y="804.0" font-size="24" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">기후</tspan></text>
+<path d="M334,797.0 H374" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="380" y="734" width="400" height="126" rx="14" fill="#F8F9FA" stroke="#ADB5BD" stroke-width="2"/>
+<text x="398" y="804.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">Open-Meteo 과거 기상</text>
+<path d="M784,797.0 H824" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="830" y="734" width="520" height="126" rx="14" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2"/>
+<text x="848" y="790.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">다낭 월별 최고 체감온도 평균</text>
+<text x="848" y="818.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start">· A등급</text>
+<path d="M1354,797.0 H1394" fill="none" stroke="#495057" stroke-width="2.5" marker-end="url(#m-dark)"/>
+<rect x="1400" y="734" width="460" height="126" rx="14" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2"/>
+<text x="1418" y="804.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_evidence</tspan> <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">climate</tspan> <tspan font-weight="700">12</tspan></text>
+<rect x="60" y="878" width="1800" height="82" rx="14" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2"/>
+<text x="84" y="928.0" font-size="22" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">공통 정제</tspan> (<tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">load_evidence.py</tspan>)</text>
+<rect x="470" y="896" width="300" height="46" rx="23" fill="#FFFFFF" stroke="#2F9E54" stroke-width="2"/>
+<text x="620.0" y="927.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">고정 ID (<tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">출처:관광지:항목</tspan>)</text>
+<rect x="788" y="896" width="520" height="46" rx="23" fill="#FFFFFF" stroke="#2F9E54" stroke-width="2"/>
+<text x="1048.0" y="927.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">차원 배정 (<tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">climb·walking·heat·crowd·general</tspan>)</text>
+<rect x="1326" y="896" width="200" height="46" rx="23" fill="#FFFFFF" stroke="#2F9E54" stroke-width="2"/>
+<text x="1426.0" y="927.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">근거 등급 <tspan font-weight="700">A/B/C</tspan></text>
+<rect x="1544" y="896" width="260" height="46" rx="23" fill="#FFFFFF" stroke="#2F9E54" stroke-width="2"/>
+<text x="1674.0" y="927.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">한계 메모(<tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">caveat</tspan>) 첨부</text>
+<rect x="0" y="980" width="1920" height="100" fill="#F1F3F5"/>
+<text x="960" y="1022.0" font-size="26" fill="#212529" font-weight="400" text-anchor="middle">합계  <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_places</tspan> <tspan font-weight="700">15</tspan> · <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_evidence</tspan> <tspan font-weight="700">523</tspan> (초기 조사 사실 86 포함) · <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_reviews</tspan> <tspan font-weight="700">1,994</tspan></text>
+<text x="960" y="1060.0" font-size="22" fill="#5C636A" font-weight="400" text-anchor="middle">관광지별 사실(계단 수·엘리베이터 운행 등)은 시기마다 달라 DB에 고정하지 않고, 채점 때 Claude가 웹 검색으로 확인</text>
+</svg>

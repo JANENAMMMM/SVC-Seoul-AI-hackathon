@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="Pretendard, 'Noto Sans KR', 'Malgun Gothic', sans-serif">
+<defs>
+<marker id="m-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#868E96"/></marker>
+<marker id="m-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3B6FD8"/></marker>
+<marker id="m-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7B4FD6"/></marker>
+<marker id="m-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2F9E54"/></marker>
+<marker id="m-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E07B1A"/></marker>
+<marker id="m-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D63B3B"/></marker>
+<marker id="m-dark" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#495057"/></marker>
+</defs>
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<text x="80" y="100.0" font-size="44" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">사람이 고치고, AI가 근거로 다시 판단한다</tspan></text>
+<text x="80" y="140.0" font-size="22" fill="#5C636A" font-weight="400" text-anchor="start">개인 의견은 그 여행만 바꾸고, 관광지 점수는 MD 의견을 근거로 AI가 다시 채점한 뒤 승인해야 바뀐다.</text>
+<text x="80" y="210.0" font-size="28" fill="#E07B1A" font-weight="400" text-anchor="start"><tspan font-weight="700">① 하나투어 MD — 관광지 점수 조정</tspan></text>
+<rect x="80" y="240" width="380" height="170" rx="16" fill="#FFF1E3" stroke="#E07B1A" stroke-width="2.5"/>
+<text x="270" y="295.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">MD 의견</tspan></text>
+<text x="270" y="329.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">"오행산 엘리베이터</text>
+<text x="270" y="363.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">점검이 잦아요"</text>
+<rect x="520" y="240" width="380" height="170" rx="16" fill="#FFF1E3" stroke="#E07B1A" stroke-width="2.5"/>
+<text x="710" y="295.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">AI가 정리</tspan></text>
+<text x="710" y="329.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">Haiku 1회 · 약 $0.0005</text>
+<text x="710" y="363.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">장소·항목·주장</text>
+<rect x="960" y="240" width="380" height="170" rx="16" fill="#F3EDFF" stroke="#7B4FD6" stroke-width="2.5"/>
+<text x="1150" y="295.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">AI가 다시 채점</tspan></text>
+<text x="1150" y="329.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">의견 = 근거 1건, 웹으로 확인</text>
+<text x="1150" y="363.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">Sonnet medium · 1회 약 $0.065</text>
+<rect x="1400" y="240" width="380" height="170" rx="16" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2.5"/>
+<text x="1590" y="295.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">MD 승인 → 반영</tspan></text>
+<text x="1590" y="329.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">점수 전후·인용 근거 확인</text>
+<text x="1590" y="363.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">승인해야 공개 점수 변경</text>
+<path d="M460,325 H516" fill="none" stroke="#E07B1A" stroke-width="3" marker-end="url(#m-orange)"/>
+<path d="M900,325 H956" fill="none" stroke="#E07B1A" stroke-width="3" marker-end="url(#m-orange)"/>
+<path d="M1340,325 H1396" fill="none" stroke="#E07B1A" stroke-width="3" marker-end="url(#m-orange)"/>
+<text x="80" y="520.0" font-size="28" fill="#2F9E54" font-weight="400" text-anchor="start"><tspan font-weight="700">② 자녀·부모님 — 일정 조정</tspan></text>
+<rect x="80" y="550" width="380" height="170" rx="16" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2.5"/>
+<text x="270" y="605.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">부모님 의견</tspan></text>
+<text x="270" y="639.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">"2일차 힘들어"</text>
+<text x="270" y="673.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">또는 버튼</text>
+<rect x="520" y="550" width="380" height="170" rx="16" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2.5"/>
+<text x="710" y="605.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">AI가 명령으로</tspan></text>
+<text x="710" y="639.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">Haiku 1회 · 약 $0.0005</text>
+<text x="710" y="673.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">버튼이면 $0</text>
+<rect x="960" y="550" width="380" height="170" rx="16" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2.5"/>
+<text x="1150" y="605.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">바뀐 일정 미리보기</tspan></text>
+<text x="1150" y="639.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">엔진이 다시 짬</text>
+<text x="1150" y="673.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">오행산 → 엘리베이터 코스</text>
+<rect x="1400" y="550" width="380" height="170" rx="16" fill="#E9F7EE" stroke="#2F9E54" stroke-width="2.5"/>
+<text x="1590" y="605.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">자녀 승인 → 확정</tspan></text>
+<text x="1590" y="639.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">승인 전엔 안 바뀜</text>
+<text x="1590" y="673.0" font-size="22" fill="#212529" font-weight="400" text-anchor="middle">난이도 전후 비교</text>
+<path d="M460,635 H516" fill="none" stroke="#2F9E54" stroke-width="3" marker-end="url(#m-green)"/>
+<path d="M900,635 H956" fill="none" stroke="#2F9E54" stroke-width="3" marker-end="url(#m-green)"/>
+<path d="M1340,635 H1396" fill="none" stroke="#2F9E54" stroke-width="3" marker-end="url(#m-green)"/>
+<path d="M80,808 A190.0,18 0 0 1 460,808 V922 A190.0,18 0 0 1 80,922 Z" fill="#E8F0FE" stroke="#3B6FD8" stroke-width="2.5"/>
+<ellipse cx="270.0" cy="808" rx="190.0" ry="18" fill="#D4E3FC" stroke="#3B6FD8" stroke-width="2.5"/>
+<text x="270" y="858.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle"><tspan font-weight="700">조정 기록</tspan> <tspan font-family="Consolas, 'D2Coding', 'Courier New', monospace" fill="#1B3A7A">scoring_feedback</tspan></text>
+<text x="270" y="890.0" font-size="20" fill="#212529" font-weight="400" text-anchor="middle">누가·무엇을·전후 값·비용</text>
+<rect x="520" y="800" width="1260" height="150" rx="16" fill="#F1F3F5" stroke="#868E96" stroke-width="1.5"/>
+<text x="545" y="845.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">왜 AI인가</tspan> 자연어 의견을 구조로 바꾸고, 사람 말을 그대로 믿지 않고 웹 근거로 교차 확인해 다시 판단</text>
+<text x="545" y="879.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">얼마나 드나</tspan> 일정 조정 1회 1원 미만 · 점수 재채점 1곳 약 90원 (팀 크레딧 $50 대비 충분)</text>
+<text x="545" y="913.0" font-size="20" fill="#212529" font-weight="400" text-anchor="start"><tspan font-weight="700">상용화 시</tspan> 임시 점수 즉시 표시 · 여러 가족의 반복 조정 → MD 검토 신호 · 승인 맥락 기억 (고도화안 문서)</text>
+</svg>
