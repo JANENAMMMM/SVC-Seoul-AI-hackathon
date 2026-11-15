@@ -13,7 +13,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white)
 ![Claude](https://img.shields.io/badge/Claude-D97757?logo=anthropic&logoColor=white)
 
-[발표자료 (PDF)](docs/presentation/final/submitted/%5B발표용%5D_반걸음_발표자료_시연링크.pdf) · [시연 영상](docs/presentation/final/submitted/시연영상.mp4) · [발표 대본](docs/presentation/final/submitted/script.md) · [심사용 안내](docs/submission.md)
+[발표자료 (PDF)](docs/presentation/final/submitted/%5B발표용%5D_반걸음_발표자료_시연링크.pdf) · [시연 영상](docs/presentation/final/submitted/시연영상.mp4) · [심사용 안내](docs/submission.md)
 
 <img src="docs/presentation/final/assets/03-customer-comparison.png" alt="고객 일정 조정 화면: 오행산 관람 방식을 바꿔 하루 부담을 상에서 중으로 낮춘 변경안" width="900">
 
